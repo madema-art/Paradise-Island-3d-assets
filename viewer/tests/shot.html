@@ -1,0 +1,48 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>glb shot</title>
+<style>html,body{margin:0;background:#1c2228}canvas{display:block}</style>
+<script type="importmap">{ "imports": { "three": "../vendor/three/three.module.js", "three/addons/": "../vendor/three/addons/" } }</script>
+</head><body><canvas id="c"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+const q = new URLSearchParams(location.search);
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true, alpha: false });
+renderer.setSize(+q.get('w') || 800, +q.get('h') || 800, false);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.NeutralToneMapping;
+const scene = new THREE.Scene();
+const LIGHTS = {
+  studio: { bg: 0x9aa4ab, env: 0.85, key: 2.6, color: 0xfff1dc, pos: [1.6, 3.2, 2.4], hemi: 0.45 },
+  sun: { bg: 0x86b6d6, env: 0.7, key: 3.6, color: 0xffe2b0, pos: [2.4, 3.0, 1.0], hemi: 0.6 },
+  dark: { bg: 0x1c2228, env: 0.6, key: 2.4, color: 0xfff1dc, pos: [1.6, 3.2, 2.4], hemi: 0.4 },
+};
+const L = LIGHTS[q.get('light') || 'studio'];
+scene.background = new THREE.Color(L.bg);
+const pm = new THREE.PMREMGenerator(renderer);
+scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture; scene.environmentIntensity = L.env;
+scene.add(new THREE.HemisphereLight(0xdfe9f2, 0x59624a, L.hemi));
+const key = new THREE.DirectionalLight(L.color, L.key); key.position.set(...L.pos); key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048); Object.assign(key.shadow.camera, { left: -1.6, right: 1.6, top: 2.4, bottom: -0.4, near: 0.1, far: 10 });
+key.shadow.bias = -0.0003; key.shadow.normalBias = 0.01; scene.add(key, key.target);
+if (q.get('ground') !== '0') {
+  const g = new THREE.Mesh(new THREE.PlaneGeometry(8, 8), new THREE.MeshStandardMaterial({ color: 0x6b7560, roughness: 1 }));
+  g.rotation.x = -Math.PI / 2; g.receiveShadow = true; scene.add(g);
+}
+const camera = new THREE.PerspectiveCamera(+q.get('fov') || 30, (+q.get('w') || 800) / (+q.get('h') || 800), 0.01, 50);
+window.shot = { THREE, scene, camera, renderer, model: null,
+  view(p) { camera.position.set(p[0], p[1], p[2]); camera.lookAt(p[3], p[4], p[5]); renderer.render(scene, camera); },
+  pose(name, t) { if (!this.mixer) return; this.mixer.stopAllAction(); const clip = this.clips.find((c) => c.name === name); const a = this.mixer.clipAction(clip); a.play(); this.mixer.setTime(t); this.mixer.update(0); this.model.updateMatrixWorld(true); } };
+const loader = new GLTFLoader();
+const load = (url) => new Promise((res, rej) => loader.load(url, res, undefined, rej));
+try {
+  const g = await load(q.get('model'));
+  scene.add(g.scene); window.shot.model = g.scene; window.shot.clips = g.animations;
+  if (g.animations.length) { window.shot.mixer = new THREE.AnimationMixer(g.scene); }
+  const extra = q.get('extra');
+  if (extra) for (const [i, e] of extra.split(',').entries()) { const x = await load(e); scene.add(x.scene); (window.shot.extras ||= []).push(x); }
+  document.body.dataset.ready = '1';
+} catch (e) { document.body.dataset.error = String(e); }
+</script></body></html>
