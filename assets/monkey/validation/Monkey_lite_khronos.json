@@ -1,0 +1,21 @@
+{
+  "file": "/home/user/Paradise-Island-3d-assets/assets/monkey/Monkey_lite.glb",
+  "version": "2.0",
+  "generator": "Khronos glTF Blender I/O v5.2.40",
+  "materials": 4,
+  "triangles": 60352,
+  "vertices": 35850,
+  "errors": 0,
+  "warnings": 8,
+  "infos": 0,
+  "messages": [
+    "1 MESH_PRIMITIVE_GENERATED_TANGENT_SPACE: Material requires a tangent space but the mesh primitive does not provide it. Runtime-generated tangent space may be non-portable across implementations. @ /meshes/0/primitives/0/material",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/102",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/103",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/104",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/105",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/106",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/107",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/108"
+  ]
+}

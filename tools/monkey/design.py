@@ -257,6 +257,8 @@ def build():
     for s, t in SIDES:
         c = P(s * 0.0215, 0.4195, 0.3315)
         D.bone(f"eye_{t}", "head", c, c + np.array([0.0, -0.012, 0.0]))
+        for part in ("up", "low"):
+            D.bone(f"lid_{part}_{t}", "head", c, c + np.array([0.0, -0.012, 0.0]))
     D.bone("coconut_attach", "root", P(0, 0.2, 0.15), P(0, 0.22, 0.15))
     return D
 

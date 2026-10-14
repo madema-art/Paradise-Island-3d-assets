@@ -15,6 +15,7 @@ sys.path.insert(0, HERE)
 import bpy  # noqa: E402
 
 import anim_lib as A  # noqa: E402
+from anim_lib import blink_amount  # noqa: E402
 import clips_core  # noqa: E402
 import clips_locomotion  # noqa: E402,F401
 
@@ -25,6 +26,27 @@ for _m in OPTIONAL:
     except ModuleNotFoundError as exc:
         if exc.name != _m:
             raise
+
+
+def with_blinks(name, frames, fn, loop):
+    """Add natural blinks to every non-static clip (two per ~3 s), unless the clip already drives the lids."""
+    if frames <= 2:
+        return fn
+    seconds = frames / A.FPS
+    n = max(1, int(round(seconds / 1.9)))
+    seed = sum(ord(c) for c in name)
+    events = [((i + 0.35 + 0.17 * ((seed * (i + 3)) % 5) / 5.0) / n) % 1.0 for i in range(n)]
+    width = min(0.45, 0.22 / seconds)
+
+    def wrapped(phase):
+        st = fn(phase)
+        if "lid_up_L" in st.fk and any(abs(v) > 1e-6 for v in st.fk["lid_up_L"]):
+            return st                      # the clip sets its own eyelids (e.g. wide-eyed startle)
+        a = blink_amount(phase, events, width)
+        if a > 0:
+            A.eye_state(st, close=a)
+        return st
+    return wrapped
 
 
 def attach_coconut(rig_ob, path):
@@ -67,12 +89,12 @@ def main():
         if groups and c["meta"].get("group") not in groups:
             continue
         clips_core.CLAMP_MAX["mm"] = 0.0
-        act = rig.bake(name, c["frames"], c["fn"], loop=c["loop"])
+        act = rig.bake(name, c["frames"], with_blinks(name, c["frames"], c["fn"], c["loop"]), loop=c["loop"])
         clamp_mm = round(clips_core.CLAMP_MAX["mm"], 1)
         for k, v in c["meta"].items():
             act[k] = v
         report[name] = dict(frames=c["frames"], seconds=round(c["frames"] / A.FPS, 3), loop=c["loop"],
-                            reach_error_mm=rig.stats[name], clamp_shift_mm=clamp_mm, **{k: v for k, v in c["meta"].items()})
+                            reach_error_mm=rig.stats[name], clamp_shift_mm=clamp_mm, uses_coconut=bool(act.get("uses_coconut", False)), **{k: v for k, v in c["meta"].items()})
         worst = max(rig.stats[name].values())
         print(f"[clip] {name:28s} {c['frames']:3d}f loop={c['loop']!s:5s} max IK miss {worst:5.1f} mm  clamp shift {clamp_mm:5.1f} mm")
     rig.reset()

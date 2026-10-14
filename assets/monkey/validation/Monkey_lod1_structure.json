@@ -1,0 +1,61 @@
+{
+  "file": "Monkey_lod1.glb",
+  "bytes": 2275504,
+  "meshes": 3,
+  "primitives": 3,
+  "vertices": 11847,
+  "triangles": 17680,
+  "materials": [
+    {
+      "name": "MonkeyFur",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 1024,
+        "height": 1024,
+        "mimeType": "image/jpeg"
+      }
+    },
+    {
+      "name": "MonkeyEye",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 512,
+        "height": 256,
+        "mimeType": "image/png"
+      }
+    }
+  ],
+  "images": [
+    "image/jpeg",
+    "image/png",
+    "image/jpeg",
+    "image/png"
+  ],
+  "bounds_min": [
+    -0.0987,
+    -0.0032,
+    -0.3648
+  ],
+  "bounds_max": [
+    0.0993,
+    0.369,
+    0.4612
+  ],
+  "skins": [
+    102
+  ],
+  "animations": [],
+  "errors": [],
+  "warnings": [],
+  "status": "PASS"
+}

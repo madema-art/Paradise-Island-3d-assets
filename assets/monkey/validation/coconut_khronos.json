@@ -1,0 +1,14 @@
+{
+  "file": "/home/user/Paradise-Island-3d-assets/assets/monkey/coconut.glb",
+  "version": "2.0",
+  "generator": "Khronos glTF Blender I/O v5.2.40",
+  "materials": 1,
+  "triangles": 4992,
+  "vertices": 2663,
+  "errors": 0,
+  "warnings": 1,
+  "infos": 0,
+  "messages": [
+    "1 MESH_PRIMITIVE_GENERATED_TANGENT_SPACE: Material requires a tangent space but the mesh primitive does not provide it. Runtime-generated tangent space may be non-portable across implementations. @ /meshes/0/primitives/0/material"
+  ]
+}

@@ -1,0 +1,110 @@
+{
+ "files": {
+  "Coconut.blend": {
+   "bytes": 423956,
+   "sha256_16": "3bbf41e728c97914"
+  },
+  "Monkey.blend": {
+   "bytes": 8011759,
+   "sha256_16": "8a24c3e61fb1a3b4"
+  },
+  "Monkey.glb": {
+   "bytes": 11977496,
+   "sha256_16": "04c03a59e82a9607"
+  },
+  "Monkey_lite.glb": {
+   "bytes": 7642488,
+   "sha256_16": "4ea85c52f7554bd8"
+  },
+  "Monkey_lod1.glb": {
+   "bytes": 2275504,
+   "sha256_16": "a89cf3768400505d"
+  },
+  "coconut.glb": {
+   "bytes": 328692,
+   "sha256_16": "1a596f289588a8a9"
+  },
+  "monkey_bones.json": {
+   "bytes": 5883,
+   "sha256_16": "b0a6a70ad1513e42"
+  },
+  "monkey_clips.json": {
+   "bytes": 18009,
+   "sha256_16": "4ebb164294aedfcc"
+  },
+  "validation/Monkey_khronos.json": {
+   "bytes": 1479,
+   "sha256_16": "cabcd726b24721b3"
+  },
+  "validation/Monkey_lite_khronos.json": {
+   "bytes": 1484,
+   "sha256_16": "1c7e512d5b0d605d"
+  },
+  "validation/Monkey_lite_structure.json": {
+   "bytes": 2851,
+   "sha256_16": "54dba8fabffb409f"
+  },
+  "validation/Monkey_lod1_khronos.json": {
+   "bytes": 932,
+   "sha256_16": "b549bd32fc5ef4ae"
+  },
+  "validation/Monkey_lod1_structure.json": {
+   "bytes": 931,
+   "sha256_16": "41309385136adba4"
+  },
+  "validation/Monkey_structure.json": {
+   "bytes": 2847,
+   "sha256_16": "500dab6f74bf3410"
+  },
+  "validation/coconut_khronos.json": {
+   "bytes": 512,
+   "sha256_16": "269fbb7102a7e29d"
+  },
+  "validation/coconut_structure.json": {
+   "bytes": 640,
+   "sha256_16": "8a2c87b293df78fd"
+  },
+  "textures/coconut_albedo.jpg": {
+   "bytes": 20111,
+   "sha256_16": "8b9e1c0ac9514fd5"
+  },
+  "textures/coconut_normal.jpg": {
+   "bytes": 191816,
+   "sha256_16": "567fec97c4a9dcc5"
+  },
+  "textures/eye_albedo.png": {
+   "bytes": 25961,
+   "sha256_16": "71a2d49318d87b32"
+  },
+  "textures/monkey_albedo.jpg": {
+   "bytes": 1008803,
+   "sha256_16": "25cfc0595e63bd6a"
+  },
+  "textures/monkey_normal.jpg": {
+   "bytes": 3984409,
+   "sha256_16": "ab1fae8200d090b3"
+  },
+  "textures/monkey_orm.png": {
+   "bytes": 840437,
+   "sha256_16": "556c9cd87e2cce35"
+  },
+  "textures/source/monkey_albedo.png": {
+   "bytes": 2656290,
+   "sha256_16": "71270d84f0016965"
+  },
+  "textures/source/monkey_normal.png": {
+   "bytes": 5333125,
+   "sha256_16": "53b4358f60a37b5c"
+  },
+  "textures/source/monkey_orm.png": {
+   "bytes": 1940357,
+   "sha256_16": "e9162e3346b92bdf"
+  }
+ },
+ "validation": {
+  "Monkey.glb": "PASS | khronos errors=0 warnings=8",
+  "Monkey_lite.glb": "PASS | khronos errors=0 warnings=8",
+  "Monkey_lod1.glb": "PASS | khronos errors=0 warnings=4",
+  "coconut.glb": "PASS | khronos errors=0 warnings=1"
+ }
+}

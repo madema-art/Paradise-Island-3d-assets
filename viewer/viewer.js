@@ -121,6 +121,9 @@ const CAMS = {
   Face:    [[0.32, 0.38, 0.95], [0, 0.31, 0.43]],
   Hands:   [[0.45, 0.22, 0.95], [0.0, 0.04, 0.34]],
   Wide:    [[2.0, 1.1, 2.4], [0, 0.25, 0.2]],
+  Climb:   [[1.7, 0.62, 0.35], [0, 0.45, 0.1]],
+  Pair:    [[1.55, 0.55, 0.54], [0, 0.12, 0.54]],
+  Feet:    [[-0.45, 0.20, -0.35], [0.0, 0.03, 0.02]],
 };
 const camNames = Object.keys(CAMS);
 function setCamera(name) {
@@ -128,7 +131,7 @@ function setCamera(name) {
   camera.position.set(...p); controls.target.set(...t); controls.update();
 }
 const camBox = $('camButtons');
-camNames.forEach((n, i) => { const b = document.createElement('button'); b.textContent = n; b.title = `${i + 1}`; b.onclick = () => setCamera(n); camBox.appendChild(b); });
+camNames.slice(0, 8).forEach((n, i) => { const b = document.createElement('button'); b.textContent = n; b.title = `${i + 1}`; b.onclick = () => setCamera(n); camBox.appendChild(b); });
 
 // ------------------------------------------------------------------ inspection shading
 const checker = (() => { const t = checkerTexture('#e8e4dc', '#2a3138', 2, 64); t.repeat.set(24, 24); return t; })();
@@ -159,7 +162,7 @@ function applyShading() {
 }
 
 // ------------------------------------------------------------------ clips
-const usesCoconut = (n) => n.startsWith('coconut_') || n === 'pose_coconut_hold';
+const usesCoconut = (n) => clipsMeta[n]?.uses_coconut ?? (n.startsWith('coconut_') || n === 'pose_coconut_hold');
 function buildClipList() {
   const list = $('cliplist'); list.innerHTML = '';
   const names = (monkey.animations || []).map((c) => c.name);
@@ -210,6 +213,7 @@ function play(name, opts = {}) {
   next.paused = paused;
   // coconut prop
   if (coconutProp) coconutProp.visible = $('chkCoconut').checked && usesCoconut(name);
+  if (opts.autoCam !== false && clipsMeta[name]?.pair && !partner) setCamera('Pair');
   // paired clip -> second monkey
   const meta = clipsMeta[name] || {};
   const wantPartner = meta.partner_clip && actions[meta.partner_clip] && $('chkPartner').checked;
@@ -368,6 +372,11 @@ async function boot() {
     loader.loadAsync(COCONUT).catch(() => null),
     fetch(META).then((r) => (r.ok ? r.json() : {})).catch(() => ({})),
   ]);
+  // ?lod=Monkey_lod1.glb: skin another mesh with this file's clips (animations are matched by bone name)
+  if (params.get('lod')) {
+    const lodGltf = await loader.loadAsync(params.get('lod'));
+    gltf.scene = lodGltf.scene;
+  }
   monkey = gltf; clipsMeta = meta;
   let idx = 0; for (const k of Object.keys(meta)) meta[k].index = idx++;
   scene.add(gltf.scene);
@@ -392,6 +401,8 @@ async function boot() {
   buildClipList(); wire_ui(); resize(); setLighting(params.get('light') || 'studio'); $('lighting').value = params.get('light') || 'studio';
   setCamera(params.get('cam') || '3/4');
   if (params.get('shading')) { shadingMode = params.get('shading'); $('shading').value = shadingMode; applyShading(); }
+  if (params.get('bg')) scene.background = new THREE.Color('#' + params.get('bg'));
+  if (params.get('ground') === '0') { ground.visible = false; $('chkGround').checked = false; }
   if (params.has('paused')) { paused = true; $('btnPause').textContent = 'Play'; }
   const first = params.get('clip') && actions[params.get('clip')] ? params.get('clip') : (actions.idle ? 'idle' : order[0]);
   play(first, { instant: true });
@@ -408,6 +419,12 @@ async function boot() {
       controls.update(); renderer.render(scene, camera);
     },
     shading(mode) { shadingMode = mode; applyShading(); renderer.render(scene, camera); },
+    orbit(deg, dist = 1.5, height = 0.42, target = [0, 0.2, 0.12]) {
+      const a = THREE.MathUtils.degToRad(deg);
+      camera.position.set(target[0] + Math.sin(a) * dist, height, target[2] + Math.cos(a) * dist);
+      controls.target.set(...target); controls.update(); renderer.render(scene, camera);
+    },
+    groundVisible(v) { ground.visible = v; },
     lighting(name) { setLighting(name); },
   };
   document.body.dataset.ready = '1';

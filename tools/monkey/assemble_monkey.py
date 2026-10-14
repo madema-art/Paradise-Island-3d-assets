@@ -190,6 +190,66 @@ def eye_mesh(center, mat, name):
     return ob
 
 
+LID_REST = {"up": 44.0, "low": 30.0}   # aperture edge elevation (degrees above/below the gaze axis) with the eye open
+
+
+def make_lid_material():
+    mat = bpy.data.materials.new("MonkeyLid")
+    mat.use_nodes = True
+    bsdf = mat.node_tree.nodes["Principled BSDF"]
+    bsdf.inputs["Base Color"].default_value = (0.50, 0.37, 0.33, 1.0)
+    bsdf.inputs["Roughness"].default_value = 0.82
+    mat.use_backface_culling = False
+    edge = bpy.data.materials.new("MonkeyLidEdge")       # dark lash line along the lid margin
+    edge.use_nodes = True
+    eb = edge.node_tree.nodes["Principled BSDF"]
+    eb.inputs["Base Color"].default_value = (0.045, 0.030, 0.026, 1.0)
+    eb.inputs["Roughness"].default_value = 0.7
+    edge.use_backface_culling = False
+    return mat, edge
+
+
+def lid_mesh(center, part, side, mats):
+    """Thin spherical shell that covers the upper or lower part of the eyeball; rotates about the lateral axis."""
+    r = design.EYE_R + (0.00085 if part == "up" else 0.00055)
+    na, nt = 28, 8
+    e0 = math.radians(LID_REST[part])
+    verts, faces = [], []
+    for ia in range(na + 1):
+        a = math.radians(-100 + 200 * ia / na)
+        edge = e0 * max(0.0, 1.0 - (a / math.radians(92)) ** 2) ** 0.8
+        for it in range(nt + 1):
+            t = it / nt
+            if part == "up":
+                e = edge + t * (math.radians(98) - edge)
+            else:
+                e = -(edge + t * (math.radians(98) - edge))
+            d = (math.cos(e) * math.cos(a) * np.array([0, -1, 0.0]) + math.cos(e) * math.sin(a) * np.array([side, 0, 0.0])
+                 + math.sin(e) * np.array([0, 0, 1.0]))
+            verts.append(np.array(center) + r * d)
+    for ia in range(na):
+        for it in range(nt):
+            i0 = ia * (nt + 1) + it
+            faces.append((i0, i0 + 1, i0 + nt + 2, i0 + nt + 1))
+    me = bpy.data.meshes.new(f"Lid_{part}_{side}")
+    me.from_pydata([tuple(v) for v in verts], [], faces)
+    for p in me.polygons:
+        p.use_smooth = True
+    me.materials.append(mats[0])
+    me.materials.append(mats[1])
+    for p in me.polygons:
+        row = p.index % nt                     # faces are generated with the edge row (t index 0) first in each strip
+        p.material_index = 1 if row == 0 else 0
+    me.update()
+    # outward normals: flip if the first face points at the eye centre
+    p0 = me.polygons[len(me.polygons) // 2]
+    if (np.array(p0.center) - np.array(center)).dot(np.array(p0.normal)) < 0:
+        me.flip_normals()
+    ob = bpy.data.objects.new(f"Monkey_Lid_{part.capitalize()}_{'L' if side > 0 else 'R'}", me)
+    bpy.context.scene.collection.objects.link(ob)
+    return ob
+
+
 # --------------------------------------------------------------------------- armature
 def roll_vector(d):
     d = Vector(d).normalized()
@@ -299,14 +359,18 @@ def tune_pole_angles(rig):
             print(f"[ik] {tip}: pole_angle={math.degrees(best):.0f}deg joint error {best_err * 1000:.1f}mm")
 
 
-def bind(body, eyes, rig):
-    for ob in [body] + eyes:
+def bind(body, eyes, lids, rig):
+    for ob in [body] + eyes + lids:
         mod = ob.modifiers.new("Armature", "ARMATURE")
         mod.object = rig
         ob.parent = rig
         ob.matrix_parent_inverse = Matrix.Identity(4)
     for ob, side in zip(eyes, ("L", "R")):
         vg = ob.vertex_groups.new(name=f"eye_{side}")
+        vg.add(list(range(len(ob.data.vertices))), 1.0, "REPLACE")
+    for ob in lids:
+        bone = ob.name.replace("Monkey_Lid_", "lid_").replace("Up_", "up_").replace("Low_", "low_")
+        vg = ob.vertex_groups.new(name=bone)
         vg.add(list(range(len(ob.data.vertices))), 1.0, "REPLACE")
 
 
@@ -330,11 +394,14 @@ def main():
 
     body = build_body(z, D, fur)
     eyes = [eye_mesh(D.bones[f"eye_{t}"]["head"], eye_mat, f"Monkey_Eye_{t}") for t in ("L", "R")]
+    lid_mats = make_lid_material()
+    lids = [lid_mesh(D.bones[f"eye_{t}"]["head"], part, side_sign, lid_mats)
+            for t, side_sign in (("L", 1.0), ("R", -1.0)) for part in ("up", "low")]
     rig = build_armature(D)
     bpy.context.view_layer.objects.active = rig
     bpy.ops.object.mode_set(mode="POSE")
     add_constraints(rig)
-    bind(body, eyes, rig)
+    bind(body, eyes, lids, rig)
     tune_pole_angles(rig)
     bpy.ops.object.mode_set(mode="OBJECT")
 

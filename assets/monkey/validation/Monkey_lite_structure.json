@@ -1,0 +1,134 @@
+{
+  "file": "Monkey_lite.glb",
+  "bytes": 7642488,
+  "meshes": 7,
+  "primitives": 11,
+  "vertices": 35850,
+  "triangles": 60352,
+  "materials": [
+    {
+      "name": "MonkeyFur",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 1024,
+        "height": 1024,
+        "mimeType": "image/jpeg"
+      }
+    },
+    {
+      "name": "MonkeyEye",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 512,
+        "height": 256,
+        "mimeType": "image/png"
+      }
+    },
+    {
+      "name": "MonkeyLid",
+      "base_color_factor": [
+        0.5,
+        0.3700000047683716,
+        0.33000001311302185,
+        1
+      ],
+      "base_color_texture": null
+    },
+    {
+      "name": "MonkeyLidEdge",
+      "base_color_factor": [
+        0.04500000178813934,
+        0.029999999329447746,
+        0.026000000536441803,
+        1
+      ],
+      "base_color_texture": null
+    }
+  ],
+  "images": [
+    "image/jpeg",
+    "image/png",
+    "image/jpeg",
+    "image/png"
+  ],
+  "bounds_min": [
+    -0.0987,
+    -0.0032,
+    -0.3648
+  ],
+  "bounds_max": [
+    0.0993,
+    0.369,
+    0.4611
+  ],
+  "skins": [
+    102
+  ],
+  "animations": [
+    "alert_idle",
+    "branch_walk",
+    "climb_dismount",
+    "climb_down",
+    "climb_hang_idle",
+    "climb_start",
+    "climb_up",
+    "coconut_approach",
+    "coconut_carry_walk",
+    "coconut_grab_lift",
+    "coconut_guard",
+    "coconut_hold_idle",
+    "coconut_inspect",
+    "coconut_lose",
+    "coconut_reach",
+    "coconut_triumph",
+    "coconut_tug_challenger",
+    "coconut_tug_holder",
+    "curious",
+    "groom",
+    "hop",
+    "idle",
+    "investigate",
+    "look_around",
+    "pose_coconut_hold",
+    "pose_crouch",
+    "pose_present",
+    "pose_sit",
+    "pose_stand",
+    "pose_threat",
+    "scratch",
+    "scurry",
+    "sit_down",
+    "sit_idle",
+    "social_greet",
+    "stand_up",
+    "startled",
+    "threat_display",
+    "turn_in_place_L",
+    "turn_in_place_R",
+    "walk"
+  ],
+  "errors": [],
+  "warnings": [
+    "mesh[3].primitive[0]: no TEXCOORD_0, textured materials will not map",
+    "mesh[3].primitive[1]: no TEXCOORD_0, textured materials will not map",
+    "mesh[4].primitive[0]: no TEXCOORD_0, textured materials will not map",
+    "mesh[4].primitive[1]: no TEXCOORD_0, textured materials will not map",
+    "mesh[5].primitive[0]: no TEXCOORD_0, textured materials will not map",
+    "mesh[5].primitive[1]: no TEXCOORD_0, textured materials will not map",
+    "mesh[6].primitive[0]: no TEXCOORD_0, textured materials will not map",
+    "mesh[6].primitive[1]: no TEXCOORD_0, textured materials will not map",
+    "material MonkeyLid: no base colour texture",
+    "material MonkeyLidEdge: no base colour texture"
+  ],
+  "status": "PASS"
+}

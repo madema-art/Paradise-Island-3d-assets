@@ -24,7 +24,7 @@ def sit_base(tail_up=48):
     st = State()
     st.pelvis_off = V(0, 0.045, -0.165)
     A.spine_pose(st, pelvis=(-62, 0, 0), s1=(-6, 0, 0), s2=(-6, 0, 0), s3=(-4, 0, 0))
-    A.head_look(st, pitch=32)
+    A.head_look(st, pitch=80)      # the torso is ~78 degrees up, so the head needs ~80 to look level
     for s in A.SIDES:
         x = side_sign(s)
         foot_to(st, s, P(x * 0.075, 0.075, 0.034), 0, yaw=x * 12)
@@ -112,7 +112,7 @@ def sit_idle(phase):
 def groom(phase):
     st = sit_base(tail_up=48)
     ph = phase * TAU
-    A.head_look(st, yaw=10 * math.sin(ph), pitch=58 + 4 * math.sin(2 * ph))
+    A.head_look(st, yaw=10 * math.sin(ph), pitch=30 + 4 * math.sin(2 * ph))
     A.spine_pose(st, s2=(2, 0, 0), s3=(4, 0, 0))
     sh = shoulders(st)
     # presented left forearm
@@ -158,7 +158,7 @@ def scratch(phase):
     st = sit_base(tail_up=40)
     ph = phase * TAU
     A.spine_pose(st, s1=(0, 5, 0), s2=(0, 5, 0), s3=(0, 4, 0))
-    A.head_look(st, yaw=-26, pitch=26)
+    A.head_look(st, yaw=-26, pitch=14)
     sh = shoulders(st)
     rake = math.sin(6 * ph)
     foot_to(st, "R", P(-0.070, 0.115 + 0.030 * rake, 0.150 + 0.010 * math.cos(6 * ph)), 25, yaw=-20, roll=-18)
@@ -232,7 +232,7 @@ def startled(phase):
     A.spine_pose(flinch, s1=(6, 0, 0), s2=(6, 0, 0), s3=(5, 0, 0))
     A.head_look(flinch, pitch=-22, roll=8)
     A.ears(flinch, back=34)
-    flinch.rot("jaw", rx=10)
+    flinch.rot("jaw", rx=8)
     A.tail_pose(flinch, curl_up=36, sway=-14)
 
     def airborne(y, z):
@@ -254,7 +254,7 @@ def startled(phase):
         A.spine_pose(st, s1=(-5, 0, 0), s2=(-6, 0, 0), s3=(-6, 0, 0))
         A.head_look(st, pitch=-18)
         A.ears(st, back=36)
-        st.rot("jaw", rx=12)
+        st.rot("jaw", rx=9)
         A.tail_pose(st, curl_up=44, sway=10)
         return st
 
@@ -290,7 +290,7 @@ def threat_display(phase):
     A.spine_pose(st, s1=(5, 0, 0), s2=(6, 0, 0), s3=(6, 0, 0))
     bob = max(0.0, math.sin(2 * ph)) ** 2
     A.head_look(st, pitch=10 + 8 * bob, yaw=5 * math.sin(2 * ph))
-    st.rot("jaw", rx=12 + 4 * bob)
+    st.rot("jaw", rx=8 + 3 * bob)
     A.ears(st, back=32)
     A.tail_pose(st, curl_up=32 + 6 * math.sin(2 * ph), wave=2, phase=ph)
     # right hand slap
@@ -308,7 +308,7 @@ def social_greet(phase):
     st = sit_pose(grip=0.25)
     ph = phase * TAU
     chatter = 0.5 + 0.5 * math.sin(10 * ph)
-    A.head_look(st, yaw=8 * math.sin(ph), pitch=10 + 7 * math.sin(2 * ph), roll=5 * math.sin(ph + 1))
+    A.head_look(st, yaw=8 * math.sin(ph), pitch=0 + 7 * math.sin(2 * ph), roll=5 * math.sin(ph + 1))
     st.rot("jaw", rx=7 * chatter)
     A.ears(st, back=-9, flick=2 * math.sin(4 * ph))
     tail_sit(st, sway=9 * math.sin(ph))

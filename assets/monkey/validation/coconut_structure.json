@@ -1,0 +1,43 @@
+{
+  "file": "coconut.glb",
+  "bytes": 328692,
+  "meshes": 1,
+  "primitives": 1,
+  "vertices": 2663,
+  "triangles": 4992,
+  "materials": [
+    {
+      "name": "Coconut",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 512,
+        "height": 256,
+        "mimeType": "image/jpeg"
+      }
+    }
+  ],
+  "images": [
+    "image/jpeg",
+    "image/jpeg"
+  ],
+  "bounds_min": [
+    -0.0637,
+    -0.0685,
+    -0.0602
+  ],
+  "bounds_max": [
+    0.0629,
+    0.0685,
+    0.0604
+  ],
+  "skins": [],
+  "animations": [],
+  "errors": [],
+  "warnings": [],
+  "status": "PASS"
+}

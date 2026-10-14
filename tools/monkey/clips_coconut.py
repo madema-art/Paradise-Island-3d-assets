@@ -33,7 +33,7 @@ def hold_hands(st, C, rot=(0, 0, 0), grip=0.75, spread=0.0, behind=0.040, tilt=0
         x = side_sign(s)
         off = R @ V(x * (0.062 + spread), behind, 0.0)
         hand_to(st, s, Vector(C) + off, tilt, yaw=0, roll=x * 90)
-        A.grip(st, s, grip, thumb=min(1.0, grip + 0.1))
+        A.grip(st, s, grip, thumb=1.0)
         st.put(f"pole_elbow_{s}", sh[s] + V(x * 0.11, 0.12, -0.04))
     st.coconut = (Vector(C), rot)
     return st
@@ -61,7 +61,7 @@ def hold_sit(C_off=V(0, -0.075, -0.145)):
     sh = shoulders(st)
     C = (sh["L"] + sh["R"]) * 0.5 + C_off
     hold_hands(st, C, grip=0.72)
-    A.head_look(st, pitch=34)
+    A.head_look(st, pitch=22)
     st.coconut_home = C
     return st
 
@@ -109,7 +109,6 @@ def coconut_grab_lift(phase):
     C = lerp_vec(C0, Cb, e) + V(0, 0, 0.045 * math.sin(math.pi * e)) + V(0, 0.0, 0)
     jerk = 0.012 * math.sin(math.pi * seg(phase, 0.18, 0.45)) * math.sin(seg(phase, 0.18, 0.45) * TAU)
     hold_hands(body, C + V(0, jerk, 0), grip=lerp(0.62, 0.78, smooth(seg(phase, 0.1, 0.5))))
-    A.head_look(body, pitch=lerp(8, 34, smooth(seg(phase, 0.4, 0.95))), yaw=0)
     return reach_clamp(body)
 
 
@@ -125,7 +124,7 @@ def coconut_hold_idle(phase):
     C = (sh["L"] + sh["R"]) * 0.5 + V(0, -0.075, -0.145) + V(0, 0, 0.004 * breath)
     hold_hands(st, C, rot=(8 * math.sin(ph), 5 * math.sin(2 * ph), 24 * math.sin(ph + 0.5)), grip=0.70 + 0.04 * math.sin(2 * ph))
     sniff = max(0.0, math.sin(2 * ph - 0.6)) ** 2
-    A.head_look(st, yaw=14 * math.sin(ph + 1.0), pitch=34 + 12 * sniff, roll=2 * math.sin(ph))
+    A.head_look(st, yaw=14 * math.sin(ph + 1.0), pitch=22 + 12 * sniff, roll=2 * math.sin(ph))
     st.rot("jaw", rx=2 * sniff)
     A.ears(st, flick=3 * max(0, math.sin(3 * ph)) ** 6)
     tail_sit(st, sway=7 * math.sin(ph), phase=ph)
@@ -140,7 +139,7 @@ def coconut_inspect(phase):
     sh = shoulders(st)
     C = (sh["L"] + sh["R"]) * 0.5 + V(0, -0.080, -0.060) + V(0, 0, 0.004 * math.sin(2 * ph))
     hold_hands(st, C, rot=(10 * math.sin(2 * ph), 0, 360.0 * phase), grip=0.66 + 0.1 * math.sin(4 * ph))
-    A.head_look(st, yaw=8 * math.sin(2 * ph), pitch=24 + 8 * math.sin(4 * ph), roll=4 * math.sin(2 * ph))
+    A.head_look(st, yaw=8 * math.sin(2 * ph), pitch=12 + 8 * math.sin(4 * ph), roll=4 * math.sin(2 * ph))
     st.rot("jaw", rx=1.5 + 1.5 * math.sin(8 * ph))
     A.eyes_look(st, pitch=-4)
     A.ears(st, back=-6)
@@ -159,7 +158,7 @@ def coconut_guard(phase):
     C = (sh["L"] + sh["R"]) * 0.5 + V(0, -0.050, -0.150)
     hold_hands(st, C, rot=(0, 0, 4 * math.sin(2 * ph)), grip=0.9, spread=-0.004, behind=0.050)
     scan = math.sin(ph) * (0.6 + 0.4 * math.sin(3 * ph))
-    A.head_look(st, yaw=48 * scan, pitch=30 + 5 * math.sin(4 * ph), roll=-5 * scan)
+    A.head_look(st, yaw=48 * scan, pitch=18 + 5 * math.sin(4 * ph), roll=-5 * scan)
     A.eyes_look(st, yaw=-10 * scan)
     st.rot("jaw", rx=3 + 5 * max(0.0, math.sin(5 * ph)) ** 2)
     A.ears(st, back=30)
@@ -188,7 +187,7 @@ def tug_state(phase, role):
     C = P(0.0, f_c, TUG_Z + 0.004 * math.sin(6 * ph))
     hold_hands(st, C, rot=(3.0 * sgn * delta / TUG_AMP, 0, 5 * math.sin(3 * ph) * sgn), grip=0.9, spread=0.003, behind=0.046)
     A.head_look(st, pitch=6 - 10 * gain + 6 * lurch, yaw=3 * math.sin(3 * ph))
-    st.rot("jaw", rx=5 + 7 * gain)
+    st.rot("jaw", rx=4 + 5 * gain)
     A.ears(st, back=22)
     A.tail_pose(st, curl_up=26 + 10 * gain, sway=8 * math.sin(3 * ph + 1.0), wave=3, phase=ph * 3)
     A.spine_pose(st, s3=(0, 0, 3 * math.sin(3 * ph) * sgn))
@@ -219,16 +218,16 @@ def coconut_triumph(phase):
     shu = shoulders(up)
     Cu = (shu["L"] + shu["R"]) * 0.5 + V(0, -0.040, 0.205)
     hold_hands(up, Cu, grip=0.8, spread=-0.002)
-    A.head_look(up, pitch=-28)
-    up.rot("jaw", rx=16)
+    A.head_look(up, pitch=-40)
+    up.rot("jaw", rx=10)
     A.ears(up, back=-10)
     tail_sit(up, lift=24)
     sh2 = lerp_state(up, up, 0)
     hold_hands(sh2, Cu + V(0, 0, 0.012), rot=(0, 7, 0), grip=0.8)
-    A.head_look(sh2, pitch=-34, roll=6)
+    A.head_look(sh2, pitch=-46, roll=6)
     sh3 = lerp_state(up, up, 0)
     hold_hands(sh3, Cu + V(0, 0, 0.012), rot=(0, -7, 0), grip=0.8)
-    A.head_look(sh3, pitch=-34, roll=-6)
+    A.head_look(sh3, pitch=-46, roll=-6)
     sh2.rot("jaw", rx=3)
     keys = [(0.0, a), (0.30, up), (0.46, sh2), (0.60, sh3), (0.74, up), (1.0, hold_sit())]
     return keypose_fn(keys)(phase)
@@ -249,7 +248,7 @@ def coconut_lose(phase):
         A.grip(open_, s, 0.0)
         open_.put(f"pole_elbow_{s}", sh[s] + V(x * 0.12, 0.08, -0.05))
     open_.coconut = (far, (30, 0, 40))
-    A.head_look(open_, pitch=26, yaw=-8)
+    A.head_look(open_, pitch=20, yaw=-8)
     A.ears(open_, back=26)
     open_.rot("jaw", rx=6)
     slump = sit_base()
@@ -261,7 +260,7 @@ def coconut_lose(phase):
         A.grip(slump, s, 0.1)
         slump.put(f"pole_elbow_{s}", shs[s] + V(x * 0.12, 0.11, -0.05))
     slump.coconut = (far, (30, 0, 40))
-    A.head_look(slump, pitch=42, yaw=-14)
+    A.head_look(slump, pitch=30, yaw=-14)
     A.ears(slump, back=28)
     tail_sit(slump, sway=-6)
     keys = [(0.0, a), (0.18, pulled), (0.38, open_), (1.0, slump)]

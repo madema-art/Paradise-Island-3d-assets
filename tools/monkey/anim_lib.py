@@ -180,8 +180,10 @@ class MonkeyRig:
         ad.action = act
         prev_q = {}
         worst = defaultdict(float)
+        uses_coconut = False
         for i in range(nframes + 1):
             st = fn(i / nframes)
+            uses_coconut = uses_coconut or st.coconut is not None
             self.apply(st)
             for k, v in self.reach_error(st).items():
                 worst[k] = max(worst[k], v)
@@ -192,6 +194,7 @@ class MonkeyRig:
                 pass
         ad.action = None
         act["loop"] = bool(loop)
+        act["uses_coconut"] = uses_coconut
         act["frames"] = nframes
         self.stats[clip_name] = {k: round(v * 1000, 1) for k, v in worst.items()}
         return act
@@ -220,12 +223,19 @@ def toe_grip(st, side, amount):
     st.rot(f"t_hallux_2_{side}", rx=40 * amount)
 
 
+CURL_GAIN, SWAY_GAIN = 2.2, 2.5
+
+
 def tail_pose(st, curl_up=0.0, sway=0.0, wave=0.0, phase=0.0, droop=0.0):
-    """Tail shape: curl_up raises it progressively along its length, sway = lateral, wave = travelling S-wave."""
+    """Tail shape. curl_up / sway are scaled TOTAL angles spread along the tail (curl_up raises it, sway = lateral);
+    wave = amplitude of a travelling S-wave per segment (degrees); droop lowers the tip progressively."""
+    w_curl = [0.6 + 0.6 * i / 10 for i in range(1, 11)]
+    w_sway = [0.5 + 0.7 * i / 10 for i in range(1, 11)]
+    sc, ss = sum(w_curl), sum(w_sway)
     for i in range(1, 11):
         a = i / 10.0
-        st.rot(f"tail_{i}", rx=curl_up * (0.6 + 0.6 * a) - droop * a,
-               rz=sway * (0.5 + 0.7 * a) + wave * math.sin(phase - a * 2.4))
+        st.rot(f"tail_{i}", rx=curl_up * CURL_GAIN * w_curl[i - 1] / sc - droop * a,
+               rz=sway * SWAY_GAIN * w_sway[i - 1] / ss + wave * math.sin(phase - a * 2.4))
 
 
 def head_look(st, yaw=0.0, pitch=0.0, roll=0.0, neck_share=0.55):
@@ -259,3 +269,29 @@ def ankle_from_ball(ball, pitch_deg, ankle_off=Vector((0.0, 0.069, 0.0265))):
 
 def wrist_from_knuckle(knuckle, pitch_deg, wrist_off=Vector((0.0, 0.045, 0.0255))):
     return knuckle + eul(pitch_deg, 0, 0) @ wrist_off
+
+
+# --------------------------------------------------------------------------- eyelids
+def lids(st, up=0.0, low=0.0, side="both"):
+    """Raw lid rotation in degrees (positive = closing for the upper lid, negative = closing for the lower lid)."""
+    for s in SIDES:
+        if side in ("both", s):
+            st.rot(f"lid_up_{s}", rx=up)
+            st.rot(f"lid_low_{s}", rx=low)
+
+
+def eye_state(st, close=0.0, wide=0.0, squint=0.0):
+    """close 0..1 shuts the eye; wide opens it further (startle); squint narrows it (threat, glare, bright light)."""
+    up = 55.0 * close + 13.0 * squint - 12.0 * wide
+    low = -39.0 * close - 10.0 * squint + 7.0 * wide
+    lids(st, up, low)
+
+
+def blink_amount(phase, events, width):
+    """Smooth 0..1 blink pulses centred on `events` (phase units), each `width` wide, wrapping around the loop."""
+    amt = 0.0
+    for c in events:
+        d = abs(((phase - c + 0.5) % 1.0) - 0.5)
+        if d < width * 0.5:
+            amt = max(amt, math.sin(math.pi * (1 - d / (width * 0.5)) * 0.5) ** 2)
+    return amt
