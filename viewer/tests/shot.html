@@ -42,7 +42,11 @@ try {
   scene.add(g.scene); window.shot.model = g.scene; window.shot.clips = g.animations;
   if (g.animations.length) { window.shot.mixer = new THREE.AnimationMixer(g.scene); }
   const extra = q.get('extra');
-  if (extra) for (const [i, e] of extra.split(',').entries()) { const x = await load(e); scene.add(x.scene); (window.shot.extras ||= []).push(x); }
+  if (extra) for (const [i, e0] of extra.split(',').entries()) {
+    const [e, bone] = e0.split('@'); const x = await load(e);
+    const host = bone ? g.scene.getObjectByName(bone) : null;
+    (host || scene).add(x.scene); (window.shot.extras ||= []).push(x);
+  }
   document.body.dataset.ready = '1';
 } catch (e) { document.body.dataset.error = String(e); }
 </script></body></html>
