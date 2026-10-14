@@ -227,7 +227,10 @@ def build_hair(path, mat):
     bones = [str(b) for b in z["bones"]]
     Vs, Fs, UVs, Ns, Is, Ws = [], [], [], [], [], []
     off = 0
+    keep_tags = [t for t in os.environ.get("HAIR_TAGS", "").split(",") if t]          # LODs keep a subset of the card layers
     for i in range(int(z["n"])):
+        if keep_tags and str(z[f"tag{i}"]) not in keep_tags:
+            continue
         Vs.append(z[f"V{i}"]); Fs.append(z[f"F{i}"] + off); UVs.append(z[f"UV{i}"]); Ns.append(z[f"N{i}"])
         Is.append(z[f"I{i}"]); Ws.append(z[f"W{i}"])
         off += len(z[f"V{i}"])
@@ -303,6 +306,15 @@ def main():
     paths = prepare_textures(a.tex, runtime, a.head_res, a.body_res)
     mats = [skin_material("CastawaySkinHead", paths, "head"), skin_material("CastawaySkinBody", paths, "body")]
     body = build_skin(z, mats)
+    ratio = float(os.environ.get("SKIN_RATIO", "1.0"))
+    if ratio < 0.999:                                                                  # LOD: collapse-decimate the skin (seams are split verts, so UV borders hold)
+        bpy.context.view_layer.objects.active = body
+        mod = body.modifiers.new("Decimate", "DECIMATE")
+        mod.decimate_type = "COLLAPSE"
+        mod.ratio = ratio
+        mod.use_collapse_triangulate = True
+        bpy.ops.object.modifier_apply(modifier=mod.name)
+        print(f"[lod] skin decimated to {len(body.data.polygons)} tris")
     objs = [body]
     eye_mat = eye_material(paths)
     for t in ("L", "R"):

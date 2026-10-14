@@ -115,6 +115,13 @@ def build():
         D.add(Ellipsoid(P(s * 0.032, -0.074, 1.255), (0.026, 0.017, 0.105)), "spine2", k=0.035, T=0.010, name=f"erector_{t}")
         D.add(Ellipsoid(P(s * 0.158, 0.0, 1.606), (0.064, 0.058, 0.050)), "spine4", k=0.04, T=0.010, name=f"shoulder_mass_{t}")
         D.add(Ellipsoid(P(s * 0.092, -0.026, 1.655), (0.082, 0.042, 0.022), rot=(0, s * 15, 0)), "spine4", k=0.03, T=0.008, name=f"trap_{t}")
+        # lean, fit definition (a few mm of relief): abdominal segments, serratus digitations, obliques, lower pec border
+        for i, zr in enumerate((1.407, 1.349, 1.291, 1.236)):
+            D.add(Ellipsoid(P(s * 0.027, 0.091, zr), (0.0235, 0.0165, 0.0255 if i < 3 else 0.022)), "spine2" if i > 0 else "spine3", k=0.008, T=0.005, name=f"ab_{t}{i}")
+        for i, zr in enumerate((1.392, 1.340, 1.290)):
+            D.add(Ellipsoid(P(s * (0.108 + 0.004 * i), 0.052 - 0.010 * i, zr), (0.021, 0.019, 0.017)), "spine3", k=0.008, T=0.005, name=f"serratus_{t}{i}")
+        D.add(Ellipsoid(P(s * 0.114, 0.034, 1.236), (0.030, 0.042, 0.050), rot=(0, 0, s * 8)), "spine2", k=0.018, T=0.006, name=f"oblique_{t}")
+        D.add(Ellipsoid(P(s * 0.078, 0.104, 1.452), (0.054, 0.010, 0.0075)), "spine4", k=0.012, T=0.005, name=f"pec_border_{t}")
 
     # ---- neck
     D.add(RoundCone(P(0, -0.020, 1.615), P(0, -0.014, 1.780), 0.061, 0.0525), "neck1", k=0.03, T=0.008, name="neck")
@@ -149,9 +156,9 @@ def build():
         D.add(Sphere(P(s * 0.0225, 0.072, 1.7945), 0.0080), "head", k=0.010, T=0.005, name=f"modiolus_{t}")
     # mandible: body, ramus, chin (centres sit inside the silhouette: outer edge ~ bigonial half-width 0.054)
     for s, t in SIDES:
-        D.add(RoundCone(P(s * 0.036, -0.010, 1.792), P(s * 0.014, 0.074, 1.764), 0.0210, 0.0175), "jaw", k=0.012, T=0.005, name=f"mandible_{t}")
+        D.add(RoundCone(P(s * 0.036, -0.010, 1.792), P(s * 0.014, 0.074, 1.764), 0.0200, 0.0168), "jaw", k=0.012, T=0.005, name=f"mandible_{t}")
         D.add(RoundCone(P(s * 0.034, -0.010, 1.792), P(s * 0.040, -0.016, 1.858), 0.0165, 0.0140), "jaw", k=0.012, T=0.005, name=f"ramus_{t}")
-    D.add(Ellipsoid(P(0, 0.078, 1.768), (0.0195, 0.0160, 0.0160)), "jaw", k=0.008, T=0.004, name="chin")
+    D.add(Ellipsoid(P(0, 0.078, 1.770), (0.0185, 0.0150, 0.0150)), "jaw", k=0.008, T=0.004, name="chin")
     D.add(Ellipsoid(P(0, 0.034, 1.754), (0.032, 0.046, 0.012)), "jaw", k=0.016, T=0.006, name="submental")
     # ears
     for s, t in SIDES:

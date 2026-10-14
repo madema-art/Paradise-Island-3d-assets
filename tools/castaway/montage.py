@@ -16,7 +16,7 @@ import anim_pack  # noqa: E402
 import clipkit as CK  # noqa: E402
 from pose_lib import RIG  # noqa: E402
 
-ALL_MODS = ["clips_locomotion", "clips_transitions", "clips_posture", "clips_staff", "clips_personality", "clips_survival", "clips_fishing", "clips_canoe", "clips_wildlife"]
+ALL_MODS = ["clips_locomotion", "clips_transitions", "clips_posture", "clips_staff", "clips_personality", "clips_survival", "clips_fishing", "clips_canoe", "clips_wildlife", "clips_climb"]
 EXTRA_MODS = os.environ.get("CLIP_MODS", "").split(",") if os.environ.get("CLIP_MODS") else []
 
 CAMS = {"a": "a:2.6,1.2,3.4,0,0.95,0", "b": "b:4.2,1.0,0.0,0,0.95,0", "c": "c:-2.6,1.2,3.4,0,0.95,0", "f": "f:0.0,1.3,3.6,0,0.95,0",
@@ -52,7 +52,7 @@ def main():
         if getattr(B, "aux_used", False):
             ex.append("build/castaway/props/Paddle.glb@prop_aux")
         pr = B.spec.get("meta", {}).get("props", []) if isinstance(B.spec.get("meta"), dict) else []
-        for nm, f in (("canoe", "Canoe"), ("boulder", "Boulder"), ("rock", "Rock"), ("log", "Log"), ("fire", "Campfire")):
+        for nm, f in (("canoe", "Canoe"), ("palm", "PalmTrunk"), ("boulder", "Boulder"), ("rock", "Rock"), ("log", "Log"), ("fire", "Campfire")):
             if nm in pr:
                 ex.append(f"build/castaway/props/{f}.glb")
         extra = ["--extra", ",".join(ex)] if ex else []

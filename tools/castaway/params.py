@@ -229,7 +229,7 @@ def finish(prm, arm_mode=("fk", "fk"), arm_space=("world", "world"), stance=(Fal
                 continue
             ik = RIG.ik[("leg", t)]
             hip = sol1.head(f"thigh_{t}")
-            ankle = p.leg[t]["target"]
+            ankle = p.root_pos + Rz(p.root_yaw) @ p.leg[t]["target"]        # IK targets are root-local
             reach = (ik.L1 + ik.L2) * (0.985 - auto[1])
             dh = np.hypot(*(ankle[:2] - hip[:2]))
             allowed = np.sqrt(max(reach ** 2 - dh ** 2, 0.0))

@@ -102,9 +102,9 @@ def build_paddle():
 
 
 def build_boulder():
-    V, F = noise_ellipsoid((0, 0.55, 0), (0.85, 0.60, 0.70), 5, 0.20)
+    V, F = noise_ellipsoid((0, 0.55, 1.35), (0.85, 0.60, 0.70), 5, 0.20)
     V[:, 1] = np.maximum(V[:, 1], 0.0)
-    marks = {"hold_1": (0.45, 0.55, 0.50), "hold_2": (-0.35, 0.85, 0.55), "hold_3": (0.1, 1.05, 0.2), "top": (0, 1.15, 0.0), "step_base": (0.0, 0.0, 0.95)}
+    marks = {"hold_1": (0.45, 0.55, 0.65), "hold_2": (-0.35, 0.85, 0.70), "lip": (0.0, 1.0, 0.66), "top": (0, 1.05, 1.35), "stand_base": (0.0, 0.0, 0.0)}
     return {"Boulder": (V, F, "stone")}, marks
 
 
@@ -150,7 +150,7 @@ def build_campfire():
 def build_palm():
     H = 5.2
     zs = np.linspace(0, H, 40)
-    pts = np.stack([0.45 * (zs / H) ** 2 * 1.0 + 0.05 * np.sin(zs * 0.8), zs, 0.12 * np.sin(zs * 0.5)], 1)
+    pts = np.stack([0.30 * (zs / H) ** 2 * 1.0 + 0.05 * np.sin(zs * 0.8), zs, 0.53 + 0.10 * np.sin(zs * 0.5)], 1)
     rad = 0.17 - 0.06 * (zs / H) + 0.012 * np.sin(zs * 18.0)
     t = tube(pts, rad, sides=14, v_scale=1.0)
     fronds = []
@@ -165,7 +165,7 @@ def build_palm():
     return {"Palm_trunk": (t[0], t[1], "wood"), "Palm_fronds": (fr[0], fr[1], "frond")}, marks
 
 
-MATS = {"wood": (0.42, 0.29, 0.17, 0.8), "wood_dark": (0.26, 0.17, 0.10, 0.85), "stone": (0.46, 0.45, 0.42, 0.95), "frond": (0.18, 0.40, 0.14, 0.7),
+MATS = {"wood": (0.42, 0.29, 0.17, 0.8), "wood_dark": (0.26, 0.17, 0.10, 0.85), "stone": (0.30, 0.29, 0.27, 0.95), "frond": (0.18, 0.40, 0.14, 0.7),
         "flame": (1.0, 0.45, 0.08, 0.5)}
 
 

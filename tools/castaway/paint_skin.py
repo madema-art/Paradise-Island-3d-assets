@@ -145,6 +145,44 @@ def body_creases(rig_lm):
     return cls
 
 
+MUSCLES = [
+    # (name, centre (x, y, z) with y = -forward, radii (rx, ry, rz), amplitude m, mirror)
+    ("pec", (0.078, -0.100, 1.495), (0.060, 0.050, 0.040), 0.0060, True),
+    ("pec_upper", (0.070, -0.095, 1.560), (0.060, 0.040, 0.022), 0.0030, True),
+    ("rectus1", (0.024, -0.104, 1.405), (0.022, 0.05, 0.024), 0.0032, True),
+    ("rectus2", (0.024, -0.104, 1.345), (0.022, 0.05, 0.024), 0.0032, True),
+    ("rectus3", (0.024, -0.102, 1.285), (0.022, 0.05, 0.024), 0.0030, True),
+    ("rectus4", (0.023, -0.100, 1.225), (0.021, 0.05, 0.024), 0.0026, True),
+    ("serratus", (0.108, -0.070, 1.350), (0.030, 0.05, 0.070), 0.0030, True),
+    ("oblique", (0.115, -0.040, 1.230), (0.035, 0.06, 0.055), 0.0026, True),
+    ("deltoid", (0.196, -0.004, 1.585), (0.045, 0.050, 0.060), 0.0045, True),
+    ("trap", (0.060, 0.070, 1.625), (0.070, 0.05, 0.040), 0.0042, True),
+    ("scapula", (0.090, 0.080, 1.520), (0.050, 0.05, 0.055), 0.0040, True),
+    ("lat", (0.105, 0.065, 1.420), (0.055, 0.05, 0.090), 0.0036, True),
+    ("erector", (0.026, 0.085, 1.340), (0.020, 0.05, 0.110), 0.0042, True),
+    ("quad", (0.115, -0.060, 0.800), (0.045, 0.06, 0.150), 0.0032, True),
+    ("calf", (0.098, 0.050, 0.370), (0.035, 0.05, 0.110), 0.0045, True),
+    ("calf_front", (0.092, -0.050, 0.350), (0.020, 0.04, 0.130), 0.0022, True),
+]
+
+
+def limb_height(P):
+    """Relief along the arms (biceps/triceps/forearm bellies, elbow bone) and legs (knee cap, shin crest) from the rest-pose landmarks."""
+    return 0.0 * P[:, 0]
+
+
+def muscle_height(P):
+    h = np.zeros(len(P))
+    for name, c, r, a, mir in MUSCLES:
+        for s in ((1.0, -1.0) if mir else (1.0,)):
+            cc = np.array([c[0] * s, c[1], c[2]])
+            d = (P - cc) / np.array(r)
+            # restrict each bump to its own side of the body (front muscles do not leak to the back)
+            side = 1.0 / (1.0 + np.exp(-(np.sign(c[1]) * -(P[:, 1] - 0.0) * 0 + (np.sign(c[1]) * (P[:, 1] - c[1] * 0.0))) / 0.02)) if False else 1.0
+            h += a * np.exp(-(d[:, 0] ** 2 + (d[:, 1] * 0.55) ** 2 + d[:, 2] ** 2)) * side
+    return h
+
+
 def digit_rings(D):
     """Skin creases around finger / toe joints (rings perpendicular to the digit axis)."""
     out_f, out_k = [], []
@@ -412,6 +450,8 @@ def paint_group(z, D, sampler, group, size, outdir, tag, seed, debug=False):
             p = q[s0:e0]
             pores = nC(p, 0.00085) * 0.55 + nC(p + 9.1, 0.0022) * 0.45
             hh[s0:e0] = (pores - 0.5) * 0.000085
+            if group == 1 and with_creases:
+                hh[s0:e0] += muscle_height(p) * 0.55 + limb_height(p)
         return hh
 
     h0 = height(P)

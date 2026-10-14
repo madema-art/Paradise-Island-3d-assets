@@ -2,8 +2,10 @@
 Authored as keyposes + oscillations; arms FK or IK (head space) with a per-key IK weight."""
 import numpy as np
 
+import gaitkit as GK
 import params as PR
 import rigkit as RK
+import steps as ST
 from clipkit import clip, keys, smooth, seg, pulse
 from posekit import *      # noqa: F401,F403
 import posekit as K
@@ -625,3 +627,132 @@ def _look_up_sky(t):
 
 mk("look_up_sky", "personality", 5.0, desc="Tips his head far back to look up at the sky or the treetops, squinting; a slow turn as something passes.",
    interrupt="any", blend_in=0.3, blend_out=0.3, start_pose="stand", end_pose="stand")(_look_up_sky)
+
+
+# ---------------------------------------------------------------------------------------------------- lounging and play
+def _lounge_sit_back(t):
+    T = 12.0
+    ph = t / T
+    from clips_posture import pose_sit_ground
+    p = pose_sit_ground(0.62)
+    p = K.P(p, sp=[-14, 0, 0], hd=[2, 0, 0], pel=[0, 0.12, -(RK.HIP_Z - 0.085) - 0.0, -26, 0, 0], armL=HANG.copy(), armR=HANG.copy(), wL=0.0, wR=0.0)
+    p = RK.face_neutral(p, 0.4)
+    p["armL"] = np.array([-26.0, 16.0, 0.0, 4.0, 0, 0])
+    p["armR"] = np.array([-26.0, 16.0, 0.0, 4.0, 0, 0])
+    p["fL"] = RK.G("open", 0.3)
+    p["fR"] = RK.G("open", 0.3)
+    p["ftL"] = FT("L", 0.15, 0.86, AZ + 0.01, -14, -8, 14)
+    p["ftR"] = FT("R", -0.15, 0.86, AZ + 0.01, -14, 8, -14)
+    p = add(p, sp=[1.4 * sw(t, 4.4), 0, 2 * sw(t, T)], hd=[-3 * np.maximum(0, sw(t, T, 0.25)), 2 * sw(t, T), 14 * sw(t, T, 0.1)])
+    p["ftR"] = np.array(p["ftR"]) + np.array([0, 0, 0.02 * np.maximum(0, sw(t, 3.0)), 0, 0, 0])
+    p = addf(p, smile_L=0.3, smile_R=0.25, squint=0.15, blink_L=0.0)
+    p = RK.breathing(p, t, 4.4, 1.0)
+    return p, O(stance=(True, True))
+
+
+mk("lounge_sit_back", "personality", 12.0, loop=True, desc="Lounging on the sand propped back on both hands, legs stretched out, face tilted to the sun with a contented half smile.",
+   interrupt="any", blend_in=0.5, blend_out=0.5, start_pose="sit_back", end_pose="sit_back")(_lounge_sit_back)
+
+
+def _lounge_recline(t):
+    T = 14.0
+    ph = t / T
+    from clips_posture import pose_sit_ground
+    p = pose_sit_ground(0.62)
+    p = K.P(p, sp=[-6, -10, 0], hd=[0, 8, 10], pel=[0, 0.14, -(RK.HIP_Z - 0.085), -28, -14, 0], armL=HANG.copy(), armR=HANG.copy(), wL=0.0, wR=0.0)
+    p = RK.face_neutral(p, 0.5)
+    # propped on the left elbow, right knee drawn up with the right hand resting on it
+    p["armL"] = np.array([-26.0, 24.0, 0.0, 70.0, 0, 0])
+    p["armR_ik"] = K.ik(v3(-0.14, 0.40, 0.58), (0, -1, 0.1), (0.6, 0, 0.8), 10)
+    p["armR_w"] = np.array([1.0])
+    p["ftL"] = FT("L", 0.15, 0.84, AZ + 0.01, -14, -8, 14)
+    p["ftR"] = FT("R", -0.17, 0.38, AZ, -10, 10, -10)
+    p["fL"] = RK.G("relaxed", 0.6)
+    p["fR"] = RK.G("relaxed", 0.8)
+    p = add(p, sp=[1.2 * sw(t, 4.4), 0, 0], hd=[0, 2 * sw(t, T), 18 * sw(t, T, 0.2)])
+    p["eye"] = np.array([8 * sw(t, T / 2), 2 * sw(t, T / 3)])
+    p = addf(p, smile_L=0.2, smile_R=0.2)
+    p = RK.breathing(p, t, 4.4, 1.0)
+    return p, O(stance=(True, True))
+
+
+mk("lounge_recline", "personality", 14.0, loop=True, desc="Reclining on one elbow in the shade, one knee drawn up with a hand draped over it, idly watching the waves.",
+   interrupt="any", blend_in=0.5, blend_out=0.5, start_pose="sit_back", end_pose="sit_back")(_lounge_recline)
+
+
+def _play_toss_catch(t):
+    T = 3.2
+    ph = (t / T) % 1.0
+    toss = pulse(ph, 0.08, 0.2, 0.22, 0.32)
+    catch = pulse(ph, 0.62, 0.72, 0.8, 1.0)
+    p = base(0.7)
+    p = add(p, sp=[-4 * toss + 4 * catch, 0, 0], hd=[-14 * smooth(seg(ph, 0.1, 0.35)) * (1 - smooth(seg(ph, 0.6, 0.7))), 0, 0], pel=[0, 0, -0.01 * catch - 0.02 * toss, 0, 0, 0])
+    up = smooth(seg(ph, 0.1, 0.22)) * (1 - smooth(seg(ph, 0.3, 0.6)))
+    p["armR"] = HANG + np.array([50 + 100 * toss - 20 * catch, 16, 0, 80 - 60 * toss + 10 * catch, 0, 0])
+    p["armL"] = HANG + np.array([24 + 60 * catch, 10 + 10 * catch, 0, 40 + 50 * catch, 0, 0])
+    p["fR"] = RK.G("grip_big", 0.9 * (1 - toss))
+    p["fL"] = RK.G("open", 0.3 + 0.5 * catch)
+    p["look"] = np.array([0.0, -0.3 - 0.0, 1.9 + 2.0 * up, 0.9])
+    p = addf(p, smile_L=0.6, smile_R=0.6, jaw=3 * catch, brow_L=0.3 * up, brow_R=0.3 * up)
+    return p, O()
+
+
+mk("play_toss_catch", "personality", 3.2, loop=True, desc="Playfully tossing a coconut up with the right hand and catching it with both, eyes following its arc.", props=["coconut"],
+   interrupt="any", blend_in=0.3, blend_out=0.3, start_pose="stand", end_pose="stand")(_play_toss_catch)
+
+
+def _play_kick_sand(t):
+    T = 3.0
+    k = pulse(t, 0.5, 0.9, 1.0, 1.5)
+    swing = np.sin(np.pi * np.clip((t - 0.7) / 0.5, 0, 1)) * (t > 0.7) * (t < 1.2)
+    a = env(t, 0.2, 0.6, 2.2, 2.9)
+    p = base(0.4)
+    p["pel"] = np.array([-0.04 * a, 0, -0.02 * a, 0, 3 * a, 0])
+    p = add(p, sp=[6 * a, 0, 6 * a], hd=[14 * a, 0, -10 * a])
+    p["ftL"] = np.array([0.10, 0.0, AZ, 0, 0, 0])
+    p["ftR"] = np.array([-0.10, -0.40 * swing * 1.0 + 0.10 * a, AZ + 0.12 * swing + 0.04 * k, -28 * swing, 0, -8 * a])
+    p["armL"] = HANG + np.array([10 * a, 30 * a, 0, 20 * a, 0, 0])
+    p["armR"] = HANG + np.array([-8 * a, 26 * a, 0, 14 * a, 0, 0])
+    p["look"] = np.array([-0.2, -0.6, 0.0, 0.8 * a])
+    p = addf(p, smile_L=0.4 * a, smile_R=0.25 * a, lip_low=0.1 * a)
+    return p, O(stance=(True, False))
+
+
+mk("play_kick_sand", "personality", 3.0, desc="Kicking sand idly while he thinks: the right foot scuffs forward, sand flies, hands loose, a lopsided smile.",
+   interrupt="any", blend_in=0.2, blend_out=0.3, start_pose="stand", end_pose="stand")(_play_kick_sand)
+
+
+def _play_flex(t):
+    a = env(t, 0.3, 0.9, 3.0, 3.8)
+    p = base(0.7)
+    pose = smooth(seg(t, 0.8, 1.2)) * (1 - smooth(seg(t, 2.0, 2.3))) 
+    pose2 = smooth(seg(t, 2.1, 2.5)) * (1 - smooth(seg(t, 3.2, 3.6)))
+    p = add(p, sp=[-3 * a, 0, 6 * (pose - pose2)], hd=[-6 * a, 0, -10 * (pose - pose2)], pel=[0, 0, -0.02 * a, 0, 0, 6 * (pose - pose2)])
+    p["armL"] = HANG + np.array([30 * pose + 20 * pose2 + 10 * a, 70 * pose + 50 * pose2 + 10 * a, 0, 120 * pose + 130 * pose2, 0, 0])
+    p["armR"] = HANG + np.array([30 * pose + 20 * pose2 + 10 * a, 70 * pose + 50 * pose2 + 10 * a, 0, 120 * pose + 130 * pose2, 0, 0])
+    p["fL"] = RK.G("fist", pose + pose2)
+    p["fR"] = RK.G("fist", pose + pose2)
+    p = addf(p, smile_L=0.8 * a, smile_R=0.6 * a, brow_L=0.5 * a, brow_R=0.2 * a, jaw=2 * a)
+    return p, O()
+
+
+mk("play_flex_pose", "personality", 4.0, desc="Mock bodybuilder poses on the beach: a double-biceps flex, then a side pose, with a ridiculous grin.",
+   interrupt="any", blend_in=0.2, blend_out=0.3, start_pose="stand", end_pose="stand")(_play_flex)
+
+
+SKIP = GK.Gait(T=26 / 30, v=1.8, duty=0.40, x=0.09, bob=0.07, z0=-0.03, sway=0.02, roll=2.0, pyaw=5.0, syaw=8.0, arm=30.0, elbow0=40.0, elbow1=20.0, lean=3.0,
+               out=-16.0, run=True, toe_out=3.0, foot=ST.Cfg(lift=0.20, toe_pitch=40.0, heel_pitch=4.0, roll_on=0.08, heel_off=0.30, toe_clear=4.0))
+
+
+def _skip(t):
+    steps = GK.make_steps(SKIP)
+    prm, opts = GK.gait_params(t, SKIP, steps)
+    prm = K.P(prm, wL=0.0, wR=0.0)
+    prm = addf(prm, smile_L=0.8, smile_R=0.8, cheek=0.6, jaw=8)
+    prm["hd"] = prm["hd"] + np.array([-4, 4 * np.sin(TAU * t / SKIP.T), 0])
+    o = O(stance=(True, True), world=opts["world"])
+    return prm, o
+
+
+mk("play_skip", "personality", SKIP.T, loop=True, speed=SKIP.v, desc="Light-hearted skipping along the beach (1.8 m/s): bouncy gait, arms swinging loosely, big grin. timeScale = speed / 1.8.",
+   interrupt="any", blend_in=0.2, blend_out=0.2, start_pose="stand", end_pose="stand")(_skip)

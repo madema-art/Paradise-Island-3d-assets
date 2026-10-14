@@ -25,8 +25,8 @@ P3 = hdesign.P
 
 # ------------------------------------------------------------------------------------------------ strand atlas
 PALETTE = dict(
-    pale=np.array([222, 196, 132]), bleach=np.array([236, 214, 158]), honey=np.array([184, 138, 70]),
-    gold=np.array([204, 160, 84]), dark=np.array([118, 84, 42]), root=np.array([78, 55, 27]), brown=np.array([98, 70, 36]),
+    pale=np.array([222, 196, 132]), bleach=np.array([236, 214, 158]), honey=np.array([196, 150, 78]),
+    gold=np.array([212, 168, 90]), dark=np.array([150, 108, 54]), root=np.array([128, 94, 48]), brown=np.array([120, 88, 44]),
 )
 CELL_W, CELL_H = 256, 512
 CELLS = {"scalp_clump": (0, 0), "scalp_wavy": (1, 0), "scalp_thin": (2, 0), "scalp_wide": (3, 0),
@@ -37,18 +37,18 @@ def _lerp(a, b, t):
     return a + (b - a) * t
 
 
-def draw_cell(rng, kind, ss=2):
+def draw_cell(rng, kind, ss=3):
     W, H = CELL_W * ss, CELL_H * ss
     rgb = Image.new("RGB", (W, H), (0, 0, 0))
     alpha = Image.new("L", (W, H), 0)
     dr_c, dr_a = ImageDraw.Draw(rgb), ImageDraw.Draw(alpha)
     spec = dict(
-        scalp_clump=dict(n=70, width=3.4, taper=0.80, wave=5, lenr=(0.70, 1.0), light=0.55, root=0.60, spread=0.34),
-        scalp_wavy=dict(n=44, width=4.2, taper=0.62, wave=22, lenr=(0.72, 1.0), light=0.50, root=0.55, spread=0.30),
+        scalp_clump=dict(n=110, width=2.5, taper=0.80, wave=5, lenr=(0.70, 1.0), light=0.55, root=0.60, spread=0.34),
+        scalp_wavy=dict(n=70, width=3.0, taper=0.62, wave=22, lenr=(0.72, 1.0), light=0.50, root=0.55, spread=0.30),
         scalp_thin=dict(n=9, width=3.0, taper=0.50, wave=14, lenr=(0.55, 1.0), light=0.70, root=0.40, spread=0.22),
-        scalp_wide=dict(n=96, width=3.0, taper=0.55, wave=7, lenr=(0.55, 1.0), light=0.50, root=0.62, spread=0.42),
-        beard_coarse=dict(n=64, width=4.4, taper=0.72, wave=9, lenr=(0.70, 1.0), light=0.45, root=0.68, spread=0.34),
-        beard_curly=dict(n=52, width=4.0, taper=0.60, wave=30, lenr=(0.65, 1.0), light=0.45, root=0.66, spread=0.34),
+        scalp_wide=dict(n=140, width=2.3, taper=0.55, wave=7, lenr=(0.55, 1.0), light=0.50, root=0.62, spread=0.42),
+        beard_coarse=dict(n=100, width=3.0, taper=0.72, wave=9, lenr=(0.70, 1.0), light=0.45, root=0.68, spread=0.34),
+        beard_curly=dict(n=84, width=2.9, taper=0.60, wave=30, lenr=(0.65, 1.0), light=0.45, root=0.66, spread=0.34),
         stache=dict(n=40, width=3.6, taper=0.45, wave=8, lenr=(0.80, 1.0), light=0.60, root=0.50, spread=0.36),
         brow=dict(n=34, width=4.4, taper=0.30, wave=5, lenr=(0.85, 1.0), light=0.30, root=0.55, spread=0.40),
     )[kind]
@@ -62,7 +62,7 @@ def draw_cell(rng, kind, ss=2):
         amp = spec["wave"] * ss * rng.uniform(0.4, 1.2)
         tone = np.clip(rng.normal(spec["light"], 0.30), 0, 1)
         base = _lerp(PALETTE["honey"], PALETTE["pale"], tone)
-        if rng.random() < 0.26:
+        if rng.random() < 0.16:
             base = _lerp(PALETTE["dark"], PALETTE["honey"], rng.random())
         if rng.random() < 0.07:
             base = PALETTE["bleach"]
@@ -75,7 +75,7 @@ def draw_cell(rng, kind, ss=2):
             x = cx + (x0 - cx) * (1.0 - spec["taper"] * v ** 1.3) + amp * np.sin(phase + v * 3.14 * freq) * (0.25 + v)
             pt = (x, y)
             if prev is not None:
-                col = _lerp(_lerp(base * 0.55 + PALETTE["root"] * 0.45, base, min(v * 2.2, 1.0)), PALETTE["bleach"], max(v - 0.55, 0) * 0.5 * (0.4 + tone))
+                col = _lerp(_lerp(base * 0.82 + PALETTE["root"] * 0.18, base, min(v * 2.2, 1.0)), PALETTE["bleach"], max(v - 0.55, 0) * 0.5 * (0.4 + tone))
                 col = col * np.clip(rng.normal(1.0, 0.02), 0.94, 1.06)
                 col = tuple(int(c) for c in np.clip(col, 0, 255))
                 w = max(int(width * (1.0 - 0.55 * v)), 2)
@@ -83,6 +83,7 @@ def draw_cell(rng, kind, ss=2):
                 dr_a.line([prev, pt], fill=255, width=w)
             prev = pt
     # root darkening and a gentle fuzz at the very top so cards blend into the scalp shell
+    alpha = alpha.filter(ImageFilter.GaussianBlur(0.9 * ss))
     rgb = rgb.resize((CELL_W, CELL_H), Image.LANCZOS)
     alpha = alpha.resize((CELL_W, CELL_H), Image.LANCZOS)
     return rgb, alpha
@@ -126,7 +127,7 @@ def region_scalp(P):
 def region_beard(P):
     x, f, z = P[:, 0], -P[:, 1], P[:, 2]
     ax = np.abs(x)
-    cheek_line = 1.852 - 0.012 * smoothstep(0.020, 0.055, ax)
+    cheek_line = 1.852 - 0.034 * smoothstep(0.030, 0.062, ax)
     ear_d = np.minimum(np.linalg.norm(P - P3(0.0775, -0.004, 1.884), axis=1), np.linalg.norm(P - P3(-0.0775, -0.004, 1.884), axis=1))
     lips = (ax < 0.0245) & (f > 0.080) & (np.abs(z - hdesign.MOUTH_Z) < 0.0125)
     nose = (ax < 0.016) & (z > 1.815)
@@ -238,7 +239,7 @@ def generate(mesh_path, seed=5):
     def keepout_face(pts, extra=0.0):
         """True for cards that stay clear of the face mask (eyes, nose, brows, cheeks)."""
         x, f, zz = pts[..., 0], -pts[..., 1], pts[..., 2]
-        zone = (f > 0.060 + extra) & (zz > 1.795) & (zz < 1.918) & (np.abs(x) < 0.074)
+        zone = ((f > 0.060 + extra) & (zz > 1.795) & (zz < 1.918) & (np.abs(x) < 0.074)) | ((f > 0.040) & (zz > 1.770) & (zz < 1.925) & (np.abs(x) < 0.088))
         return ~zone[:, 1:].any(axis=1)
 
     for layer, (count, len_scale, vol, width) in enumerate(((330, 1.0, 0.40, (0.040, 0.072)), (250, 1.0, 0.62, (0.035, 0.062)), (110, 0.55, 0.30, (0.030, 0.050)))):
@@ -256,6 +257,8 @@ def generate(mesh_path, seed=5):
         d0[front] = unit(0.40 * nrm[front] + 0.30 * flow[front] + 0.45 * sweep[front] + rng.normal(0, 0.18, (front.sum(), 3)))
         back = f < -0.02
         side = (np.abs(x) > 0.045) & ~back
+        sweep_back = unit(np.stack([np.sign(x) * 0.15, 0.95 * np.ones(n), -0.25 * np.ones(n)], 1))
+        d0[side] = unit(0.30 * nrm[side] + 0.75 * sweep_back[side] + rng.normal(0, 0.12, (side.sum(), 3)))
         L = np.where(back, rng.uniform(0.24, 0.40, n), np.where(side, rng.uniform(0.15, 0.27, n), rng.uniform(0.09, 0.19, n)))
         L = L * len_scale * rng.uniform(0.75, 1.2, n)
         pts = grow(sdf, roots, nrm, d0, L, 8, vol=vol, grav=0.95, stiff=0.9, noise_amp=0.08, rng=rng, wave=0.06)

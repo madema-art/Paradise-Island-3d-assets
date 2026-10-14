@@ -54,6 +54,7 @@ def anchored(p, root, ftL_w, ftR_w, yaw=None):
     root = np.asarray(root, float)
     p = PR.copy(p)
     p["root"] = root
+    p["pel_auto"] = np.array([1.0, 0.03, 0.0])          # let the pelvis drop when a foot is placed too far below the hips
     for sd, w in (("L", ftL_w), ("R", ftR_w)):
         w = np.asarray(w, float)
         loc = Rz(-root[3]) @ (w[:3] - root[:3])
@@ -92,7 +93,7 @@ def _board(t):
     p["fR"] = RK.G("grip_big", 0.8)
     p["fL"] = RK.G("grip_big", 0.8)
     p["look"] = np.array([0.0, -0.6, 0.4, 0.8])
-    return p, O_(stance=(False, False))
+    return p, O_(stance=(True, True))
 
 
 mk("canoe_board", "canoe", 3.2, root="anchored", desc="Steps from the beach into the canoe: grips the gunwale, swings a leg over the rail, steps in and turns to face the bow. Root is baked relative to the shore anchor (beside the hull).",

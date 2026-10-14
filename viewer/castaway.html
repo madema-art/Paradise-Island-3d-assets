@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paradise Island · Castaway Asset Viewer</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="castaway.css">
+<script type="importmap">
+{ "imports": { "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/" } }
+</script>
+</head>
+<body>
+<canvas id="stage"></canvas>
+
+<aside id="clips" class="panel">
+  <header>
+    <h1>Castaway <span>asset workshop</span></h1>
+    <p id="loadstate">Loading…</p>
+    <input id="search" type="search" placeholder="Search clips (name, description)…">
+    <div class="filters">
+      <select id="fTier"><option value="">All tiers</option></select>
+      <select id="fStatus"><option value="">Any status</option><option value="verified">Verified</option><option value="in_development">In development</option></select>
+    </div>
+  </header>
+  <div id="cliplist"></div>
+</aside>
+
+<aside id="controls" class="panel">
+  <section>
+    <h2>Playback</h2>
+    <div class="row">
+      <button id="btnPause" title="Space">Pause</button>
+      <button id="btnRestart">Restart</button>
+      <button id="btnPrev" title="←">‹</button>
+      <button id="btnNext" title="→">›</button>
+    </div>
+    <label>Speed <input id="speed" type="range" min="0.1" max="2" step="0.05" value="1"><output id="speedOut">1.00×</output></label>
+    <label>Crossfade <input id="fade" type="range" min="0" max="1" step="0.05" value="0.25"><output id="fadeOut">0.25 s</output></label>
+    <label>Time <input id="scrub" type="range" min="0" max="1" step="0.001" value="0"><output id="timeOut">0.00 s</output></label>
+    <label class="check"><input id="chkTravel" type="checkbox" checked> Simulate travel (the controller moves/turns the character from the exported speed &amp; yaw curves)</label>
+    <label class="check"><input id="chkRepeat" type="checkbox" checked> Repeat one-shot clips</label>
+    <button id="btnReset" class="wide">Reset position</button>
+  </section>
+
+  <section>
+    <h2>Camera</h2>
+    <div class="grid" id="camButtons"></div>
+    <label class="check"><input id="chkFollow" type="checkbox" checked> Follow character</label>
+    <label class="check"><input id="chkSpin" type="checkbox"> Auto-rotate (R)</label>
+  </section>
+
+  <section>
+    <h2>Look</h2>
+    <label>Lighting
+      <select id="lighting">
+        <option value="studio">Neutral studio</option>
+        <option value="tropical">Tropical sun</option>
+        <option value="shade">Palm shade</option>
+        <option value="dusk">Golden hour</option>
+        <option value="overcast">Overcast</option>
+      </select>
+    </label>
+    <label>Shading
+      <select id="shading">
+        <option value="pbr">Lit PBR (as exported)</option>
+        <option value="albedo">Albedo only</option>
+        <option value="normals">Geometry normals</option>
+      </select>
+    </label>
+    <label>Exposure <input id="exposure" type="range" min="0.4" max="2" step="0.05" value="1"></label>
+    <div class="checks">
+      <label class="check"><input id="chkWire" type="checkbox"> Wireframe (W)</label>
+      <label class="check"><input id="chkBones" type="checkbox"> Skeleton (S)</label>
+      <label class="check"><input id="chkHair" type="checkbox" checked> Hair &amp; beard cards</label>
+      <label class="check"><input id="chkGround" type="checkbox" checked> Ground</label>
+      <label class="check"><input id="chkWater" type="checkbox"> Water plane</label>
+      <label class="check"><input id="chkShadow" type="checkbox" checked> Shadows</label>
+    </div>
+  </section>
+
+  <section>
+    <h2>Props &amp; attachment test</h2>
+    <label>Staff / pole / spear
+      <select id="staffMode">
+        <option value="auto">Follow clip (prop_staff bone)</option>
+        <option value="off">Hidden</option>
+        <option value="R_main">Right hand · main grip</option>
+        <option value="R_upper">Right hand · upper grip</option>
+        <option value="R_low">Right hand · low grip</option>
+        <option value="R_over_horizontal">Right hand · overhand, held out</option>
+        <option value="L_main">Left hand · main grip</option>
+        <option value="L_over_horizontal">Left hand · overhand, held out</option>
+        <option value="back_sling">Slung across the back</option>
+      </select>
+    </label>
+    <div class="checks">
+      <label class="check"><input id="chkStaffLine" type="checkbox"> Show fishing line + hook</label>
+      <label class="check"><input id="chkAutoProps" type="checkbox" checked> Auto-show the clip's props (canoe, paddle, boulder, fire, fish…)</label>
+    </div>
+    <label>Upper-body layer <select id="layerClip"><option value="">— none —</option></select></label>
+    <label>Layer weight <input id="layerW" type="range" min="0" max="1" step="0.01" value="0.8"><output id="layerOut">0.80</output></label>
+  </section>
+
+  <section>
+    <h2>Compare</h2>
+    <label>Second character plays <select id="cmpClip"><option value="">— off —</option></select></label>
+    <label class="check"><input id="chkSync" type="checkbox" checked> Lock to the same time</label>
+  </section>
+
+  <section>
+    <h2>Face tester</h2>
+    <div class="grid3" id="presetButtons"></div>
+    <div class="grid3" id="visemeButtons"></div>
+    <label class="check"><input id="chkBlink" type="checkbox" checked> Auto blink</label>
+    <label class="check"><input id="chkTalk" type="checkbox"> Lip-sync demo</label>
+    <div id="faceSliders"></div>
+    <button id="btnFaceReset" class="wide">Reset face</button>
+  </section>
+
+  <section>
+    <h2>Clip</h2>
+    <div id="clipinfo" class="info">—</div>
+    <h2>Asset</h2>
+    <div id="stats" class="info">—</div>
+  </section>
+</aside>
+
+<div id="hint">Drag: orbit · Wheel: zoom · Right-drag: pan · Space: pause · ←/→: clips · 1–9: camera · W/S/R: wire/skeleton/rotate</div>
+<script type="module" src="castaway.js"></script>
+</body>
+</html>
