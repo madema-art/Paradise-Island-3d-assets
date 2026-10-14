@@ -3,6 +3,19 @@
 Asset-creation workshop for the Paradise Island Three.js game. It is independent of the game
 repository: nothing here reads from or writes to the game.
 
+## Contents
+
+| Path | What |
+|---|---|
+| `assets/monkey/` | **Island monkey**: runtime GLBs (full, lite, LOD1), editable `.blend`, textures, 41 animation clips, coconut prop, validation reports and previews. Start with `assets/monkey/README.md`. |
+| `assets/monkey/previews/` | Character reference sheet, per-group animation pose sheets, texture atlas overview, UV layout, turntable, clip GIFs. |
+| `viewer/` | Standalone Three.js test viewer (no connection to the game): `python3 -m http.server` in the repo root, open `/viewer/`. See `viewer/README.md`. |
+| `tools/monkey/` | Monkey pipeline (`build_all.sh`). |
+| `tools/blender/` | Blender/bpy setup and GLB validators. |
+| `docs/MONKEY_INTEGRATION.md` | Integration guide for Claude Code. |
+| `docs/HANDOFF.md` | Repo state, rebuild instructions, environment notes. |
+| `assets/test/tropical_fish/` | Original proof-of-concept fish. |
+
 ## Blender in this environment: status
 
 | Check | Result |
@@ -11,7 +24,7 @@ repository: nothing here reads from or writes to the game.
 | Newest full application | **Not installable here.** `download.blender.org` returns 403 from the egress policy. Not worked around. |
 | Python API (`bpy`) | **Works.** `bpy` 5.2.2 LTS from PyPI in a venv at `/opt/bpy-venv` (CPython 3.13). Same glTF exporter as the app. |
 | Proof-of-concept asset | Low-poly painted tropical fish: builds, saves `.blend`, exports `.glb`, passes both validators. |
-| Game-ready pipeline | **Viable for static props and creatures** with the conventions and limits below. In-game (Three.js) loading and performance are **not yet tested**. |
+| Game-ready pipeline | **Viable for static props and creatures** with the conventions and limits below. The monkey GLBs were verified loading and animating in Three.js r186 (headless); performance inside the real game is **not yet tested**. |
 
 ### Limitations
 
@@ -23,7 +36,7 @@ repository: nothing here reads from or writes to the game.
 - **Headless render caveats.** The Ubuntu 4.0.2 build has no OpenImageDenoiser, so previews render with denoising off. No GPU is
   present. EEVEE needs a GL context and was not tested.
 - **No mesh compression.** Draco and MeshOptimizer libraries are absent from the wheel, so the export is uncompressed.
-- **Textures are procedural.** The painted look is generated in Python and baked to a 512² PNG (base colour only, no
+- **Textures are procedural.** The monkey set is painted in Python (see `tools/monkey/paint_textures.py`) and baked to 2048² albedo, normal and ORM maps. The fish uses a 512² base-colour PNG only.
   normal or roughness maps). Fins use a planar side-view UV projection, so they get little texel detail.
 - **Deprecation.** `Material.use_nodes` is slated for removal in Blender 6.0. Update the build script when 6.0 lands.
 

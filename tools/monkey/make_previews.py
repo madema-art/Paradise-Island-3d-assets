@@ -47,45 +47,38 @@ def reference():
     shutil.rmtree(d, ignore_errors=True)
     q = "ground=0&bg=d9dee2&light=overcast"
     size = "560x470"
-    views = [("Front", "Front"), ("Three-quarter front", "3/4"), ("Side (left)", "Side"), ("Back", "Back"), ("Top", "Top")]
+    # (title, focus bone, azimuth, distance, elevation, offset xyz)  -- camera orbits the bone's world position
+    views = [("Front", "spine2", 0, 1.2, 6, "0,-0.06,0"), ("Three-quarter front", "spine2", 35, 1.25, 12, "0,-0.07,-0.06"),
+             ("Side (left)", "spine2", 90, 1.5, 4, "0,-0.07,-0.10"), ("Back", "spine2", 180, 1.25, 8, "0,-0.06,0"),
+             ("Three-quarter back", "spine2", 215, 1.3, 14, "0,-0.07,-0.08"), ("Top", "spine2", 0, 1.6, 88, "0,0,-0.11")]
+    closeups = [("Face · front", "head", 0, 0.42, 4, "0,0.03,0.04"), ("Face · three-quarter", "head", 40, 0.42, 8, "0,0.03,0.04"),
+                ("Face · profile", "head", 90, 0.42, 3, "0,0.03,0.04"), ("Hands", "hand_L", 25, 0.38, 25, "-0.06,0,0"),
+                ("Feet", "foot_L", 60, 0.40, 22, "-0.04,0,0"), ("Tail & haunch", "tail_4", 150, 0.80, 18, "0,0,0.02")]
     shots = {}
-    for title, cam in views:
-        capture("pose_stand", d, "--times", "0", "--cam", cam, "--size", size, "--query", q)
-        src = os.path.join(d, f"pose_stand_{cam.replace('/', '')}_0.png")
-        shots[title] = Image.open(src).convert("RGB")
-        os.rename(src, os.path.join(d, f"v_{cam.replace('/', '')}.png"))
-    closeups = [("Face · front", "0.0,0.33,0.78,0,0.31,0.44"), ("Face · three-quarter", "0.26,0.37,0.78,0,0.31,0.44"),
-                ("Face · profile", "0.70,0.33,0.44,0,0.31,0.44"), ("Hands", "0.30,0.12,0.78,0.0,0.03,0.33"),
-                ("Feet", "-0.42,0.14,-0.28,0.0,0.03,0.02"), ("Tail & haunch", "-0.55,0.35,-0.75,0,0.22,-0.2")]
-    for title, cam in closeups:
-        capture("pose_stand", d, "--times", "0", "--cam", "3/4", "--camera", cam, "--size", size, "--query", q)
-        src = os.path.join(d, "pose_stand_34_0.png")
-        shots[title] = Image.open(src).convert("RGB")
+    for title, bone, az, dist, el, off in views + closeups:
+        capture("pose_stand", d, "--times", "0", "--cam", "3/4", "--focus", f"{bone},{az},{dist},{el},{off}", "--size", size, "--query", q)
+        shots[title] = Image.open(os.path.join(d, "pose_stand_34_0.png")).convert("RGB")
     W, H = 560, 470
     pad = 14
     head = 90
-    sheet = Image.new("RGB", (pad + 5 * (W + pad), head + 2 * (H + pad + 24) + pad), (233, 236, 238))
+    sheet = Image.new("RGB", (pad + 6 * (W + pad), head + 2 * (H + pad + 24) + pad), (233, 236, 238))
     dr = ImageDraw.Draw(sheet)
     dr.text((pad, 14), "Paradise Island · Monkey · character reference", font=font(30), fill=(28, 34, 40))
-    n_tri = sum(json.load(open(os.path.join(ASSETS, "validation", "Monkey_structure.json")))["triangles"] for _ in [0])
     info = json.load(open(os.path.join(ASSETS, "validation", "Monkey_structure.json")))
     dr.text((pad, 54), f"Long-tailed-macaque-like · ~0.46 m head-body, 0.95 m with tail · {info['triangles']:,} tris (LOD0) · "
             f"{info['skins'][0]} bones · 2048 albedo / normal / ORM · {len(META)} animation clips", font=font(17), fill=(70, 80, 88))
-    for i, (title, _) in enumerate(views):
+    for i, v in enumerate(views):
+        title = v[0]
         x, y = pad + i * (W + pad), head
         sheet.paste(shots[title], (x, y + 24))
         dr.text((x + 4, y), title, font=font(16), fill=(28, 34, 40))
-    for i, (title, _) in enumerate(closeups):
-        x, y = pad + (i % 5) * (W + pad), head + (H + pad + 24)
-        if i < 5:
-            sheet.paste(shots[title], (x, y + 24))
-            dr.text((x + 4, y), title, font=font(16), fill=(28, 34, 40))
-    # sixth close-up goes under the first column of an extra slot on the right if there is room
-    last_title = closeups[5][0]
-    sheet.paste(shots[last_title].crop((0, 0, W, H)), (pad + 4 * (W + pad), head + (H + pad + 24) + 24)) if False else None
+    for i, v in enumerate(closeups):
+        title = v[0]
+        x, y = pad + i * (W + pad), head + (H + pad + 24)
+        sheet.paste(shots[title], (x, y + 24))
+        dr.text((x + 4, y), title, font=font(16), fill=(28, 34, 40))
     os.makedirs(OUT, exist_ok=True)
     sheet.save(os.path.join(OUT, "character_reference_sheet.png"), optimize=True)
-    # a second sheet for the tail close-up + rest of the detail
     print("[previews] character_reference_sheet.png", sheet.size)
 
 
@@ -160,7 +153,7 @@ def textures():
     eye = Image.open(os.path.join(ASSETS, "textures", "eye_albedo.png")).convert("RGB").resize((T, T // 2), Image.LANCZOS)
     coco = Image.open(os.path.join(ASSETS, "textures", "coconut_albedo.jpg")).convert("RGB").resize((T, T // 2), Image.LANCZOS)
     pad, head = 12, 56
-    sheet = Image.new("RGB", (pad + 3 * (T + pad), head + 2 * (T + 34 + pad)), (233, 236, 238))
+    sheet = Image.new("RGB", (pad + 3 * (T + pad), head + 3 * (T + 34 + pad)), (233, 236, 238))
     dr = ImageDraw.Draw(sheet)
     dr.text((pad, 14), "Monkey texture set · 2048² atlas, one UV set (UVMap), seams hidden by 3D-continuous painting", font=font(22), fill=(28, 34, 40))
     slots = cols + [("Eye (equirect, 512×256)", eye), ("Coconut albedo (512×256)", coco)]
@@ -169,6 +162,7 @@ def textures():
         im = im.resize((T, T if im.height == im.width else T // 2), Image.LANCZOS)
         sheet.paste(im, (x, y + 28))
         dr.text((x + 2, y + 4), title, font=font(17), fill=(28, 34, 40))
+    sheet = sheet.crop((0, 0, sheet.width, head + 2 * (T + 34 + pad) + T // 2 + 34 + pad))
     sheet.save(os.path.join(OUT, "texture_atlas_overview.png"), optimize=True)
     over.resize((1536, 1536), Image.LANCZOS).save(os.path.join(OUT, "uv_layout.png"), optimize=True)
     print("[previews] texture_atlas_overview.png, uv_layout.png")

@@ -66,6 +66,17 @@ for (const c of clips) {
       const v = args.camera.split(',').map(Number);
       await page.evaluate((v) => { const w = window.viewer; w.camera.position.set(v[0], v[1], v[2]); w.controls.target.set(v[3], v[4], v[5]); w.controls.update(); w.renderer.render(w.scene, w.camera); }, v);
     }
+    if (args.focus) {   // --focus bone,azimuthDeg,distance,elevationDeg[,dx,dy,dz]  (azimuth 0 = in front of the monkey, +Z)
+      const f = args.focus.split(',');
+      await page.evaluate(([bone, az, dist, el, off]) => {
+        const w = window.viewer, T = w.THREE; let b = null;
+        w.scene.traverse((o) => { if (!b && o.isBone && o.name === bone) b = o; });
+        const p = new T.Vector3(); (b || w.scene).getWorldPosition(p); p.x += off[0]; p.y += off[1]; p.z += off[2];
+        const a = T.MathUtils.degToRad(az), e = T.MathUtils.degToRad(el);
+        w.camera.position.set(p.x + Math.sin(a) * Math.cos(e) * dist, p.y + Math.sin(e) * dist, p.z + Math.cos(a) * Math.cos(e) * dist);
+        w.controls.target.copy(p); w.controls.update(); w.renderer.render(w.scene, w.camera);
+      }, [f[0], Number(f[1] || 0), Number(f[2] || 0.5), Number(f[3] || 10), [Number(f[4] || 0), Number(f[5] || 0), Number(f[6] || 0)]]);
+    }
     const file = path.join(out, phases ? `${c}__${String(i).padStart(2, '0')}.png` : `${c}_${cam.replace('/', '')}_${String(t).replace('.', 'p')}.png`);
     await page.screenshot({ path: file });
     if (!phases) console.log('saved', file);
