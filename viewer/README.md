@@ -23,3 +23,7 @@ Automated capture (headless Chromium, software WebGL):
 cd viewer/tests && npm install
 node capture.mjs --clips walk,idle --times 0,0.4 --cam 3/4 --out ../../build/monkey/threejs
 ```
+
+## Castaway viewer
+
+`viewer/castaway.html` (same server, `/viewer/castaway.html`): clip browser for the 142 castaway clips (lazy-loaded animation packs), compare mode (second character), crossfade/speed/scrub, travel simulation from the exported speed/yaw curves, camera presets (full, front, side, back, face, profile, hands, feet, top; 1 to 9), neutral and tropical lighting, wireframe, skeleton, hair toggle, water plane, staff attachment test (follow clip, either hand, back sling, optional line and hook), upper-body layering, hand-pose override and a face tester (19 controls, presets, visemes, lip-sync demo). Headless test: `node viewer/tests/castaway_capture.mjs --query "clip=walk&cam=0" --out build/x.png`.

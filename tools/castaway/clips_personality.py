@@ -360,7 +360,7 @@ def _celebrate(t):
     p["pel"] = np.array([0, 0.0, -0.10 * crouch + 0.35 * jump - 0.02 * a, 8 * crouch, 0, 5 * np.sin(TAU * t / 1.7) * a])
     p = add(p, sp=[12 * crouch - 6 * a, 0, 6 * np.sin(TAU * t / 1.7) * a], hd=[-4 * a, 0, 0])
     for sd in ("L", "R"):
-        p[f"ft{sd}"] = np.array(p[f"ft{sd}"]) + np.array([0, 0, 0.30 * jump + 0.0, -20 * jump, 0, 0])
+        p[f"ft{sd}"] = np.array(p[f"ft{sd}"]) + np.array([0, 0, 0.38 * jump + 0.0, -20 * jump, 0, 0])
     wave = np.sin(TAU * 2.0 * t) * a
     p["armL"] = HANG + np.array([150 * a * (1 - 0.1 * crouch), 28 * a, 0, 20 * a, 0, 0]) + np.array([0, 6 * wave, 0, 0, 0, 0])
     p["armR"] = HANG + np.array([150 * a, 28 * a, 0, 20 * a, 0, 0]) + np.array([0, -6 * wave, 0, 0, 0, 0])
@@ -433,8 +433,8 @@ def _dance_hop(t):
     p["pel"] = np.array([0.04 * s, 0.0, -0.04 + 0.09 * air, 0, -5 * s, 6 * s])
     p = add(p, sp=[3, 6 * s, -8 * s], hd=[-4, 0, 6 * s])
     # kick-hop: the free leg swings forward/out while the stance leg bounces
-    p["ftL"] = REST_L + np.array([0.0, -0.20 * hopR, 0.0 + 0.04 * air * (hopL > 0) + 0.14 * hopR, -18 * hopR, 0, 0])
-    p["ftR"] = REST_R + np.array([0.0, -0.20 * hopL, 0.0 + 0.04 * air * (hopR > 0) + 0.14 * hopL, -18 * hopL, 0, 0])
+    p["ftL"] = REST_L + np.array([0.0, -0.20 * hopR, 0.0 + 0.10 * air * (hopL > 0) + 0.14 * hopR, -18 * hopR, 0, 0])
+    p["ftR"] = REST_R + np.array([0.0, -0.20 * hopL, 0.0 + 0.10 * air * (hopR > 0) + 0.14 * hopL, -18 * hopL, 0, 0])
     p["armL"] = HANG + np.array([30 + 40 * s, 30, 0, 80 + 30 * s, 0, 0])
     p["armR"] = HANG + np.array([30 - 40 * s, 30, 0, 80 - 30 * s, 0, 0])
     p["fL"] = RK.G("fist", 0.5)
@@ -635,10 +635,10 @@ def _lounge_sit_back(t):
     ph = t / T
     from clips_posture import pose_sit_ground
     p = pose_sit_ground(0.62)
-    p = K.P(p, sp=[-14, 0, 0], hd=[2, 0, 0], pel=[0, 0.12, -(RK.HIP_Z - 0.085) - 0.0, -26, 0, 0], armL=HANG.copy(), armR=HANG.copy(), wL=0.0, wR=0.0)
+    p = K.P(p, sp=[-14, 0, 0], hd=[2, 0, 0], pel=[0, 0.12, -(RK.HIP_Z - 0.085) + 0.02, -22, 0, 0], armL=HANG.copy(), armR=HANG.copy(), wL=0.0, wR=0.0)
     p = RK.face_neutral(p, 0.4)
-    p["armL"] = np.array([-26.0, 16.0, 0.0, 4.0, 0, 0])
-    p["armR"] = np.array([-26.0, 16.0, 0.0, 4.0, 0, 0])
+    p["armL"] = np.array([-16.0, 22.0, 0.0, 4.0, 0, 0])
+    p["armR"] = np.array([-16.0, 22.0, 0.0, 4.0, 0, 0])
     p["fL"] = RK.G("open", 0.3)
     p["fR"] = RK.G("open", 0.3)
     p["ftL"] = FT("L", 0.15, 0.86, AZ + 0.01, -14, -8, 14)

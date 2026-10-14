@@ -9,10 +9,13 @@ repository: nothing here reads from or writes to the game.
 |---|---|
 | `assets/monkey/` | **Island monkey**: runtime GLBs (full, lite, LOD1), editable `.blend`, textures, 41 animation clips, coconut prop, validation reports and previews. Start with `assets/monkey/README.md`. |
 | `assets/monkey/previews/` | Character reference sheet, per-group animation pose sheets, texture atlas overview, UV layout, turntable, clip GIFs. |
-| `viewer/` | Standalone Three.js test viewer (no connection to the game): `python3 -m http.server` in the repo root, open `/viewer/`. See `viewer/README.md`. |
+| `assets/castaway/` | **Castaway**: rigged 2.00 m human castaway (GLB + LOD1 + lite), `Staff.glb` (walking stick / fishing pole / spear), 142 clips in animation packs with machine-readable metadata, face + grip tables, proxy props, editable `.blend`, previews, validation. Start with `assets/castaway/README.md`. |
+| `viewer/` | Standalone Three.js test viewers (no connection to the game): `python3 -m http.server` in the repo root, open `/viewer/` (monkey) or `/viewer/castaway.html` (castaway). See `viewer/README.md`. |
 | `tools/monkey/` | Monkey pipeline (`build_all.sh`). |
+| `tools/castaway/` | Castaway pipeline (`build_castaway.sh`, `build_library.py`, clip modules, previews, packaging). |
 | `tools/blender/` | Blender/bpy setup and GLB validators. |
 | `docs/MONKEY_INTEGRATION.md` | Integration guide for Claude Code. |
+| `docs/CASTAWAY_INTEGRATION.md`, `docs/CASTAWAY_ANIMATION_LIBRARY.md`, `docs/CASTAWAY_HANDOFF.md` | Castaway integration guide, every clip with status, rebuild/handoff notes. |
 | `docs/HANDOFF.md` | Repo state, rebuild instructions, environment notes. |
 | `assets/test/tropical_fish/` | Original proof-of-concept fish. |
 

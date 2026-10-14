@@ -16,3 +16,7 @@ The owner inspects results in the browser from Claude Cloud, without downloading
 5. Give the owner the link in the final message.
 
 Current monkey preview: https://claude.ai/artifact/9PwuB2sqeuQfCUuDooKsDF (private).
+
+The castaway has its own viewer and its own private artifact: stage with `python3 tools/stage_castaway_viewer.py` (writes `build/artifact_castaway/`, GLBs published as
+`*.glb.wasm`), publish `build/artifact_castaway/index.html` plus the files in `build/artifact_castaway/files.json` (contentType `application/wasm` for `*.wasm`), and update
+the same URL on later revisions: CASTAWAY_ARTIFACT_URL_PLACEHOLDER (private).

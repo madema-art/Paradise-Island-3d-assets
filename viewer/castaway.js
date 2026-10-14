@@ -288,7 +288,7 @@ function faceAfter(dt) {
 
 // ------------------------------------------------------------------ camera presets
 const CAMS = [
-  ['Full', null, 4.6, 28, 10, [0, 0.98, 0]], ['Front', null, 4.6, 0, 6, [0, 0.98, 0]], ['Side', null, 4.6, 90, 6, [0, 0.98, 0]], ['Back', null, 4.6, 180, 8, [0, 0.98, 0]],
+  ['Full', null, 5.8, 28, 10, [0, 0.98, 0]], ['Front', null, 5.8, 0, 6, [0, 0.98, 0]], ['Side', null, 5.8, 90, 6, [0, 0.98, 0]], ['Back', null, 5.8, 180, 8, [0, 0.98, 0]],
   ['Face', 'head', 0.85, 18, 6, [0, 0.07, 0.02]], ['Profile', 'head', 0.9, 90, 4, [0, 0.07, 0.02]], ['Hands', 'hands', 1.1, 20, 20, [0, 0, 0]], ['Feet', 'feet', 1.3, 25, 18, [0, 0.06, 0]], ['Top', null, 4.0, 0, 80, [0, 0.9, 0]],
 ];
 let camIdx = 0;
@@ -395,6 +395,13 @@ function stats() {
   $('btnFaceReset').onclick = () => setFace({});
 }
 
+// hand pose override
+const HP = GRIPS.hand_poses ? GRIPS.hand_poses.poses : {};
+for (const n of Object.keys(HP)) { const o = document.createElement('option'); o.value = n; o.textContent = n.replace('_', ' '); $('handPose').append(o); }
+function applyHandPose() {
+  const n = $('handPose').value; if (!n || !HP[n]) return;
+  for (const [b, q] of Object.entries(HP[n])) { const node = bone(b); if (node) node.quaternion.set(q[0], q[1], q[2], q[3]); }
+}
 // look
 for (const id of ['lighting']) $(id).onchange = () => setLighting($(id).value);
 $('exposure').oninput = () => { renderer.toneMappingExposure = parseFloat($('exposure').value); };
@@ -468,6 +475,7 @@ function frame() {
     }
   }
   faceAfter(state.paused ? 0 : dt);
+  applyHandPose();
   if (state.action && r) {
     const t = state.action.time;
     if (!scrubbing) scrub.value = t;

@@ -102,9 +102,9 @@ def build_paddle():
 
 
 def build_boulder():
-    V, F = noise_ellipsoid((0, 0.55, 1.35), (0.85, 0.60, 0.70), 5, 0.20)
+    V, F = noise_ellipsoid((0, 0.30, 1.12), (0.85, 0.46, 0.70), 5, 0.10)
     V[:, 1] = np.maximum(V[:, 1], 0.0)
-    marks = {"hold_1": (0.45, 0.55, 0.65), "hold_2": (-0.35, 0.85, 0.70), "lip": (0.0, 1.0, 0.66), "top": (0, 1.05, 1.35), "stand_base": (0.0, 0.0, 0.0)}
+    marks = {"hold_1": (0.45, 0.55, 0.65), "hold_2": (-0.35, 0.85, 0.70), "lip": (0.0, 0.76, 0.46), "top": (0, 0.78, 1.12), "stand_base": (0.0, 0.0, 0.0)}
     return {"Boulder": (V, F, "stone")}, marks
 
 

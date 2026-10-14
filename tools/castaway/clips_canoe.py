@@ -41,7 +41,7 @@ def paddle_state(tip_x, tip_f, tip_z, pitch, roll=0.0, yaw=0.0, aR=0.55, aL=1.20
     return SK.SS(tip_x, tip_f, tip_z, pitch, roll, yaw, along=aR, wR=wR, wL=wL, alongL=aL)
 
 
-def paddle_pose(p, s, rmode="side", lmode="over"):
+def paddle_pose(p, s, rmode="side", lmode="back"):
     return SK.apply_state(p, s, right_mode=rmode, left_mode=lmode, grip="grip_staff", prop="aux")
 
 
@@ -82,12 +82,12 @@ def _board(t):
     lean = env(t, 0.3, 1.0, 1.6, 2.4)
     p = add(p, sp=[20 * lean, 0, 0], hd=[-12 * lean, 0, 0], pel=[0, 0, -0.10 * lean, 8 * lean, 0, 0])
     p = anchored(p, rt, fl, fr)
-    grip_r = to_local(rt, [0.38, -0.05 - 0.15 * smooth(seg(t, 1.4, 2.6)), 0.43])
-    grip_l = to_local(rt, [-0.38, -0.25, 0.43])
+    grip_r = to_local(rt, [0.38, 0.22, 0.43])           # both hands on the near rail while he faces the hull
+    grip_l = to_local(rt, [0.38, -0.22, 0.43])
     p["armR_ik"] = K.ik(grip_r, (0, -1, 0), (0, 0, 1), 10)
     p["armL_ik"] = K.ik(grip_l, (0, -1, 0), (0, 0, 1), -10)
-    p["armR_w"] = np.array([smooth(seg(t, 0.4, 0.9)) * (1 - smooth(seg(t, 2.8, 3.2)))])
-    p["armL_w"] = np.array([smooth(seg(t, 1.6, 2.2)) * (1 - smooth(seg(t, 2.8, 3.2)))])
+    p["armR_w"] = np.array([smooth(seg(t, 0.4, 0.9)) * (1 - smooth(seg(t, 1.2, 1.6)))])
+    p["armL_w"] = np.array([smooth(seg(t, 0.6, 1.0)) * (1 - smooth(seg(t, 1.3, 1.7)))])
     p["armR"] = HANG + np.array([20, 10, 0, 30, 0, 0])
     p["armL"] = HANG + np.array([20, 10, 0, 30, 0, 0])
     p["fR"] = RK.G("grip_big", 0.8)
@@ -160,17 +160,21 @@ def _paddle(t, T=2.4, side=+1, strong=1.0):
     sx = -0.62 * side                                # blade distance out from the centreline (side=+1: right side of the canoe)
     s = paddle_state(sx, f, z, 0.0, 0.0, 0.0)
     # shaft leans outward at the blade: build the axis from the blade tip and the top hand: top hand over the centreline, level with the chin
-    top = np.array([-0.08 * side, -(f * 0.45 + 0.30), 0.92 + 0.06 * eff])
+    top = np.array([-0.05 * side, -(f * 0.45 + 0.30), 0.84 + 0.06 * eff])
     tip = np.array([sx, -f, z])
     d = top - tip
     ln = np.linalg.norm(d)
     ax = d / ln
     pitch, roll = SK.tilt_from(ax)
-    s = SK.SS(sx, f, z, pitch, roll, 0.0, along=0.55, wR=1.0, wL=1.0, alongL=min(ln, 1.30))
+    low, top_a = 0.62, min(ln, 1.20)
+    if side > 0:      # blade on his right: the right hand is the lower hand, the left hand holds the T-grip end
+        s = SK.SS(sx, f, z, pitch, roll, 0.0, along=low, wR=1.0, wL=1.0, alongL=top_a)
+    else:             # blade on his left: roles swap
+        s = SK.SS(sx, f, z, pitch, roll, 0.0, along=top_a, wR=1.0, wL=1.0, alongL=low)
     p = seated(SEAT_Z, 14.0 + 10 * (0.5 - 0.5 * np.cos(TAU * ph)) * strong, 0.0)
     p = add(p, sp=[-12 * eff * strong, 5 * side * eff, 8 * side * (0.5 - eff)], hd=[2 * eff, 0, -4 * side], pel=[0, 0, 0, 0, 0, 0])
     p["armL_w"] = np.array([1.0])
-    p = paddle_pose(p, s, "side" if side > 0 else "outer", "over")
+    p = paddle_pose(p, s, "side" if side > 0 else "back", "back" if side > 0 else "side")
     p["look"] = np.array([0.0, -4.0, 0.2, 0.7])
     p = addf(p, furrow=0.2 * eff, jaw=2 * eff)
     p = RK.breathing(p, t, T / 2, 1.5 * strong)
@@ -204,8 +208,8 @@ mk("canoe_drift", "canoe", 8.0, loop=True, desc="Drifting: paddle laid across th
 
 def _canoe_fish(t):
     T = 10.0
-    s = SK.kv(t, [(0.0, SK.SH(-0.20, 0.20, 0.62, 70, 12, 20, 0.72, 1.22)), (4.0, SK.SH(-0.20, 0.22, 0.62, 74, 12, 20, 0.72, 1.22)), (6.0, SK.SH(-0.20, 0.22, 0.62, 72, 12, 22, 0.72, 1.22)),
-                  (10.0, SK.SH(-0.20, 0.20, 0.62, 70, 12, 20, 0.72, 1.22))])
+    s = SK.kv(t, [(0.0, SK.SH(-0.20, 0.20, 0.62, 70, -12, 20, 0.72, 1.08)), (4.0, SK.SH(-0.20, 0.22, 0.62, 74, -12, 20, 0.72, 1.08)), (6.0, SK.SH(-0.20, 0.22, 0.62, 72, -12, 22, 0.72, 1.08)),
+                  (10.0, SK.SH(-0.20, 0.20, 0.62, 70, -12, 20, 0.72, 1.08))])
     p = seated(SEAT_Z, 8.0, 0.1)
     p = add(p, sp=[0, 1.5 * sw(t, T), 3 * sw(t, T, 0.2)], hd=[6 + 2 * sw(t, T, 0.4), 0, 8 * sw(t, T, 0.1)])
     p["look"] = np.array([-0.6, -2.4, 0.0, 0.9])
@@ -222,7 +226,7 @@ def _canoe_reel(t):
     T = 2.0
     ph = t / T
     pull = 0.5 - 0.5 * np.cos(TAU * ph)
-    s = SK.SH(-0.20, 0.20, 0.66, 58 - 8 * pull, 12, 20, 0.72, 1.22, 1.0, 0.0)
+    s = SK.SH(-0.20, 0.20, 0.66, 58 - 8 * pull, -12, 20, 0.72, 1.08, 1.0, 0.0)
     p = seated(SEAT_Z, 12.0, 0.0)
     p = add(p, sp=[-6 * pull, 0, 3 * sw(t, T)], hd=[4, 0, 6 * sw(t, T)], pel=[0, 0.01 * pull, 0, 0, 0, 0])
     p["armL_ik"] = K.ik(v3(0.10, 0.36 - 0.16 * pull, 0.62 - 0.14 * pull), (-0.1, -1, 0.0), (0.2, 0, 1), -10)

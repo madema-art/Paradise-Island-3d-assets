@@ -105,14 +105,14 @@ def _reach_handhold(t):
     test = np.sin(TAU * 2.5 * (t - 1.0)) * env(t, 1.1, 1.3, 1.7, 1.9)
     p = b(0.1)
     p = add(p, sp=[-8 * a, 3 * a, 0], hd=[-22 * a, 0, -6 * a], pel=[0.01 * a, 0.03 * a, 0.02 * a, -3 * a, 0, 0])
-    p["armR_ik"] = K.ik(v3(-0.18, 0.40, 2.05 + 0.02 * test), (0, -0.3, 1), (0, -1, 0), 10)
+    p["armR_ik"] = K.ik(v3(-0.18, 0.40, 1.96 + 0.02 * test), (0, -0.3, 1), (0, -1, 0), 10)
     p["armR_w"] = np.array([a])
     p["armR"] = HANG + np.array([150 * a, 10 * a, 0, 20 * a, 0, 0])
     p["fR"] = RK.G("open", 0.8 * (1 - smooth(seg(t, 0.9, 1.3))) * a + RK.G("grip_big", 0.9)[0] * 0)
     p["fR"] = RK.G("grip_big", 1.0 * smooth(seg(t, 1.0, 1.4)) * a + 0.1 * (1 - smooth(seg(t, 1.0, 1.4))))
     p["armL"] = HANG + np.array([12 * a, 12 * a, 0, 24 * a, 0, 0])
     p["ftL"] = np.array(p["ftL"]) + np.array([0, 0, 0, 0, 0, 0])
-    p["look"] = np.array([-0.18, -0.4, 2.1, 0.8 * a])
+    p["look"] = np.array([-0.18, -0.4, 2.0, 0.8 * a])
     p = addf(p, furrow=0.3 * a, squint=0.3 * a)
     return p, O()
 
@@ -139,23 +139,24 @@ mk("climb_approach_tree", "climbing", 2.6, desc="Stops at a palm trunk, lays a h
 
 
 # ---------------------------------------------------------------------------------------------------- boulders and rocks
-BOULDER_H = 1.0
+BOULDER_H = 0.75
 
 
 def _boulder_up(t):
-    root = SK_kv(t, [(0.0, [0, 0.0, 0.0, 0]), (0.6, [0, -0.08, 0.0, 0]), (1.4, [0, -0.22, 0.28, 0]), (2.2, [0, -0.36, 0.64, 0]), (2.8, [0, -0.46, BOULDER_H, 0]), (3.5, [0, -0.50, BOULDER_H, 0])])
+    root = SK_kv(t, [(0.0, [0, 0.0, 0.0, 0]), (0.6, [0, -0.10, 0.0, 0]), (1.3, [0, -0.14, 0.10, 0]), (2.0, [0, -0.26, 0.34, 0]), (2.6, [0, -0.36, 0.62, 0]), (3.2, [0, -0.44, BOULDER_H, 0]), (3.6, [0, -0.46, BOULDER_H, 0])])
     rt = np.array(root)
-    fl = SK_kv(t, [(0.0, [0.10, 0.0, AZ, 0, 0, 0]), (1.7, [0.10, 0.0, AZ, 0, 0, 0]), (2.2, [0.14, -0.50, 0.86 + AZ, -10, 0, 10]), (3.2, [0.10, -0.52, BOULDER_H + AZ, 0, 0, 0])])
-    fr = SK_kv(t, [(0.0, [-0.10, 0.0, AZ, 0, 0, 0]), (0.8, [-0.10, 0.0, AZ, 0, 0, 0]), (1.3, [-0.12, -0.46, 0.46 + AZ, -20, 0, -10]), (2.4, [-0.12, -0.46, 0.46 + AZ, -20, 0, -10]),
-                   (2.9, [-0.12, -0.58, BOULDER_H + AZ, -5, 0, 0]), (3.5, [-0.10, -0.54, BOULDER_H + AZ, 0, 0, 0])])
+    fl = SK_kv(t, [(0.0, [0.10, 0.0, AZ, 0, 0, 0]), (2.0, [0.10, 0.0, AZ, 0, 0, 0]), (2.5, [0.12, -0.46, BOULDER_H + AZ + 0.02, -10, 0, 8]), (3.2, [0.10, -0.52, BOULDER_H + AZ, 0, 0, 0])])
+    fr = SK_kv(t, [(0.0, [-0.10, 0.0, AZ, 0, 0, 0]), (1.0, [-0.10, 0.0, AZ, 0, 0, 0]), (1.4, [-0.12, -0.40, 0.36 + AZ, -20, 0, -8]), (2.5, [-0.12, -0.40, 0.36 + AZ, -20, 0, -8]),
+                   (3.0, [-0.12, -0.54, BOULDER_H + AZ, -5, 0, 0]), (3.6, [-0.10, -0.54, BOULDER_H + AZ, 0, 0, 0])])
     p = b(0.0)
-    lean = env(t, 0.4, 1.2, 2.4, 3.2)
-    p = add(p, sp=[26 * lean, 0, 0], hd=[-22 * lean, 0, 0], pel=[0, 0.0, -0.10 * lean, 8 * lean, 0, 0])
+    lean = env(t, 0.4, 1.5, 2.4, 3.1)
+    kneel = env(t, 1.6, 2.2, 2.9, 3.3)                  # chest folded over the lip while a knee comes up
+    p = add(p, sp=[30 * lean + 28 * kneel, 0, 0], hd=[-26 * lean, 0, 0], pel=[0, 0, -0.06 * lean - 0.45 * kneel, 22 * lean + 10 * kneel, 0, 0])
     p = anchored(p, rt, fl, fr)
-    top = to_local(rt, [0.0, -0.70, BOULDER_H + 0.05])
-    grab = smooth(seg(t, 0.5, 1.0)) * (1 - smooth(seg(t, 2.7, 3.2)))
-    p["armR_ik"] = K.ik(to_local(rt, [-0.20, -0.66, BOULDER_H + 0.04]), (0, -1, 0), (0, 0, -1), 10)
-    p["armL_ik"] = K.ik(to_local(rt, [0.20, -0.66, BOULDER_H + 0.04]), (0, -1, 0), (0, 0, -1), -10)
+    grab = smooth(seg(t, 0.5, 1.0)) * (1 - smooth(seg(t, 2.4, 2.9)))
+    hy = float(SK_kv(t, [(0.0, [-0.50]), (1.8, [-0.50]), (2.8, [-0.64])])[0])   # the hands walk back across the top as the body comes over
+    p["armR_ik"] = K.ik(to_local(rt, [-0.20, hy, BOULDER_H + 0.03]), (0, -1, 0), (0, 0, -1), 10)
+    p["armL_ik"] = K.ik(to_local(rt, [0.20, hy, BOULDER_H + 0.03]), (0, -1, 0), (0, 0, -1), -10)
     p["armR_w"] = np.array([grab])
     p["armL_w"] = np.array([grab])
     p["armR"] = HANG + np.array([60, 10, 0, 20, 0, 0])
@@ -172,7 +173,7 @@ def SK_kv(t, kf):
     return SK.kv(t, kf)
 
 
-mk("climb_onto_boulder", "climbing", 3.5, root="anchored", desc="Hauls himself onto a 1 m boulder: hands on the lip, one foot on a ledge, a knee up onto the top and a push to stand. Root baked relative to the anchor at the foot of the rock.",
+mk("climb_onto_boulder", "climbing", 3.5, root="anchored", desc="Hauls himself onto a 0.75 m boulder: hands on the lip, one foot on a ledge, chest over the edge, a knee up onto the top and a push to stand. Root baked relative to the anchor at the foot of the rock.",
    props=["boulder"], interrupt="none", blend_in=0.2, blend_out=0.3, start_pose="stand_at_boulder", end_pose="stand_on_boulder", anchor="boulder_base", events=[(0.5, "hands_on_lip"), (2.3, "knee_on_top")])(_boulder_up)
 
 
@@ -181,7 +182,7 @@ def _boulder_down(t):
     return p, o
 
 
-mk("climb_down_boulder", "climbing", 3.5, root="anchored", desc="Lowers himself off the 1 m boulder facing it (the climb played in reverse): lies on the edge, feels for the ledge, drops to the ground.",
+mk("climb_down_boulder", "climbing", 3.5, root="anchored", desc="Lowers himself off the 0.75 m boulder facing it (the climb played in reverse): lies on the edge, feels for the ledge, drops to the ground.",
    props=["boulder"], interrupt="none", blend_in=0.2, blend_out=0.3, start_pose="stand_on_boulder", end_pose="stand_at_boulder", anchor="boulder_base")(_boulder_down)
 
 
@@ -285,7 +286,7 @@ def _look_down(t):
     p["ftL"] = FT("L", 0.15, 0.06, AZ, 0, 0, 10)
     p["ftR"] = FT("R", -0.15, -0.14, AZ, 0, 0, -8)
     p = add(p, sp=[26 * a, 0, 4 * a], hd=[28 * a, 0, -6 * a], pel=[0, 0.08 * a, -0.14 * a, 8 * a, 0, 0])
-    p["armL_ik"] = K.ik(v3(0.14, 0.34, 0.74), (-0.1, -1, 0.0), (-0.7, 0, 0.7), -10)
+    p["armL_ik"] = K.ik(v3(0.14, 0.34, 0.78), (-0.1, -1, 0.0), (-0.7, 0, 0.7), -10)
     p["armL_w"] = np.array([a])
     p["armR"] = HANG + np.array([30 * a, 40 * a, 0, 40 * a, 0, 0])
     p["fL"] = RK.G("grip_big", 0.8 * a)

@@ -76,7 +76,7 @@ def _track(t):
     p["ftR"] = FT("R", -0.115, 0.04, AZ, 0, 0, -6)
     scan = np.sin(TAU * ph)
     touch = pulse(t, 2.0, 2.6, 4.2, 4.8)
-    p["armR_ik"] = K.ik(v3(-0.16, 0.42 + 0.10 * scan, 0.04), (0, -1, -0.2), (0, 0, -1), 20)
+    p["armR_ik"] = K.ik(v3(-0.16, 0.42 + 0.10 * scan, 0.11), (0, -1, -0.2), (0, 0, -1), 20)
     p["armR_w"] = np.array([0.4 + 0.6 * touch])
     p["armR"] = HANG + np.array([50, 10, 0, 30, 0, 0])
     p["armL"] = HANG + np.array([20, 14, 0, 70, 0, 0])
@@ -114,8 +114,8 @@ def _startled(t):
     p = b(0.0)
     p["pel"] = np.array([0, 0.10 * a, 0.10 * jump - 0.05 * smooth(seg(t, 0.45, 0.6)) * (1 - smooth(seg(t, 0.8, 1.4))), -10 * a, 0, 0])
     p = add(p, sp=[-12 * a, 0, 0], hd=[-10 * a, 0, 8 * a], pel=[0, 0, 0, 0, 0, 0])
-    p["ftL"] = np.array(p["ftL"]) + np.array([-0.03 * a, 0.14 * a, 0.06 * jump, 0, 0, 0])
-    p["ftR"] = np.array(p["ftR"]) + np.array([0.0, 0.18 * a, 0.08 * jump, 0, 0, 0])
+    p["ftL"] = np.array(p["ftL"]) + np.array([-0.03 * a, 0.14 * a, 0.13 * jump, 0, 0, 0])
+    p["ftR"] = np.array(p["ftR"]) + np.array([0.0, 0.18 * a, 0.14 * jump, 0, 0, 0])
     p["armL"] = HANG + np.array([60 * a, 40 * a, 0, 60 * a, 0, 0])
     p["armR"] = HANG + np.array([70 * a, 44 * a, 0, 50 * a, 0, 0])
     p["fL"] = RK.G("open", a)
@@ -157,7 +157,7 @@ mk("approach_carefully", "wildlife", SNEAK.T, loop=True, root="inplace", speed=S
 def _stalk_spear(t):
     steps = GK.make_steps(STALK)
     prm, opts = GK.gait_params(t, STALK, steps)
-    s = SK.SH(-0.14, 0.32, 0.70 + 0.03 * np.cos(TAU * t / STALK.T * 2), 112 + 2 * np.sin(TAU * t / STALK.T), 0, 0, 0.95, 1.55, 1.0, 1.0)
+    s = SK.SH(-0.14, 0.32, 0.70 + 0.03 * np.cos(TAU * t / STALK.T * 2), 112 + 2 * np.sin(TAU * t / STALK.T), 0, 0, 0.95, 1.37, 1.0, 1.0)
     prm = K.P(prm)
     prm["look"] = np.array([0.0, -3.0, 0.0, 0.8])
     prm = SK.apply_state(prm, s, "over", "over")
@@ -172,7 +172,7 @@ mk("stalk_rat", "wildlife", STALK.T, loop=True, speed=STALK.v, props=["staff"], 
 
 
 def _spear_ground(t):
-    s = SK.kv(t, [(0.0, SK.SH(-0.14, 0.32, 0.72, 112, 0, 0, 0.95, 1.55)), (0.35, SK.SH(-0.14, 0.26, 0.92, 128, 0, 0, 0.95, 1.55)), (0.50, SK.SH(-0.15, 0.50, 0.50, 138, 0, 0, 0.95, 1.55)), (0.9, SK.SH(-0.15, 0.50, 0.50, 138, 0, 0, 0.95, 1.55)), (1.3, SK.SH(-0.15, 0.50, 0.50, 138, 0, 0, 0.95, 1.55))])
+    s = SK.kv(t, [(0.0, SK.SH(-0.14, 0.32, 0.72, 112, 0, 0, 0.95, 1.37)), (0.35, SK.SH(-0.14, 0.26, 0.92, 128, 0, 0, 0.95, 1.37)), (0.50, SK.SH(-0.15, 0.50, 0.50, 138, 0, 0, 0.95, 1.37)), (0.9, SK.SH(-0.15, 0.50, 0.50, 138, 0, 0, 0.95, 1.37)), (1.3, SK.SH(-0.15, 0.50, 0.50, 138, 0, 0, 0.95, 1.37))])
     a = smooth(seg(t, 0.25, 0.5))
     p = K.P(pose_crouch(0.30 + 0.12 * a), sp=[28 + 14 * a, 0, 0], hd=[-18, 0, 0], armL=HANG.copy(), armR=HANG.copy(), wL=0.0, wR=0.0,
             ftL=FT("L", 0.15, 0.30 + 0.10 * a, AZ, 0, 0, 10), ftR=FT("R", -0.15, -0.10, AZ, 0, 0, -8))
@@ -187,7 +187,7 @@ mk("spear_thrust_ground", "wildlife", 1.3, props=["staff"], staff_use="spear", d
 
 
 def _spear_ground_recover(t):
-    s = SK.kv(t, [(0.0, SK.SH(-0.15, 0.50, 0.50, 138, 0, 0, 0.95, 1.55)), (0.6, SK.SH(-0.15, 0.40, 0.70, 120, 0, 0, 0.95, 1.55)), (1.4, SK.SH(-0.18, 0.20, 0.90, 80, 0, 0, 0.95, 1.55, 1.0, 0.0)), (2.2, SK.SH(-0.20, 0.14, 0.95, 20, -2, 0, 1.0, 1.5, 1.0, 0.0))])
+    s = SK.kv(t, [(0.0, SK.SH(-0.15, 0.50, 0.50, 138, 0, 0, 0.95, 1.37)), (0.6, SK.SH(-0.15, 0.40, 0.70, 120, 0, 0, 0.95, 1.37)), (0.95, SK.SH(-0.16, 0.34, 0.80, 105, 0, 0, 0.95, 1.37, 1.0, 0.0)), (1.4, SK.SH(-0.18, 0.20, 0.90, 80, 0, 0, 0.95, 1.37, 1.0, 0.0)), (2.2, SK.SH(-0.20, 0.14, 0.95, 20, -2, 0, 1.0, 1.5, 1.0, 0.0))])
     a = smooth(seg(t, 0.4, 1.8))
     p = K.P(pose_crouch(0.42 - 0.38 * a), sp=[42 - 40 * a, 0, 0], hd=[-18 + 14 * a, 0, 14 * np.sin(TAU * (t - 1.0) / 1.0) * env(t, 0.9, 1.1, 1.8, 2.1)], armL=HANG.copy(), armR=HANG.copy(), wL=0.0, wR=0.0,
             ftL=FT("L", 0.15 - 0.04 * a, 0.40 - 0.40 * a, AZ, 0, 0, 10 - 8 * a), ftR=FT("R", -0.15 + 0.05 * a, -0.10 + 0.10 * a, AZ, 0, 0, -8 + 6 * a))

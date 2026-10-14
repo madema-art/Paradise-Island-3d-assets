@@ -128,19 +128,108 @@ def frame_times(spec):
     return n + 1, [i / FPS for i in range(n + 1)]
 
 
+def _arm_miss(p):
+    return max([v for kk, v in p.report.items() if kk.startswith("arm")] + [0.0])
+
+
+def _finish(prm, opts):
+    return PR.finish(prm, arm_mode=opts.get("arm_mode", ("fk", "fk")), arm_space=opts.get("arm_space", ("world", "world")),
+                     stance=opts.get("stance", (False, False)), ground=opts.get("ground", 0.0))
+
+
+def _apply_assist(prm, x):
+    q = PR.copy(prm)
+    q["sp"] = q["sp"] + np.array([x[0], 0.0, 0.0])
+    q["pel"] = q["pel"] + np.array([0.0, x[3], x[1], x[2], 0.0, 0.0])
+    q["hd"] = q["hd"] + np.array([-0.6 * x[0], 0.0, 0.0])
+    return q
+
+
+def _assist_solve(prm, opts, x0):
+    """Reach assist: small forward bend / pelvis drop / pelvis tilt that brings an out-of-reach IK hand target into range."""
+    from scipy.optimize import minimize
+    bounds = [(-10.0, 50.0), (-0.45, 0.04), (-6.0, 22.0), (-0.12, 0.12)]
+
+    def cost(x):
+        _, _ = None, None
+        p, _ = _finish(_apply_assist(prm, x), opts)
+        reg = (x[0] / 40.0) ** 2 + (x[1] / 0.3) ** 2 + (x[2] / 15.0) ** 2 + (x[3] / 0.1) ** 2
+        return (_arm_miss(p) * 1000.0) ** 2 + 4.0 * reg
+    r = minimize(cost, x0, method="Powell", bounds=bounds, options=dict(maxiter=3, xtol=1e-2, ftol=1e-3))
+    return np.array(r.x)
+
+
+def reach_assist_offsets(spec, times, reports):
+    """Per-frame assist offsets (n, 4) or None. Frames whose arm IK misses by > 8 mm are solved (every 2nd frame, warm-started), then interpolated and smoothed."""
+    bad = [i for i, r in enumerate(reports) if r > 0.008]
+    if not bad:
+        return None
+    n = len(times)
+    idx = sorted({j for i in bad for j in range(max(0, i - 6), min(n, i + 7))})
+    offs = np.zeros((n, 4))
+    x = np.zeros(4)
+    solved = []
+    for k, i in enumerate(idx):
+        if k % 2 and i + 1 in idx:
+            continue
+        prm, opts = spec["fn"](times[i])
+        x = _assist_solve(prm, opts, x)
+        offs[i] = x
+        solved.append(i)
+    # interpolate between solved frames, zero elsewhere, then smooth
+    xs = np.array(solved)
+    for c in range(4):
+        offs[:, c] = np.interp(np.arange(n), xs, offs[xs, c], left=0.0, right=0.0) if len(xs) > 1 else offs[:, c]
+        gap = np.ones(n, bool)
+        gap[xs.min():xs.max() + 1] = False
+        offs[gap, c] = 0.0
+    from scipy.ndimage import gaussian_filter1d
+    offs = gaussian_filter1d(offs, 2.0, axis=0, mode="wrap" if spec["loop"] else "nearest")
+    return offs
+
+
 def bake(name, with_secondary=True, verbose=False):
     spec = CLIPS[name]
     n, times = frame_times(spec)
     sk = RIG.sk
     B = Baked(name, spec, n, spec["loop"])
-    quats, trans, sols, poses = [], [], [], []
-    for t in times:
-        prm, opts = spec["fn"](t)
-        p, sol = PR.finish(prm, arm_mode=opts.get("arm_mode", ("fk", "fk")), arm_space=opts.get("arm_space", ("world", "world")),
-                           stance=opts.get("stance", (False, False)), ground=opts.get("ground", 0.0))
-        sols.append(sol)
-        poses.append(p)
-        B.world.append(opts.get("world", dict(pos=(0, 0, 0), yaw=0.0)))
+
+    def run(offs=None):
+        sols, poses, world, reports = [], [], [], []
+        for i, t in enumerate(times):
+            prm, opts = spec["fn"](t)
+            if offs is not None:
+                prm = _apply_assist(prm, offs[i])
+            p, sol = _finish(prm, opts)
+            sols.append(sol)
+            poses.append(p)
+            reports.append(_arm_miss(p))
+            world.append(opts.get("world", dict(pos=(0, 0, 0), yaw=0.0)))
+        return sols, poses, world, reports
+    sols, poses, B.world, reports = run()
+    if spec["meta"].get("reach_assist", True):
+        offs = reach_assist_offsets(spec, times, reports)
+        if offs is not None:
+            B.assist = offs
+            sols, poses, B.world, reports = run(offs)
+            # second pass: isolated frames whose smoothed assist fell short are re-solved from their current offsets
+            for _ in range(2):
+                bad = [i for i, r in enumerate(reports) if r > 0.015]
+                if not bad:
+                    break
+                offs = offs.copy()
+                for i in bad:
+                    prm, opts = spec["fn"](times[i])
+                    offs[i] = _assist_solve(prm, opts, offs[i])
+                from scipy.ndimage import gaussian_filter1d
+                lo = np.zeros(n, bool)
+                for i in bad:
+                    lo[[(i + j) % n if spec["loop"] else min(max(i + j, 0), n - 1) for j in range(-3, 4)]] = True
+                sm = gaussian_filter1d(offs, 0.8, axis=0, mode="wrap" if spec["loop"] else "nearest")
+                offs[lo] = sm[lo]
+                B.assist = offs
+                sols, poses, B.world, reports = run(offs)
+    quats, trans = [], []
     if with_secondary:
         D_sec = secondary.simulate(sols, spec["loop"], floor=spec["meta"].get("floor", 0.012))
         sols = [PR_resolve(poses[i], D_sec[i]) for i in range(len(poses))]
@@ -156,7 +245,10 @@ def PR_resolve(p, D_sec):
     D_extra = dict(getattr(p, "_extraD", {}))
     D_extra.update(D_sec)
     from pose_lib import solve
-    return solve(p, extra_D=D_extra)
+    rep = dict(p.report)                    # the secondary-motion re-solve must not drop the arm/leg IK reach report
+    sol = solve(p, extra_D=D_extra)
+    p.report = rep
+    return sol
 
 
 # ------------------------------------------------------------------------------------------------ QA metrics
@@ -242,6 +334,7 @@ def clip_key(name):
     h = hashlib.sha1()
     for m in CORE_MODULES:
         h.update(_src(m))
+    h.update(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "rest_pose.json"), "rb").read())
     h.update(_src(spec.get("src_module") or spec["fn"].__module__))
     h.update(name.encode())
     return h.hexdigest()[:16]

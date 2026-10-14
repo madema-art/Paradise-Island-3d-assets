@@ -47,6 +47,16 @@ try {
     const host = bone ? g.scene.getObjectByName(bone) : null;
     (host || scene).add(x.scene); (window.shot.extras ||= []).push(x);
   }
+  const hide = (q.get('hide') || '').split(',').filter(Boolean);
+  g.scene.traverse((o) => {
+    if (!o.isMesh) return;
+    const ms = Array.isArray(o.material) ? o.material : [o.material];
+    for (const m of ms) {
+      if (m.name === 'CastawayHair') m.alphaToCoverage = true;
+      if (hide.includes(m.name)) o.visible = false;
+      if (q.get('wire')) { m.wireframe = true; if (q.get('wire') === 'flat') { m.map = null; m.normalMap = null; m.metalnessMap = null; m.color.set(0xdde6ee); m.needsUpdate = true; } }
+    }
+  });
   document.body.dataset.ready = '1';
 } catch (e) { document.body.dataset.error = String(e); }
 </script></body></html>

@@ -58,6 +58,32 @@ def back_mount():
     return dict(bone="spine3", q=quat(Rl), p=[round(float(v), 5) for v in p])
 
 
+def grip_poses():
+    """Finger/thumb bone rotations (node-local quaternion xyzw, absolute = rest * basis) of each named hand pose, for both hands."""
+    import params as PR
+    import anim_pack
+    from glb_tools import Glb
+    glb = Glb(os.path.join(ROOT, "build/castaway/Castaway_static.glb"))
+    q0, _ = anim_pack.rest_nodes(glb)
+    sk = RIG.sk
+    names = [n for n in sk.names if n.startswith("f_")]
+    out = {}
+    for gname in PL.GRIPS:
+        prm = RK.stand()
+        for sd in ("fL", "fR"):
+            prm[sd] = RK.G(gname, 1.0)
+        _, sol = PR.finish(prm, arm_mode=("fk", "fk"), stance=(True, True))
+        q = sol.quats()
+        d = {}
+        for n in names:
+            i = sk.i(n)
+            qb = np.roll(q[i], -1)                                   # wxyz -> xyzw
+            r = Rot.from_quat(q0[i]) * Rot.from_quat(qb)
+            d[n] = [round(float(x), 6) for x in r.as_quat()]
+        out[gname] = d
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(ROOT, "build/castaway/lib/castaway_grips.json"))
@@ -69,6 +95,7 @@ def main():
             out["grips"][f"{side}_{gname}"] = hand_mount(side, up, np.array([rx, 0.0, 0.0]), along)
         out["grips"][f"{side}_over_horizontal"] = hand_mount(side, np.array([0.0, -1.0, 0.0]), np.array([0.0, 0.0, 1.0]), GRIP_Y["main"])
     out["grips"]["back_sling"] = back_mount()
+    out["hand_poses"] = dict(note="Absolute node-local quaternions (xyzw) of every finger/thumb bone for each named hand pose (both hands); set node.quaternion directly to override a clip's fingers.", poses=grip_poses())
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     json.dump(out, open(a.out, "w"), indent=1)
     print(f"[grips] {len(out['grips'])} mounts -> {a.out}")

@@ -260,8 +260,8 @@ def _turn_fish(t):
     T = 6.0
     rot = TAU * t / 3.0                       # skewer turned by the wrist
     p = kneel_base(0.1, 12.0)
-    p["armR_ik"] = K.ik(v3(-0.16, 0.50, 0.34), (0.1, -1, 0.2), (0.0, 0.5, 1.0), 10 * np.sin(rot))
-    p["armL_ik"] = K.ik(v3(0.12, 0.36, 0.30), (-0.1, -1, 0.2), (0.0, 0.5, 1.0), -10)
+    p["armR_ik"] = K.ik(v3(-0.16, 0.42, 0.34), (0.1, -1, 0.2), (0.0, 0.5, 1.0), 10 * np.sin(rot))
+    p["armL_ik"] = K.ik(v3(0.12, 0.32, 0.30), (-0.1, -1, 0.2), (0.0, 0.5, 1.0), -10)
     p["armR_w"] = np.array([1.0])
     p["armL_w"] = np.array([1.0])
     p["fR"] = RK.G("grip_thin", 0.9)

@@ -24,14 +24,14 @@ def axis_from(pitch=0.0, roll=0.0, yaw=0.0):
     """Unit axis (butt -> tip) from tilt angles: pitch + = tip forward, roll + = tip to his left, yaw about the vertical."""
     a = np.array([0.0, 0.0, 1.0])
     a = axis_angle([1, 0, 0], pitch) @ a       # forward tilt: the tip moves towards -Y
-    a = axis_angle([0, 1, 0], -roll) @ a      # lean left (+x)
+    a = axis_angle([0, 1, 0], roll) @ a        # lean left (+x)
     a = axis_angle([0, 0, 1], yaw) @ a
     return unit(a)
 
 
 def tilt_from(axis):
-    a = unit(axis)
-    return float(np.degrees(np.arctan2(-a[1], a[2]))), float(np.degrees(np.arctan2(a[0], a[2])))
+    a = unit(axis)          # exact inverse of axis_from(pitch, roll, 0): a = (cos p sin r, -sin p, cos p cos r)
+    return float(np.degrees(np.arcsin(np.clip(-a[1], -1, 1)))), float(np.degrees(np.arctan2(a[0], a[2])))
 
 
 def grip_hand(side, butt, axis, along, mode="side", roll=0.0, twist=0.0):
@@ -106,13 +106,50 @@ def kv(t, keys_, ease="smooth"):
     return V[i] * (1 - u) + V[i + 1] * u
 
 
-def apply_state(p, s, right_mode="side", left_mode="back", grip="grip_staff", prop="staff"):
-    """Place the staff (or the aux prop, e.g. a paddle) from a state vector and set the IK targets of the hands (weights in s[7], s[8])."""
+REACH_MAX = 0.625       # shoulder -> wrist distance we allow when sliding a grip along the shaft (upper arm 0.372 + forearm 0.288 = 0.66)
+
+
+def _shoulders(p):
+    """Root-local shoulder positions of the pose parameters p (arms FK, so the clavicle/spine pose decides)."""
+    from kin import Rz
+    from pose_lib import RIG
+    _, sol = PR.finish(PR.copy(p), arm_mode=("fk", "fk"), stance=(True, True))
+    root = np.asarray(p["root"][:3], float)
+    yaw = float(p["root"][3])
+    return {sd: Rz(-yaw) @ (sol.head(f"upper_arm_{sd}") - root) for sd in ("L", "R")}
+
+
+def _fit_along(side, butt, axis, a_pref, lo, hi, shoulder, mode):
+    """Grip distance along the shaft closest to a_pref (within [lo, hi]) that keeps the palm within the arm's reach."""
+    import pose_lib as PL
+    from pose_lib import RIG
+    best, best_d = a_pref, 1e9
+    for a in np.linspace(lo, hi, 41):
+        v = grip_hand(side, butt, axis, a, mode)
+        Dh = PL.hand_delta(side, v[3:6], v[6:9])
+        wrist = v[:3] - Dh @ RIG.palm_off[side]
+        d = np.linalg.norm(wrist - shoulder)
+        cost = abs(a - a_pref) + (0 if d <= REACH_MAX else 10 * (d - REACH_MAX))
+        if cost < best_d:
+            best, best_d = a, cost
+    return best
+
+
+def apply_state(p, s, right_mode="side", left_mode="back", grip="grip_staff", prop="staff", fit=True):
+    """Place the staff (or the aux prop, e.g. a paddle) from a state vector and set the IK targets of the hands (weights in s[7], s[8]).
+    With fit=True each gripping hand slides along the shaft (within a window around its nominal spot) to stay inside the arm's reach."""
     butt = s[:3]
     axis = axis_from(s[3], s[4], s[5])
     p = put(p, butt, axis) if prop == "staff" else RK.set_aux(p, np.asarray(butt, float), unit(axis))
-    p["armR_ik"] = grip_hand("R", butt, axis, s[6], right_mode)
-    p["armL_ik"] = grip_hand("L", butt, axis, s[9], left_mode)
+    aR, aL = s[6], s[9]
+    if fit and (s[7] > 0.5 or s[8] > 0.5):
+        sh = _shoulders(p)
+        if s[7] > 0.5:
+            aR = _fit_along("R", butt, axis, s[6], max(0.05, s[6] - 0.30), s[6] + 0.30, sh["R"], right_mode)
+        if s[8] > 0.5:
+            aL = _fit_along("L", butt, axis, s[9], max(0.05, s[9] - 0.40), s[9] + 0.30, sh["L"], left_mode)
+    p["armR_ik"] = grip_hand("R", butt, axis, aR, right_mode)
+    p["armL_ik"] = grip_hand("L", butt, axis, aL, left_mode)
     p["armR_w"] = np.array([s[7]])
     p["armL_w"] = np.array([s[8]])
     if s[7] > 0.5:
@@ -129,6 +166,7 @@ def opts_blend():
 def SH(rx, rf, rz, pitch, roll=0.0, yaw=0.0, aR=0.75, aL=1.25, wR=1.0, wL=1.0):
     """Staff state from the RIGHT hand grip point R=(x, forward, z) on the shaft; the butt lies aR metres behind it along the axis."""
     ax = axis_from(pitch, roll, yaw)
+    aL = min(aL, aR + 0.30)                                   # hands at most 0.30 m apart on the shaft: the left arm must reach it
     R = np.array([rx, -rf, rz], float)
     butt = R - ax * aR
     return np.array([butt[0], butt[1], butt[2], pitch, roll, yaw, aR, wR, wL, aL], float)

@@ -207,12 +207,14 @@ def finish(prm, arm_mode=("fk", "fk"), arm_space=("world", "world"), stance=(Fal
             pt = sol0.Hw[ib] + Q @ (pt - H0)
             fd, pn = Q @ fd, Q @ pn
         PL.arm_to_point(p, t, pt, fd, pn, twist=float(v[9]))
+    blend_miss = {}
     if "blend" in arm_mode:
         sol_ik = solve(p, extra_D=D_extra)
         for t, mode in zip(SIDES, arm_mode):
             if mode != "blend":
                 continue
             w = float(np.clip(prm[f"arm{t}_w"][0], 0.0, 1.0))
+            blend_miss[f"arm_{t}"] = p.report.get(f"arm_{t}", 0.0) * w          # the IK reach error counts in proportion to the IK weight
             for bone in (f"upper_arm_{t}", f"forearm_{t}", f"hand_{t}", f"forearm_tw1_{t}", f"forearm_tw2_{t}"):
                 Rf = D_extra.get(bone, I3)
                 Ri = sol_ik.D.get(bone, I3)
@@ -243,6 +245,7 @@ def finish(prm, arm_mode=("fk", "fk"), arm_space=("world", "world"), stance=(Fal
         sol1 = solve(p, extra_D=D_extra)
         _look(p, sol1, p.root_pos + Rz(p.root_yaw) @ look[:3], float(look[3]))
     sol = solve(p, extra_D=D_extra)
+    p.report.update(blend_miss)
     p._extraD = D_extra
     return p, sol
 

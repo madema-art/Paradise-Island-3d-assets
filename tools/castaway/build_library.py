@@ -58,17 +58,11 @@ UPPER_VARIANTS = ["laugh_quiet", "laugh_hearty", "frustration", "disappointment"
 # clips reviewed frame by frame in skinned Three.js contact sheets (real GLB) after the last kinematics change
 NOT_REVIEWED = set()          # filled by the QA pass notes below if needed
 KNOWN_ISSUES = {
-    "dance_hop": "foot reach error up to ~17 mm on the hop apex",
-    "celebrate": "foot reach error up to ~30 mm in the take-off crouch",
-    "startled": "foot reach error up to ~40 mm at the peak of the jump",
-    "reach_for_handhold": "toes lift ~20 mm short of the target on the highest reach",
-    "swim_crawl": "head/arm pose is a first pass: limbs read correctly but timing and body roll are not tuned",
-    "swim_breaststroke": "first pass: leg frog-kick amplitude not tuned",
-    "tread_water": "first pass: the legs are not hidden below the surface in a dry viewer",
-    "lounge_sit_back": "hands sink ~80 mm into the ground plane at the widest arm swing",
-    "stretch_after_sleep": "right hand sinks ~20 mm into the ground in the roll phase",
-    "look_down_from_height": "hand lifts ~11 mm off the knee at the deepest lean",
+    "swim_crawl": "first pass: limbs read correctly but stroke timing, body roll and the kick are not tuned; a dry viewer shows the body below the water line",
+    "swim_breaststroke": "first pass: the frog kick amplitude and glide timing are not tuned",
+    "tread_water": "first pass: eggbeater legs are only roughly timed; the legs are not hidden below a surface in a dry viewer",
 }
+WATER_CLIPS = {"swim_crawl", "swim_breaststroke", "tread_water", "float_on_back"}
 
 
 def tier_of(name, spec):
@@ -215,6 +209,8 @@ def build(args):
             issues.append(KNOWN_ISSUES[n])
         if reach > 25.0 and n not in KNOWN_ISSUES:
             issues.append(f"IK reach error {reach:.0f} mm")
+        if mm["min_z"] < -0.03 and n not in WATER_CLIPS and spec["group"] not in ("canoe",) and not n.startswith("tree_climb") and n not in KNOWN_ISSUES:   # tree climbs: the root travels down the trunk, so feet below the root plane are intended
+            issues.append(f"bones sink {abs(mm['min_z']) * 1000:.0f} mm below the ground plane")
         status = "verified" if not issues else "in_development"
         rec["status"] = status
         rec["status_note"] = ("pose-checked frame by frame in skinned Three.js contact sheets; IK misses < 25 mm; no ground penetration beyond the listed notes" if status == "verified"

@@ -20,6 +20,8 @@ const browser = await chromium.launch({ executablePath: process.env.CHROME || '/
 const page = await browser.newPage({ viewport: { width: W, height: H } });
 const errs = []; page.on('console', (m) => { if (['error', 'warning'].includes(m.type())) errs.push(m.text()); }); page.on('pageerror', (e) => errs.push(e.message));
 const qs = new URLSearchParams({ model: '/' + args.model, w: W, h: H, light: args.light || 'studio', ground: args.ground ?? '1', fov: args.fov || '30' });
+if (args.wire) qs.set('wire', args.wire);
+if (args.hide) qs.set('hide', args.hide);
 if (args.extra) qs.set('extra', args.extra.split(',').map((e) => '/' + e).join(','));
 await page.goto(`http://localhost:${server.address().port}/viewer/tests/shot.html?${qs}`);
 await page.waitForFunction(() => document.body.dataset.ready === '1' || document.body.dataset.error, null, { timeout: 120000 });
