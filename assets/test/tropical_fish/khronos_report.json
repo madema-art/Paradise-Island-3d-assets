@@ -1,0 +1,13 @@
+{
+  "version": "2.0",
+  "generator": "Khronos glTF Blender I/O v5.2.40",
+  "materials": 2,
+  "triangles": 251,
+  "vertices": 549,
+  "errors": 0,
+  "warnings": 0,
+  "infos": 1,
+  "messages": [
+    "2 UNUSED_OBJECT: This object may be unused. @ /meshes/0/primitives/1/attributes/TEXCOORD_0"
+  ]
+}

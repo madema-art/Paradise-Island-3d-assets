@@ -1,0 +1,11 @@
+{
+  "name": "paradise-island-blender-tools",
+  "private": true,
+  "description": "Khronos glTF validation for the asset workshop",
+  "scripts": {
+    "validate": "node validate_glb_khronos.js"
+  },
+  "dependencies": {
+    "gltf-validator": "2.0.0-dev.3.10"
+  }
+}

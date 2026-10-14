@@ -1,0 +1,52 @@
+{
+  "file": "TropicalFish.glb",
+  "bytes": 311996,
+  "meshes": 1,
+  "primitives": 2,
+  "vertices": 549,
+  "triangles": 251,
+  "materials": [
+    {
+      "name": "FishPaint",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 512,
+        "height": 512,
+        "mimeType": "image/png"
+      }
+    },
+    {
+      "name": "FishEye",
+      "base_color_factor": [
+        0.014999999664723873,
+        0.014999999664723873,
+        0.019999999552965164,
+        1
+      ],
+      "base_color_texture": null
+    }
+  ],
+  "images": [
+    "image/png"
+  ],
+  "bounds_min": [
+    -0.86,
+    -0.34,
+    -0.38
+  ],
+  "bounds_max": [
+    0.5,
+    0.4,
+    0.38
+  ],
+  "errors": [],
+  "warnings": [
+    "material FishEye: no base colour texture"
+  ],
+  "status": "PASS"
+}
