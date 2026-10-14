@@ -99,11 +99,11 @@ def make_fur_material(paths):
     nt.links.new(sep.outputs["Red"], grp.inputs["Occlusion"])
 
     # soft fur-like rim; exported as KHR_materials_sheen
-    for name, val in (("Sheen Weight", 0.35), ("Sheen Roughness", 0.55)):
+    for name, val in (("Sheen Weight", 0.35), ("Sheen Roughness", 0.60)):
         if name in bsdf.inputs:
             bsdf.inputs[name].default_value = val
     if "Sheen Tint" in bsdf.inputs:
-        bsdf.inputs["Sheen Tint"].default_value = (0.78, 0.68, 0.52, 1.0)
+        bsdf.inputs["Sheen Tint"].default_value = (0.30, 0.26, 0.19, 1.0)   # glTF exports tint only: pre-multiply by the weight
     if "Specular IOR Level" in bsdf.inputs:
         bsdf.inputs["Specular IOR Level"].default_value = 0.25
     mat.use_backface_culling = True

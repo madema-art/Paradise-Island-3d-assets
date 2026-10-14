@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paradise Island · Monkey Asset Viewer</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="viewer.css">
+<script type="importmap">
+{ "imports": { "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/" } }
+</script>
+</head>
+<body>
+<canvas id="stage"></canvas>
+
+<aside id="clips" class="panel">
+  <header>
+    <h1>Monkey <span>asset workshop</span></h1>
+    <p id="loadstate">Loading…</p>
+  </header>
+  <div id="cliplist"></div>
+</aside>
+
+<aside id="controls" class="panel">
+  <section>
+    <h2>Playback</h2>
+    <div class="row">
+      <button id="btnPause" title="Space">Pause</button>
+      <button id="btnRestart">Restart</button>
+      <button id="btnPrev" title="←">‹</button>
+      <button id="btnNext" title="→">›</button>
+    </div>
+    <label>Speed <input id="speed" type="range" min="0.1" max="2" step="0.05" value="1"><output id="speedOut">1.00×</output></label>
+    <label>Crossfade <input id="fade" type="range" min="0" max="1" step="0.05" value="0.25"><output id="fadeOut">0.25 s</output></label>
+    <label>Time <input id="scrub" type="range" min="0" max="1" step="0.001" value="0"><output id="timeOut">0.00 s</output></label>
+    <label class="check"><input id="chkTravel" type="checkbox" checked> Simulate travel (scroll ground / trunk at the clip's ground speed — feet should not slide)</label>
+  </section>
+
+  <section>
+    <h2>Camera</h2>
+    <div class="grid" id="camButtons"></div>
+    <label class="check"><input id="chkSpin" type="checkbox"> Auto-rotate (R)</label>
+  </section>
+
+  <section>
+    <h2>Inspect</h2>
+    <label>Shading
+      <select id="shading">
+        <option value="pbr">Lit PBR (as exported)</option>
+        <option value="albedo">Albedo only</option>
+        <option value="normalmap">Normal map</option>
+        <option value="ao">Ambient occlusion (ORM.R)</option>
+        <option value="rough">Roughness (ORM.G)</option>
+        <option value="normals">Geometry normals</option>
+        <option value="uv">UV checker</option>
+      </select>
+    </label>
+    <label>Light
+      <select id="lighting">
+        <option value="studio">Studio</option>
+        <option value="sun">Island sun</option>
+        <option value="jungle">Jungle shade</option>
+        <option value="overcast">Overcast</option>
+      </select>
+    </label>
+    <label>Exposure <input id="exposure" type="range" min="0.4" max="2" step="0.05" value="1"></label>
+    <div class="checks">
+      <label class="check"><input id="chkWire" type="checkbox"> Wireframe (W)</label>
+      <label class="check"><input id="chkBones" type="checkbox"> Skeleton (S)</label>
+      <label class="check"><input id="chkGround" type="checkbox" checked> Ground</label>
+      <label class="check"><input id="chkShadow" type="checkbox" checked> Shadows</label>
+      <label class="check"><input id="chkCoconut" type="checkbox" checked> Coconut prop</label>
+      <label class="check"><input id="chkPartner" type="checkbox" checked> Partner (paired clips)</label>
+    </div>
+  </section>
+
+  <section>
+    <h2>Clip</h2>
+    <div id="clipinfo" class="info">—</div>
+    <h2>Asset</h2>
+    <div id="stats" class="info">—</div>
+  </section>
+</aside>
+
+<div id="hint">Drag: orbit · Wheel: zoom · Right-drag: pan · Space: pause · ←/→: clips · 1–8: camera · W/S/R: wire/skeleton/rotate</div>
+<script type="module" src="viewer.js"></script>
+</body>
+</html>

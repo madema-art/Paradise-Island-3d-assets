@@ -177,10 +177,10 @@ def build_sdf_sampler(D, voxel=0.003):
 
 # ----------------------------------------------------------------------------- palette (sRGB)
 C = dict(
-    dorsal_dark=np.array([0.215, 0.165, 0.105]),
-    dorsal_light=np.array([0.385, 0.305, 0.195]),
-    flank=np.array([0.470, 0.385, 0.265]),
-    belly=np.array([0.690, 0.625, 0.505]),
+    dorsal_dark=np.array([0.200, 0.150, 0.092]),
+    dorsal_light=np.array([0.345, 0.260, 0.155]),
+    flank=np.array([0.420, 0.330, 0.210]),
+    belly=np.array([0.610, 0.540, 0.420]),
     gold=np.array([0.620, 0.500, 0.270]),
     tip_dark=np.array([0.100, 0.075, 0.055]),
     crown=np.array([0.170, 0.125, 0.085]),
@@ -285,7 +285,7 @@ def paint(args):
 
     # --- fur colour -------------------------------------------------------------------------------
     ventral = smoothstep(0.05, -0.55, nz)
-    dorsal_mix = np.clip(patch * 1.4 - 0.15, 0, 1)
+    dorsal_mix = np.clip(0.28 + patch * 0.55, 0, 1)
     fur = mix(C["dorsal_dark"], C["dorsal_light"], dorsal_mix)
     fur = mix(fur, C["flank"], 0.45 * (1 - smoothstep(0.35, 0.85, nz)))
     # darker spine stripe
@@ -348,8 +348,8 @@ def paint(args):
     occ = np.zeros(n_n, np.float32)
     for i, tdist in enumerate((0.0035, 0.008, 0.015, 0.026, 0.04)):
         occ += (tdist - sdf(P + Nn * tdist)).clip(0, None) / tdist / (1.0 + 0.6 * i)
-    ao = np.clip(1.0 - 0.55 * occ, 0.30, 1.0).astype(np.float32)
-    col = col * (0.55 + 0.45 * ao[:, None])          # a little AO baked into colour for unlit viewers
+    ao = np.clip(1.0 - 0.45 * occ, 0.40, 1.0).astype(np.float32)
+    col = col * (0.84 + 0.16 * ao[:, None])          # only a hint of AO in the colour; the ORM map carries the rest
     print(f"[paint] colour + AO done ({time.time() - t0:.1f}s)")
 
     # --- roughness ----------------------------------------------------------------------------------------

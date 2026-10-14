@@ -1,0 +1,8 @@
+{
+  "name": "monkey-viewer-tests",
+  "private": true,
+  "description": "Headless Three.js capture harness for the monkey viewer",
+  "type": "module",
+  "scripts": { "capture": "node capture.mjs" },
+  "devDependencies": { "playwright-core": "^1.50.0" }
+}

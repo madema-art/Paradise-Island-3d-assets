@@ -3,7 +3,7 @@ Structural validator for .glb files. Pure Python, no Blender needed.
 
 Checks that the file is a well-formed GLB 2.0, that every primitive has finite
 geometry with valid accessors, that the mesh has real triangles, and that each
-material's base-colour texture points at an embedded, decodable PNG.
+material's base-colour texture points at an embedded PNG or JPEG.
 
 Usage:
   python3 tools/blender/validate_glb.py path/to/model.glb [--json report.json] [--min-triangles 20]
@@ -72,11 +72,27 @@ def read_accessor(gltf, blob, idx):
     return [struct.unpack_from(fmt, blob, base + i * stride) for i in range(count)]
 
 
-def png_size(blob, view):
+def image_size(blob, view):
+    """(width, height) of an embedded PNG or JPEG, or None if it is neither."""
     raw = blob[view["byteOffset"]: view["byteOffset"] + view["byteLength"]]
-    if not raw.startswith(PNG_SIGNATURE) or raw[12:16] != b"IHDR":
-        return None
-    return struct.unpack(">II", raw[16:24])  # width, height
+    if raw.startswith(PNG_SIGNATURE) and raw[12:16] == b"IHDR":
+        return struct.unpack(">II", raw[16:24])
+    if raw[:2] == b"\xff\xd8":                        # JPEG: walk the markers to the first SOFn
+        i = 2
+        while i + 9 < len(raw):
+            if raw[i] != 0xFF:
+                i += 1
+                continue
+            marker = raw[i + 1]
+            if marker in (0xD8, 0x01) or 0xD0 <= marker <= 0xD7:
+                i += 2
+                continue
+            seglen = struct.unpack(">H", raw[i + 2:i + 4])[0]
+            if marker in (0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7, 0xC9, 0xCA, 0xCB, 0xCD, 0xCE, 0xCF):
+                h, w = struct.unpack(">HH", raw[i + 5:i + 9])
+                return w, h
+            i += 2 + seglen
+    return None
 
 
 def validate(gltf, blob, min_triangles):
@@ -167,9 +183,9 @@ def validate(gltf, blob, min_triangles):
             if "bufferView" not in img:
                 errors.append(f"material {entry['name']}: texture is not embedded")
             else:
-                size = png_size(blob, gltf["bufferViews"][img["bufferView"]])
+                size = image_size(blob, gltf["bufferViews"][img["bufferView"]])
                 if size is None:
-                    errors.append(f"material {entry['name']}: embedded image is not a PNG")
+                    errors.append(f"material {entry['name']}: embedded image is neither PNG nor JPEG")
                 else:
                     entry["base_color_texture"] = {"width": size[0], "height": size[1],
                                                    "mimeType": img.get("mimeType")}
@@ -180,6 +196,18 @@ def validate(gltf, blob, min_triangles):
         summary["materials"].append(entry)
 
     summary["images"] = [img.get("mimeType", "?") for img in images]
+    summary["skins"] = [len(sk.get("joints", [])) for sk in gltf.get("skins", [])]
+    summary["animations"] = [a.get("name", "?") for a in gltf.get("animations", [])]
+    for ai, an in enumerate(gltf.get("animations", [])):
+        for ch in an.get("channels", []):
+            if ch["target"].get("node") is None or ch["target"]["node"] >= len(gltf.get("nodes", [])):
+                errors.append(f"animation {an.get('name', ai)}: channel targets a missing node")
+                break
+        for sm in an.get("samplers", []):
+            acc = gltf["accessors"][sm["input"]]
+            if acc.get("count", 0) < 1:
+                errors.append(f"animation {an.get('name', ai)}: empty sampler")
+                break
     if not summary["materials"]:
         errors.append("no materials in file")
     return summary, errors, warnings
