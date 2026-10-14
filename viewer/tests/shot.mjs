@@ -24,12 +24,15 @@ if (args.extra) qs.set('extra', args.extra.split(',').map((e) => '/' + e).join('
 await page.goto(`http://localhost:${server.address().port}/viewer/tests/shot.html?${qs}`);
 await page.waitForFunction(() => document.body.dataset.ready === '1' || document.body.dataset.error, null, { timeout: 120000 });
 const err = await page.evaluate(() => document.body.dataset.error); if (err) { console.error('LOAD ERROR', err); process.exit(2); }
-if (args.clip) await page.evaluate(([c, t]) => window.shot.pose(c, t), [args.clip, +(args.t || 0)]);
 const files = [];
-for (const spec of (args.views || '').split(';').filter(Boolean)) {
-  const [name, vals] = spec.split(':'); const v = vals.split(',').map(Number);
-  await page.evaluate((v) => window.shot.view(v), v);
-  const f = path.join(out, `${name}.png`); await page.screenshot({ path: f }); files.push(f);
+const times = args.times ? args.times.split(',').map(Number) : [+(args.t || 0)];
+for (const [ti, t] of times.entries()) {
+  if (args.clip) await page.evaluate(([c, tt]) => window.shot.pose(c, tt), [args.clip, t]);
+  for (const spec of (args.views || '').split(';').filter(Boolean)) {
+    const [name, vals] = spec.split(':'); const v = vals.split(',').map(Number);
+    await page.evaluate((v) => window.shot.view(v), v);
+    const f = path.join(out, times.length > 1 ? `${name}_${String(ti).padStart(2, '0')}.png` : `${name}.png`); await page.screenshot({ path: f }); files.push(f);
+  }
 }
 console.log(files.join('\n'));
 if (errs.length) console.log('console:', [...new Set(errs)].slice(0, 8).join(' | '));

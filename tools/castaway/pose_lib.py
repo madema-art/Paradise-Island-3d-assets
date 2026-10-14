@@ -332,6 +332,7 @@ def solve(p, extra_D=None, extra_tr=None):
                 D[ik.end] = Ql.T @ spec["foot_rot"]
             report[f"{kind}_{t}"] = miss
     sol = sk.evaluate(D, tw)
+    sol.D = D
     p.report = report
     return sol
 

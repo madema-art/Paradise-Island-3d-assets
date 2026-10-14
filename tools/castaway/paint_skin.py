@@ -313,7 +313,7 @@ def paint_group(z, D, sampler, group, size, outdir, tag, seed, debug=False):
     m_palm = np.clip(m_hand * palm_side, 0, 1)
     m_sole = m_foot * sstep(-0.15, -0.65, nz)
     # tan lines: the maro covers hips -> the skin underneath stays pale
-    m_cover = box(zc, 0.915, 1.115, 0.035) * (1 - sstep(0.205, 0.245, ax)) * (1 - m_arm)
+    m_cover = box(zc, float(hdesign.zmap(0.915)), float(hdesign.zmap(1.115)), 0.035) * (1 - sstep(0.205, 0.245, ax)) * (1 - m_arm)
     m_cover = np.clip(m_cover * (0.55 + 0.45 * patch), 0, 1)
 
     # ----- albedo
@@ -368,7 +368,7 @@ def paint_group(z, D, sampler, group, size, outdir, tag, seed, debug=False):
     nail_col = mix(C["nail"], np.array([0.84, 0.70, 0.62]), 0.5 * hair_h)
     col = mix(col, nail_col, nail_amt * 0.92)
     # hairy areas: sun-bleached body hair on limbs/chest, hair roots under scalp/beard/brows
-    body_hair_d = np.clip(0.75 * (m_arm * box(zc, 0.9, 1.28, 0.05)) + 0.8 * m_leg * box(zc, 0.12, 0.98, 0.05) + 0.45 * chest * (m_arm < 0.3)
+    body_hair_d = np.clip(0.75 * (m_arm * box(zc, 0.9, 1.28, 0.05)) + 0.8 * m_leg * box(zc, 0.12, 1.05, 0.05) + 0.45 * chest * (m_arm < 0.3)
                           + 0.35 * m_hand * (1 - palm_side) + 0.25 * m_foot * (1 - m_sole), 0, 1) * (1 - m_head) * (1 - m_palm) * (1 - m_nail * 0.9)
     bh = np.clip((hair_h - 0.46) * 5.0, 0, 1) * body_hair_d * (0.55 + 0.7 * patch)
     col = mix(col, C["body_hair"] * (0.9 + 0.25 * hair_h[:, None]), np.clip(bh * 0.55, 0, 1))

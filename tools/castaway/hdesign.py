@@ -20,8 +20,19 @@ MOUTH_Z = 1.7945        # mouth line (stomion)
 LIP_SQUEEZE = 0.00225   # sculpted slit half-height, closed again by a warp before skinning
 
 
+# Vertical remap applied to every design coordinate: lengthens the legs (long-legged build) and shortens the torso
+# correspondingly, leaving feet, shoulders and head where they were. knots: (design z, final z)
+ZKNOTS = ((0.0, 0.0), (0.09, 0.09), (0.975, 1.048), (1.64, 1.64), (2.2, 2.2))
+
+
+def zmap(z):
+    z = np.asarray(z, float)
+    xs, ys = zip(*ZKNOTS)
+    return np.where(z < 0, z, np.interp(z, xs, ys))
+
+
 def P(x, f, z):
-    return np.array([x, -f, z], float)
+    return np.array([x, -f, float(zmap(z))], float)
 
 
 class Design:

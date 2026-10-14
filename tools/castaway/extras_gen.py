@@ -179,9 +179,9 @@ def maro_parts(sdf, rng):
     # ---- waist band (wrapped, slightly diagonal)
     nu, nv = 101, 9
     th = np.linspace(0, 2 * np.pi, nu)
-    center = np.array([0.0, -0.004, 1.0])
-    z_top_base = 1.112
-    z_bot_base = 0.998
+    center = np.array([0.0, -0.004, float(hdesign.zmap(1.0))])
+    z_top_base = float(hdesign.zmap(1.112))
+    z_bot_base = float(hdesign.zmap(0.998))
     P = np.zeros((nv, nu, 3))
     for i, a in enumerate(th):
         d = np.array([np.sin(a), -np.cos(a), 0.0])           # a=0 -> front (-Y)
@@ -215,7 +215,7 @@ def maro_parts(sdf, rng):
                 v = j / (nv - 1)
                 w = width0 * (1 - 0.18 * v)
                 x = u * w * 0.5
-                z = 1.075 - v * length - 0.01 * (1 - abs(u))
+                z = float(hdesign.zmap(1.075)) - v * length - 0.01 * (1 - abs(u))
                 # find the body surface along +-Y at (x, z)
                 o = np.array([[x, 0.0, z]])
                 d = np.array([[0.0, sign, 0.0]])
@@ -366,6 +366,7 @@ def main():
                 names = ["pelvis", "thigh_L", "thigh_R", "cloth_knot_1", "cloth_knot_2"]
             Wskin = weights_for(V, skinV, skinW, skin_bones, names[:3])
             zt = {"front": (1.075, 0.80), "back": (1.075, 0.82), "knot": (1.040, 0.76)}[kind]
+            zt = (float(hdesign.zmap(zt[0])), float(hdesign.zmap(zt[1])) + (0.04 if False else 0.0))
             v = np.clip((zt[0] - V[:, 2]) / (zt[0] - zt[1]), 0, 1)
             a1 = smoothstep(0.10, 0.45, v)
             a2 = smoothstep(0.50, 0.95, v)
