@@ -210,3 +210,80 @@ def foot_slide_report(B, thresh_z=0.012):
                 run = []
         out[t] = round(worst * 1000, 1)
     return out
+
+
+# ------------------------------------------------------------------------------------------------ parallel / cached baking
+import hashlib
+import pickle
+import sys as _sys
+
+CORE_MODULES = ["clipkit", "params", "pose_lib", "kin", "secondary", "rigkit", "staffkit", "posekit", "steps", "gaitkit", "pathgait", "hdesign"]
+
+
+class BakedLite:
+    """Pickleable result of a bake (no solved poses): everything the GLB writer, metadata and reports need."""
+
+    def __init__(self, d):
+        self.__dict__.update(d)
+        self.sols, self.poses = [], []
+
+
+def _src(mod):
+    m = _sys.modules.get(mod)
+    f = getattr(m, "__file__", None)
+    return open(f, "rb").read() if f else b""
+
+
+def clip_key(name):
+    spec = CLIPS[name]
+    h = hashlib.sha1()
+    for m in CORE_MODULES:
+        h.update(_src(m))
+    h.update(_src(spec["fn"].__module__))
+    h.update(name.encode())
+    return h.hexdigest()[:16]
+
+
+def _uses_prop(B, bone):
+    sk = RIG.sk
+    i = sk.i(bone)
+    for p in B.poses:
+        pos, R = p.props[bone]
+        if np.linalg.norm(pos - sk.head[i]) > 1e-3 or abs(R[2, 2] - 1) > 1e-3:
+            return True
+    return False
+
+
+def _bake_worker(args):
+    name, cache_dir = args
+    B = bake(name)
+    d = dict(name=B.name, spec={k: v for k, v in B.spec.items() if k != "fn"}, n=B.n, loop=B.loop, quat=B.quat, trans=B.trans, world=B.world,
+             metrics=B.metrics, staff_used=_uses_prop(B, "prop_staff"), aux_used=_uses_prop(B, "prop_aux"))
+    with open(os.path.join(cache_dir, f"{name}.{clip_key(name)}.pkl"), "wb") as f:
+        pickle.dump(d, f)
+    return name
+
+
+def bake_many(names, procs=4, cache_dir=None, verbose=True):
+    """Bake clips in parallel with an on-disk cache (key = core sources + the clip's module source). Returns {name: BakedLite}."""
+    import multiprocessing as mp
+    root = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+    cache_dir = cache_dir or os.path.join(root, "build/castaway/bakecache")
+    os.makedirs(cache_dir, exist_ok=True)
+    todo = [n for n in names if not os.path.exists(os.path.join(cache_dir, f"{n}.{clip_key(n)}.pkl"))]
+    if todo:
+        if verbose:
+            print(f"[bake] {len(todo)} clip(s) to bake, {len(names) - len(todo)} cached", flush=True)
+        ctx = mp.get_context("fork")
+        with ctx.Pool(min(procs, len(todo))) as pool:
+            for n in pool.imap_unordered(_bake_worker, [(n, cache_dir) for n in todo]):
+                if verbose:
+                    print(f"[bake] done {n}", flush=True)
+    out = {}
+    for n in names:
+        with open(os.path.join(cache_dir, f"{n}.{clip_key(n)}.pkl"), "rb") as f:
+            d = pickle.load(f)
+        spec = dict(CLIPS[n])
+        d["spec"] = spec
+        out[n] = BakedLite(d)
+    return out

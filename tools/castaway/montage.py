@@ -16,7 +16,7 @@ import anim_pack  # noqa: E402
 import clipkit as CK  # noqa: E402
 from pose_lib import RIG  # noqa: E402
 
-ALL_MODS = ["clips_locomotion", "clips_transitions", "clips_posture", "clips_staff", "clips_personality"]
+ALL_MODS = ["clips_locomotion", "clips_transitions", "clips_posture", "clips_staff", "clips_personality", "clips_survival", "clips_fishing"]
 EXTRA_MODS = os.environ.get("CLIP_MODS", "").split(",") if os.environ.get("CLIP_MODS") else []
 
 CAMS = {"a": "a:2.6,1.2,3.4,0,0.95,0", "b": "b:4.2,1.0,0.0,0,0.95,0", "c": "c:-2.6,1.2,3.4,0,0.95,0", "f": "f:0.0,1.3,3.6,0,0.95,0",
@@ -35,7 +35,8 @@ def main():
     W, H = map(int, size.split("x"))
     for m in ALL_MODS + EXTRA_MODS:
         importlib.import_module(m)
-    bakes = [CK.bake(n) for n in names]
+    bk = CK.bake_many(names)
+    bakes = [bk[n] for n in names]
     glb = os.path.join(ROOT, "build/castaway/_montage.glb")
     anim_pack.write_main(os.path.join(ROOT, "build/castaway/Castaway_static.glb"), glb, bakes)
     rows = []
@@ -44,7 +45,7 @@ def main():
         times = [dur * i / nf if B.loop else min(dur * i / (nf - 1), dur - 1.5 / 30) for i in range(nf)]
         d = os.path.join(ROOT, "build/castaway/sheets", "_m_" + B.name)
         os.makedirs(d, exist_ok=True)
-        uses = any(np.linalg.norm(p.props["prop_staff"][0] - RIG.sk.head[RIG.sk.i("prop_staff")]) > 1e-3 or abs(p.props["prop_staff"][1][2, 2] - 1) > 1e-3 for p in B.poses)
+        uses = B.staff_used
         extra = ["--extra", "build/castaway/Staff.glb@prop_staff"] if uses else []
         vspec = ";".join((cam if (cam and len(views) == 1 and v == "a") else CAMS[v]) for v in views)
         subprocess.run(["node", os.path.join(ROOT, "viewer/tests/shot.mjs"), "--model", "build/castaway/_montage.glb", "--clip", B.name, *extra,

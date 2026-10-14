@@ -23,7 +23,7 @@ def P(x, f, z):
 def axis_from(pitch=0.0, roll=0.0, yaw=0.0):
     """Unit axis (butt -> tip) from tilt angles: pitch + = tip forward, roll + = tip to his left, yaw about the vertical."""
     a = np.array([0.0, 0.0, 1.0])
-    a = axis_angle([1, 0, 0], -pitch) @ a      # forward tilt: the tip moves towards -Y
+    a = axis_angle([1, 0, 0], pitch) @ a       # forward tilt: the tip moves towards -Y
     a = axis_angle([0, 1, 0], -roll) @ a      # lean left (+x)
     a = axis_angle([0, 0, 1], yaw) @ a
     return unit(a)
@@ -124,3 +124,11 @@ def apply_state(p, s, right_mode="side", left_mode="back", grip="grip_staff"):
 
 def opts_blend():
     return dict(arm_mode=("blend", "blend"), arm_space=("world", "world"), stance=(True, True))
+
+
+def SH(rx, rf, rz, pitch, roll=0.0, yaw=0.0, aR=0.75, aL=1.25, wR=1.0, wL=1.0):
+    """Staff state from the RIGHT hand grip point R=(x, forward, z) on the shaft; the butt lies aR metres behind it along the axis."""
+    ax = axis_from(pitch, roll, yaw)
+    R = np.array([rx, -rf, rz], float)
+    butt = R - ax * aR
+    return np.array([butt[0], butt[1], butt[2], pitch, roll, yaw, aR, wR, wL, aL], float)

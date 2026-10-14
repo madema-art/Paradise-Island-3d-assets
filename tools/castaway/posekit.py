@@ -135,3 +135,34 @@ def addf(p, **kw):
     for k, v in kw.items():
         p["face"][PR.FACE_KEYS.index(k)] += v
     return p
+
+
+# ---------------------------------------------------------------------------------------------------- world points on the body
+def body_pt(p, bone, rest_pt, stance=(True, True)):
+    """World position of a point fixed to `bone` (given in rest coordinates) for the pose parameters p (arms FK)."""
+    from pose_lib import RIG
+    q = PR.copy(p)
+    _, sol = PR.finish(q, arm_mode=("fk", "fk"), stance=stance)
+    ib = RIG.sk.i(bone)
+    return sol.Hw[ib] + sol.Q[ib] @ (np.asarray(rest_pt, float) - RIG.sk.head[ib])
+
+
+def body_dir(p, bone, rest_dir, stance=(True, True)):
+    from pose_lib import RIG
+    _, sol = PR.finish(PR.copy(p), arm_mode=("fk", "fk"), stance=stance)
+    return sol.Q[RIG.sk.i(bone)] @ np.asarray(rest_dir, float)
+
+
+def hand_to_head(p, side, rest_pt, fd, pn, twist=None, w=1.0, stance=(True, True)):
+    """Hand IK target (world) that tracks a point on the head."""
+    from pose_lib import RIG
+    q = PR.copy(p)
+    if twist is None:                      # elbow low and forward (a hand at the face with the default swivel throws the elbow up)
+        twist = -160.0 if side == "R" else 160.0
+    _, sol = PR.finish(q, arm_mode=("fk", "fk"), stance=stance)
+    ib = RIG.sk.i("head")
+    pt = sol.Hw[ib] + sol.Q[ib] @ (np.asarray(rest_pt, float) - RIG.sk.head[ib])
+    Q = sol.Q[ib]
+    q[f"arm{side}_ik"] = ik_hand(pt, unit(Q @ np.asarray(fd, float)), unit(Q @ np.asarray(pn, float)), twist)
+    q[f"arm{side}_w"] = np.array([w])
+    return q
