@@ -241,7 +241,7 @@ def finish(prm, arm_mode=("fk", "fk"), arm_space=("world", "world"), stance=(Fal
     look = prm["look"]
     if look[3] > 1e-4:
         sol1 = solve(p, extra_D=D_extra)
-        _look(p, sol1, look[:3], float(look[3]))
+        _look(p, sol1, p.root_pos + Rz(p.root_yaw) @ look[:3], float(look[3]))
     sol = solve(p, extra_D=D_extra)
     p._extraD = D_extra
     return p, sol

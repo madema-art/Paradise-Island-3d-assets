@@ -106,11 +106,11 @@ def kv(t, keys_, ease="smooth"):
     return V[i] * (1 - u) + V[i + 1] * u
 
 
-def apply_state(p, s, right_mode="side", left_mode="back", grip="grip_staff"):
-    """Place the staff from a state vector and set the IK targets of the hands (weights in s[7], s[8]) for 'blend' arm mode."""
+def apply_state(p, s, right_mode="side", left_mode="back", grip="grip_staff", prop="staff"):
+    """Place the staff (or the aux prop, e.g. a paddle) from a state vector and set the IK targets of the hands (weights in s[7], s[8])."""
     butt = s[:3]
     axis = axis_from(s[3], s[4], s[5])
-    p = put(p, butt, axis)
+    p = put(p, butt, axis) if prop == "staff" else RK.set_aux(p, np.asarray(butt, float), unit(axis))
     p["armR_ik"] = grip_hand("R", butt, axis, s[6], right_mode)
     p["armL_ik"] = grip_hand("L", butt, axis, s[9], left_mode)
     p["armR_w"] = np.array([s[7]])

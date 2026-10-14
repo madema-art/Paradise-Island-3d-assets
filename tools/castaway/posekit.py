@@ -104,9 +104,12 @@ def blink_wrap(fn, seconds, seed, every=(2.6, 4.6)):
 
 def mk(name, group, seconds, loop=False, blinks=True, seed=None, **meta):
     """Decorator: fn(t) -> (pose, opts); adds blinks and registers the clip."""
+    import sys as _s
+    src = _s._getframe(1).f_globals.get("__name__")
+
     def deco(fn):
         f = RK.with_blinks(fn, seconds, seed if seed is not None else (abs(hash(name)) % 997), every=(2.4, 4.4)) if blinks else fn
-        clip(name, group, seconds, loop=loop, **meta)(f)
+        clip(name, group, seconds, loop=loop, src_module=src, **meta)(f)
         return f
     return deco
 

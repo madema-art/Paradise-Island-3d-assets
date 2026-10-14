@@ -22,8 +22,11 @@ CLIPS = {}
 
 
 def clip(name, group, seconds, loop=False, speed=None, root="inplace", desc="", **meta):
+    import sys as _s
+    src = meta.pop("src_module", None) or _s._getframe(1).f_globals.get("__name__")
+
     def deco(fn):
-        CLIPS[name] = dict(fn=fn, name=name, group=group, seconds=float(seconds), loop=bool(loop), speed=speed, root=root, desc=desc, meta=meta)
+        CLIPS[name] = dict(fn=fn, name=name, group=group, seconds=float(seconds), loop=bool(loop), speed=speed, root=root, desc=desc, meta=meta, src_module=src)
         return fn
     return deco
 
@@ -239,7 +242,7 @@ def clip_key(name):
     h = hashlib.sha1()
     for m in CORE_MODULES:
         h.update(_src(m))
-    h.update(_src(spec["fn"].__module__))
+    h.update(_src(spec.get("src_module") or spec["fn"].__module__))
     h.update(name.encode())
     return h.hexdigest()[:16]
 

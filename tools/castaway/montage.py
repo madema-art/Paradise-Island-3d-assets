@@ -16,7 +16,7 @@ import anim_pack  # noqa: E402
 import clipkit as CK  # noqa: E402
 from pose_lib import RIG  # noqa: E402
 
-ALL_MODS = ["clips_locomotion", "clips_transitions", "clips_posture", "clips_staff", "clips_personality", "clips_survival", "clips_fishing"]
+ALL_MODS = ["clips_locomotion", "clips_transitions", "clips_posture", "clips_staff", "clips_personality", "clips_survival", "clips_fishing", "clips_canoe", "clips_wildlife"]
 EXTRA_MODS = os.environ.get("CLIP_MODS", "").split(",") if os.environ.get("CLIP_MODS") else []
 
 CAMS = {"a": "a:2.6,1.2,3.4,0,0.95,0", "b": "b:4.2,1.0,0.0,0,0.95,0", "c": "c:-2.6,1.2,3.4,0,0.95,0", "f": "f:0.0,1.3,3.6,0,0.95,0",
@@ -46,7 +46,16 @@ def main():
         d = os.path.join(ROOT, "build/castaway/sheets", "_m_" + B.name)
         os.makedirs(d, exist_ok=True)
         uses = B.staff_used
-        extra = ["--extra", "build/castaway/Staff.glb@prop_staff"] if uses else []
+        ex = []
+        if uses:
+            ex.append("build/castaway/Staff.glb@prop_staff")
+        if getattr(B, "aux_used", False):
+            ex.append("build/castaway/props/Paddle.glb@prop_aux")
+        pr = B.spec.get("meta", {}).get("props", []) if isinstance(B.spec.get("meta"), dict) else []
+        for nm, f in (("canoe", "Canoe"), ("boulder", "Boulder"), ("rock", "Rock"), ("log", "Log"), ("fire", "Campfire")):
+            if nm in pr:
+                ex.append(f"build/castaway/props/{f}.glb")
+        extra = ["--extra", ",".join(ex)] if ex else []
         vspec = ";".join((cam if (cam and len(views) == 1 and v == "a") else CAMS[v]) for v in views)
         subprocess.run(["node", os.path.join(ROOT, "viewer/tests/shot.mjs"), "--model", "build/castaway/_montage.glb", "--clip", B.name, *extra,
                         "--times", ",".join(f"{t:.3f}" for t in times), "--views", vspec, "--out", d, "--size", size, "--fov", kw.get("fov", "34")],

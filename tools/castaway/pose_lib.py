@@ -311,12 +311,18 @@ def solve(p, extra_D=None, extra_tr=None):
             S = sol0.Hw[iu]
             Qp = sol0.Q[par]
             pole = spec["pole"] if spec["pole"] is not None else Qp @ ik.pole_rest
-            Qu, Ql, E, Tact, miss = ik.solve(S, spec["target"], pole, spec["twist"])
+            # IK targets are authored in the root-local frame: carry them through the root transform (identity for in-place clips)
+            Rr = Rz(p.root_yaw)
+            tgt = np.asarray(p.root_pos, float) + Rr @ spec["target"]
+            if spec["pole"] is not None:
+                pole = Rr @ pole
+            Qu, Ql, E, Tact, miss = ik.solve(S, tgt, pole, spec["twist"])
             D[ik.upper] = Qp.T @ Qu
             D[ik.lower] = Qu.T @ Ql
             if kind == "arm":
                 if spec["hand_dirs"] is not None:
-                    Dh = hand_delta(t, *spec["hand_dirs"])
+                    fd_, pn_ = spec["hand_dirs"][0], spec["hand_dirs"][1]
+                    Dh = hand_delta(t, Rr @ np.asarray(fd_, float), Rr @ np.asarray(pn_, float), *spec["hand_dirs"][2:])
                     Dh_local = Ql.T @ Dh
                 elif spec["hand_rel"] is not None:
                     Dh_local = euler(*spec["hand_rel"])
@@ -329,7 +335,7 @@ def solve(p, extra_D=None, extra_tr=None):
                     D[f"forearm_tw1_{t}"] = axis_angle(ax, 0.35 * twist)
                     D[f"forearm_tw2_{t}"] = axis_angle(ax, 0.70 * twist)
             else:
-                D[ik.end] = Ql.T @ spec["foot_rot"]
+                D[ik.end] = Ql.T @ (Rr @ spec["foot_rot"])
             report[f"{kind}_{t}"] = miss
     sol = sk.evaluate(D, tw)
     sol.D = D
