@@ -1,0 +1,18 @@
+{
+ "runs": 20,
+ "hours_per_run": 1.0,
+ "mantas_per_run": 3,
+ "per_manta_per_hour_means": {
+  "breach": 6.467,
+  "curious": 0.883,
+  "shadow_pass": 1.801,
+  "feed": 3.0,
+  "flee": 0.883
+ },
+ "breach_per_manta_hour_while_player_in_25_to_80m": 49.237,
+ "seen_fraction_mean": 0.21,
+ "speed_mps_p50_mean": 1.4,
+ "speed_mps_max_over_runs": 4.0,
+ "min_gap_between_breaches_s_over_runs": 91.0,
+ "breach_global_cooldown_s": 90.0
+}

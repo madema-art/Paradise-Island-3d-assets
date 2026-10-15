@@ -27,3 +27,7 @@ node capture.mjs --clips walk,idle --times 0,0.4 --cam 3/4 --out ../../build/mon
 ## Castaway viewer
 
 `viewer/castaway.html` (same server, `/viewer/castaway.html`): clip browser for the 142 castaway clips (lazy-loaded animation packs), compare mode (second character), crossfade/speed/scrub, travel simulation from the exported speed/yaw curves, camera presets (full, front, side, back, face, profile, hands, feet, top; 1 to 9), neutral and tropical lighting, wireframe, skeleton, hair toggle, water plane, staff attachment test (follow clip, either hand, back sling, optional line and hook), upper-body layering, hand-pose override and a face tester (19 controls, presets, visemes, lip-sync demo). Headless test: `node viewer/tests/castaway_capture.mjs --query "clip=walk&cam=0" --out build/x.png`.
+
+## Manta (`manta.html`)
+
+Plays every clip in `assets/manta/Manta.glb` (ten clips, scrub, speed, crossfade) and lists the behaviour spec from `assets/manta/manta_behavior.json`. Serve the repo root and open `/viewer/manta.html`. Private artifact staging: `python3 tools/stage_manta_viewer.py`.

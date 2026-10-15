@@ -1,0 +1,91 @@
+{
+ "fps": 30,
+ "units": "metres",
+ "clips": {
+  "glide_cruise": {
+   "duration_s": 2.4,
+   "loop": true,
+   "frames": 73,
+   "fps": 30
+  },
+  "glide_gentle": {
+   "duration_s": 5.0,
+   "loop": true,
+   "frames": 151,
+   "fps": 30
+  },
+  "flap_power": {
+   "duration_s": 1.1,
+   "loop": true,
+   "frames": 34,
+   "fps": 30
+  },
+  "feed_open": {
+   "duration_s": 5.0,
+   "loop": true,
+   "frames": 151,
+   "fps": 30
+  },
+  "curious_approach": {
+   "duration_s": 4.0,
+   "loop": true,
+   "frames": 121,
+   "fps": 30
+  },
+  "turn_left": {
+   "duration_s": 2.4,
+   "loop": false,
+   "frames": 73,
+   "fps": 30
+  },
+  "turn_right": {
+   "duration_s": 2.4,
+   "loop": false,
+   "frames": 73,
+   "fps": 30
+  },
+  "startle_burst": {
+   "duration_s": 1.2,
+   "loop": false,
+   "frames": 37,
+   "fps": 30
+  },
+  "breach_rise": {
+   "duration_s": 3.0,
+   "loop": false,
+   "frames": 91,
+   "fps": 30
+  },
+  "breach_fall": {
+   "duration_s": 2.5,
+   "loop": false,
+   "frames": 76,
+   "fps": 30
+  }
+ },
+ "axis_probe": {
+  "wing_L1 +flap lifts tip (z up)": 0.3402,
+  "wing_R1 +flap lifts tip (z up)": 0.3402,
+  "body +pitch raises nose (z up)": 0.1921,
+  "tail1 +bend raises tip (z up)": 0.266,
+  "head_L +yaw sends lobe out (+Y)": 0.1773,
+  "head_R -yaw sends lobe out (-Y)": 0.1773
+ },
+ "bones": [
+  "root",
+  "body",
+  "head_L",
+  "head_R",
+  "wing_L1",
+  "wing_L2",
+  "wing_L3",
+  "wing_R1",
+  "wing_R2",
+  "wing_R3",
+  "tail1",
+  "tail2",
+  "tail3"
+ ],
+ "vertices": 1208,
+ "triangles": 2332
+}

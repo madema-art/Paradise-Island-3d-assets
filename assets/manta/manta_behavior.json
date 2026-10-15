@@ -1,0 +1,109 @@
+{
+ "creature": "giant_manta",
+ "wingspan_m": 6.0,
+ "units": "metres, seconds",
+ "frame": "Y-up in the game. The rig is in place; heading, speed and depth come from the game.",
+ "depth_m": {
+  "patrol_min": 6.0,
+  "patrol_max": 14.0,
+  "surface": 0.5,
+  "breach_apex": 3.0
+ },
+ "speed_mps": {
+  "patrol": 1.4,
+  "curious": 0.9,
+  "feed": 0.45,
+  "flee": 4.0,
+  "turn_rate_dps": 22.0
+ },
+ "ranges_m": {
+  "notice": 90.0,
+  "curious_enter": 32.0,
+  "curious_orbit": [
+   7.0,
+   10.0
+  ],
+  "startle": 6.0,
+  "spear_startle": 12.0,
+  "breach_player_min": 25.0,
+  "breach_player_max": 80.0,
+  "shadow_pass_min": 25.0,
+  "shadow_pass_max": 60.0,
+  "shadow_pass_height": 6.0
+ },
+ "timers_s": {
+  "patrol_leg": [
+   25.0,
+   60.0
+  ],
+  "curious_hold": [
+   12.0,
+   20.0
+  ],
+  "feed_hold": [
+   20.0,
+   40.0
+  ],
+  "flee_hold": 12.0,
+  "shadow_pass": 9.0,
+  "breach_total": 5.8
+ },
+ "cooldowns_s": {
+  "curious": 600.0,
+  "shadow_pass": 240.0,
+  "breach_per_manta": [
+   240.0,
+   420.0
+  ],
+  "breach_global": 90.0,
+  "feed_per_manta": 1200.0
+ },
+ "rates_per_s_when_eligible": {
+  "breach": 0.025,
+  "curious": 0.022222222222222223,
+  "shadow_pass": 0.011111111111111112,
+  "feed": 0.011111111111111112
+ },
+ "clips": {
+  "patrol_cruise": [
+   "glide_cruise",
+   "glide_gentle"
+  ],
+  "turn": [
+   "turn_left",
+   "turn_right"
+  ],
+  "curious": [
+   "curious_approach"
+  ],
+  "feed": [
+   "feed_open"
+  ],
+  "flee": [
+   "startle_burst",
+   "flap_power"
+  ],
+  "breach": [
+   "breach_rise",
+   "breach_fall"
+  ]
+ },
+ "noticeability": {
+  "silhouette": "pale underside and dark dorsal with wings held wide: reads at 90 m against both sand and deep water",
+  "shadow": "a soft dark blob the size of the wingspan on the seabed while altitude is under 12 m, fading out by 20 m",
+  "sound": "a wing-beat cue on every flap (every 2.4 s cruising, every 1.1 s powered), spatialised, audible to 60 m",
+  "event_cues": "a splash and a ripple ring on breach; a brief whoosh when it bolts",
+  "frequency_target": "a manta is in view (within 90 m) about a fifth of the time an explorer is in the lagoon; a breach about every 6 to 10 min per manta while explorers are around"
+ },
+ "integration": {
+  "status": "spec only, not implemented in the game",
+  "owner": "the local Claude Code session in the game repository",
+  "steps": [
+   "Replace the procedural manta mesh with assets/manta/Manta.glb (one skinned mesh, 13 bones, 10 clips).",
+   "Drive the state machine above from the game's own world (depth, waypoints, player position, bloom zones).",
+   "Keep the clips in place: apply the game's heading and speed to the root, never bake motion into a clip.",
+   "Hook the event cues (splash, ripple, sound) to the breach and flee transitions.",
+   "Tune the numbers in this file first, then copy them into the game's data."
+  ]
+ }
+}

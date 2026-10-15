@@ -1,0 +1,116 @@
+{
+  "file": "Manta.glb",
+  "bytes": 735244,
+  "meshes": 1,
+  "primitives": 6,
+  "vertices": 1268,
+  "triangles": 2332,
+  "materials": [
+    {
+      "name": "MantaDorsal",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 512,
+        "height": 512,
+        "mimeType": "image/png"
+      }
+    },
+    {
+      "name": "MantaVentral",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 256,
+        "height": 256,
+        "mimeType": "image/png"
+      }
+    },
+    {
+      "name": "MantaMouth",
+      "base_color_factor": [
+        0.05000000074505806,
+        0.05000000074505806,
+        0.05999999865889549,
+        1
+      ],
+      "base_color_texture": null
+    },
+    {
+      "name": "MantaGill",
+      "base_color_factor": [
+        0.10000000149011612,
+        0.10000000149011612,
+        0.10999999940395355,
+        1
+      ],
+      "base_color_texture": null
+    },
+    {
+      "name": "MantaEye",
+      "base_color_factor": [
+        0.009999999776482582,
+        0.009999999776482582,
+        0.009999999776482582,
+        1
+      ],
+      "base_color_texture": null
+    },
+    {
+      "name": "MantaTail",
+      "base_color_factor": [
+        0.11999999731779099,
+        0.18000000715255737,
+        0.23999999463558197,
+        1
+      ],
+      "base_color_texture": null
+    }
+  ],
+  "images": [
+    "image/png",
+    "image/png"
+  ],
+  "bounds_min": [
+    -3.4002,
+    -0.0849,
+    -2.963
+  ],
+  "bounds_max": [
+    1.6206,
+    0.4046,
+    2.963
+  ],
+  "skins": [
+    13
+  ],
+  "animations": [
+    "breach_fall",
+    "breach_rise",
+    "curious_approach",
+    "feed_open",
+    "flap_power",
+    "glide_cruise",
+    "glide_gentle",
+    "startle_burst",
+    "turn_left",
+    "turn_right"
+  ],
+  "errors": [],
+  "warnings": [
+    "mesh[0].primitive[5]: 49 UVs outside [0,1]",
+    "material MantaMouth: no base colour texture",
+    "material MantaGill: no base colour texture",
+    "material MantaEye: no base colour texture",
+    "material MantaTail: no base colour texture"
+  ],
+  "status": "PASS"
+}

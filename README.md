@@ -10,9 +10,12 @@ repository: nothing here reads from or writes to the game.
 | `assets/monkey/` | **Island monkey**: runtime GLBs (full, lite, LOD1), editable `.blend`, textures, 41 animation clips, coconut prop, validation reports and previews. Start with `assets/monkey/README.md`. |
 | `assets/monkey/previews/` | Character reference sheet, per-group animation pose sheets, texture atlas overview, UV layout, turntable, clip GIFs. |
 | `assets/castaway/` | **Castaway**: rigged 2.00 m human castaway (GLB + LOD1 + lite), `Staff.glb` (walking stick / fishing pole / spear), 142 clips in animation packs with machine-readable metadata, face + grip tables, proxy props, editable `.blend`, previews, validation. Start with `assets/castaway/README.md`. |
-| `viewer/` | Standalone Three.js test viewers (no connection to the game): `python3 -m http.server` in the repo root, open `/viewer/` (monkey) or `/viewer/castaway.html` (castaway). See `viewer/README.md`. |
+| `assets/manta/` | **Giant manta ray**: first Blender-authored version. Skinned 6 m ray (`Manta.glb`, 2,332 tris), 10 in-place clips, behaviour config and headless simulation, editable `.blend`, real pose renders, validation. Start with `assets/manta/README.md`. |
+| `docs/MANTA_HANDOFF.md` | Manta handoff to the game repository: integration steps, state machine, noticeability goals, acceptance checks. |
+| `viewer/` | Standalone Three.js test viewers (no connection to the game): `python3 -m http.server` in the repo root, open `/viewer/` (monkey), `/viewer/castaway.html` (castaway) or `/viewer/manta.html` (manta). See `viewer/README.md`. |
 | `tools/monkey/` | Monkey pipeline (`build_all.sh`). |
 | `tools/castaway/` | Castaway pipeline (`build_castaway.sh`, `build_library.py`, clip modules, previews, packaging). |
+| `tools/manta/` | Manta pipeline: geometry, clips, textures, bpy build, behaviour simulation, pose renders. |
 | `tools/blender/` | Blender/bpy setup and GLB validators. |
 | `docs/MONKEY_INTEGRATION.md` | Integration guide for Claude Code. |
 | `docs/CASTAWAY_INTEGRATION.md`, `docs/CASTAWAY_ANIMATION_LIBRARY.md`, `docs/CASTAWAY_HANDOFF.md` | Castaway integration guide, every clip with status, rebuild/handoff notes. |

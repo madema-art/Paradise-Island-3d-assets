@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paradise Island · Giant Manta Asset Viewer</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="manta.css">
+<script type="importmap">
+{ "imports": { "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/" } }
+</script>
+</head>
+<body>
+<canvas id="stage"></canvas>
+
+<aside id="clips" class="panel">
+  <header>
+    <h1>Giant manta <span>asset workshop</span></h1>
+    <p id="loadstate">Loading…</p>
+    <input id="search" type="search" placeholder="Search clips…">
+  </header>
+  <div id="cliplist"></div>
+</aside>
+
+<aside id="controls" class="panel">
+  <section>
+    <h2>Playback</h2>
+    <p id="span" class="span">–</p>
+    <div class="row">
+      <button id="btnPause" title="Space">Pause</button>
+      <button id="btnRestart">Restart</button>
+      <button id="btnPrev" title="←">‹</button>
+      <button id="btnNext" title="→">›</button>
+    </div>
+    <label>Speed <input id="speed" type="range" min="0.1" max="2" step="0.05" value="1"><output id="speedOut">1.00×</output></label>
+    <label>Crossfade <input id="fade" type="range" min="0" max="1" step="0.05" value="0.25"><output id="fadeOut">0.25 s</output></label>
+    <label>Time <input id="scrub" type="range" min="0" max="1" step="0.001" value="0"><output id="timeOut">0.00 s</output></label>
+    <p id="info" class="note">–</p>
+  </section>
+  <section>
+    <h2>Behaviour spec</h2>
+    <div id="behaviour" class="behaviour">Loading…</div>
+  </section>
+  <p class="hint">Drag to orbit · wheel to zoom · Space pause · ← → clips</p>
+</aside>
+
+<script type="module" src="manta.js"></script>
+</body>
+</html>

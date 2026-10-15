@@ -1,0 +1,17 @@
+{
+  "file": "../../assets/manta/Manta.glb",
+  "version": "2.0",
+  "generator": "Khronos glTF Blender I/O v5.2.40",
+  "materials": 6,
+  "triangles": 2332,
+  "vertices": 1268,
+  "errors": 0,
+  "warnings": 0,
+  "infos": 4,
+  "messages": [
+    "2 UNUSED_OBJECT: This object may be unused. @ /meshes/0/primitives/2/attributes/TEXCOORD_0",
+    "2 UNUSED_OBJECT: This object may be unused. @ /meshes/0/primitives/3/attributes/TEXCOORD_0",
+    "2 UNUSED_OBJECT: This object may be unused. @ /meshes/0/primitives/4/attributes/TEXCOORD_0",
+    "2 UNUSED_OBJECT: This object may be unused. @ /meshes/0/primitives/5/attributes/TEXCOORD_0"
+  ]
+}
