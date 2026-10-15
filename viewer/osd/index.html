@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paradise Island · On-screen display prototype</title>
+<link rel="icon" href="data:,">
+<style>
+:root { --box: rgba(10, 24, 32, .92); --ink: #eef7f9; --muted: #9dbcc6; --accent: #ffe08a; --line: rgba(238, 247, 249, .14); }
+html, body { margin: 0; height: 100%; background: #9fd3e0; font: 14px/1.4 system-ui, sans-serif; color: var(--ink); overflow: hidden; }
+#stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+/* three boxes at most, all solid: no backdrop blur, so the browser does not blur the scene every frame */
+#focus, #hint, #menu { position: fixed; background: var(--box); border-radius: 10px; box-sizing: border-box; }
+#focus { top: 14px; left: 14px; padding: 10px 14px; min-width: 200px; }
+#focus .name { font-size: 17px; font-weight: 600; }
+#focus .meta { color: var(--muted); font-size: 13px; margin-top: 2px; }
+#focus[hidden] { display: none; }
+#hint { left: 50%; bottom: 14px; transform: translateX(-50%); padding: 8px 14px; color: var(--muted); font-size: 13px; white-space: nowrap; }
+#menu { top: 14px; right: 14px; bottom: 14px; width: 340px; display: flex; flex-direction: column; padding: 12px; }
+#menu[hidden] { display: none; }
+#menu .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+#menu .tab { background: transparent; border: 1px solid var(--line); color: var(--muted); border-radius: 7px; padding: 5px 9px; font: inherit; cursor: pointer; }
+#menu .tab.on { color: var(--ink); border-color: var(--accent); }
+#menu .rows { overflow: auto; flex: 1; }
+#menu .head { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; margin: 12px 4px 4px; }
+#menu .row { display: flex; justify-content: space-between; gap: 10px; padding: 9px 10px; border-radius: 7px; border: 1px solid transparent; }
+#menu .row.on { border-color: var(--accent); background: rgba(255, 224, 138, .08); }
+#menu .val { color: var(--muted); }
+#menu .val.yes { color: #9be58a; }
+#menu .val.no { color: #e89a8a; }
+@media (max-width: 760px) { #menu { left: 8px; right: 8px; top: auto; width: auto; max-height: 55%; } #hint { font-size: 12px; } }
+</style>
+<script type="importmap">
+{ "imports": { "three": "../vendor/three/three.module.js", "three/addons/": "../vendor/three/addons/" } }
+</script>
+</head>
+<body data-mode="play">
+<canvas id="stage"></canvas>
+<div id="focus" hidden><div class="name"></div><div class="meta"></div></div>
+<div id="hint"></div>
+<div id="menu" hidden></div>
+<script type="module" src="osd.js"></script>
+</body>
+</html>

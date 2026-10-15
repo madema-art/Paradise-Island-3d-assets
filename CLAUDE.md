@@ -27,4 +27,6 @@ The redesigned points of interest (Sunken Temple and Glimmer Ring) have their ow
 
 The lagoon coral comparison (the game's coral against the redesign) has its own private artifact: stage with `python3 tools/stage_lagoon_viewer.py` (writes `build/artifact_lagoon/`), publish `build/artifact_lagoon/index.html` plus the files in `build/artifact_lagoon/files.json` (contentType `text/plain` for extension-less files), and update the same URL on later revisions: https://claude.ai/artifact/NQtVbK86ozevgzeBDmD2sx (private).
 
+The on-screen display and controller menu prototype has its own private artifact: stage with `python3 tools/stage_osd_viewer.py` (writes `build/artifact_osd/`), publish `build/artifact_osd/index.html` plus the files in `build/artifact_osd/files.json` (contentType `text/plain` for extension-less files), and update the same URL on later revisions: https://claude.ai/artifact/Af3zD75NLkM7tabUBBgs9N (private).
+
 The giant manta ray has its own viewer and private artifact: stage with `python3 tools/stage_manta_viewer.py` (writes `build/artifact_manta/`, GLB published as `*.glb.wasm`), publish `build/artifact_manta/index.html` plus the files in `build/artifact_manta/files.json` (contentType `application/wasm` for `*.wasm`), and update the same URL on later revisions: https://claude.ai/artifact/SkuLE4corUxLQ1qRcA6Y37 (private).
