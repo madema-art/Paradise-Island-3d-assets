@@ -1,0 +1,32 @@
+{
+ "file": "Castaway_anim_posture.glb",
+ "bytes": 875188,
+ "meshes": 0,
+ "primitives": 0,
+ "vertices": 0,
+ "triangles": 0,
+ "materials": [],
+ "images": [],
+ "skins": [],
+ "animations": [
+  "sit_down",
+  "sit_idle",
+  "stand_up",
+  "kneel_down",
+  "kneel_idle",
+  "kneel_rise",
+  "lie_down",
+  "sleep_loop",
+  "fall_asleep",
+  "wake_up",
+  "stretch_after_sleep"
+ ],
+ "errors": [
+  "no meshes in file",
+  "no vertices read, cannot compute bounds",
+  "no materials in file"
+ ],
+ "warnings": [],
+ "status": "PASS (skeleton-only pack)",
+ "note": "Skeleton-only animation pack: the mesh/material checks are not applicable; 'no meshes in file' is expected."
+}

@@ -1,0 +1,26 @@
+{
+ "file": "Castaway_anim_water.glb",
+ "bytes": 375404,
+ "meshes": 0,
+ "primitives": 0,
+ "vertices": 0,
+ "triangles": 0,
+ "materials": [],
+ "images": [],
+ "skins": [],
+ "animations": [
+  "wade",
+  "swim_crawl",
+  "swim_breaststroke",
+  "float_on_back",
+  "tread_water"
+ ],
+ "errors": [
+  "no meshes in file",
+  "no vertices read, cannot compute bounds",
+  "no materials in file"
+ ],
+ "warnings": [],
+ "status": "PASS (skeleton-only pack)",
+ "note": "Skeleton-only animation pack: the mesh/material checks are not applicable; 'no meshes in file' is expected."
+}

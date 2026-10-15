@@ -73,7 +73,7 @@ Every clip has `blend.blend_in_s/blend_out_s`, `interruptible` (`any`, `after_st
 
 ## 7. Budget
 
-LOD0: skin 46.0k tris + hair/beard cards 18.5k + maro 2.8k + mouth/eyes ≈ 72k tris, 110 joints, 4 draw groups (skin head, skin body, hair, eyes/maro/mouth); 2048² head and body atlases (JPEG albedo/normal, 1024 PNG ORM). LOD1: 41k tris (skin 19k, 1024²). Lite: 24k tris (skin 7.8k, 512²). Keep animation packs unloaded until a behaviour needs them.
+LOD0: skin 46.0k tris + hair/beard cards 18.5k + maro 2.8k + mouth/eyes ≈ 72k tris, 110 joints, **16 draw calls** (16 skinned meshes sharing 6 materials; merge by material in the loader for 6, see `CASTAWAY_TECHNICAL_SPEC.md`); 2048² head and body atlases (JPEG albedo/normal, 1024 PNG ORM). LOD1: 41k tris (skin 19k, 1024²). Lite: 24k tris (skin 7.8k, 512²). Keep animation packs unloaded until a behaviour needs them.
 
 ## 8. What is verified and what is not
 

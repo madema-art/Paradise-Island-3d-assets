@@ -1,0 +1,29 @@
+{
+  "file": "/home/user/Paradise-Island-3d-assets/assets/castaway/Staff.glb",
+  "version": "2.0",
+  "generator": "Khronos glTF Blender I/O v5.2.40",
+  "materials": 4,
+  "triangles": 22746,
+  "vertices": 12883,
+  "errors": 0,
+  "warnings": 3,
+  "infos": 13,
+  "messages": [
+    "1 MESH_PRIMITIVE_GENERATED_TANGENT_SPACE: Material requires a tangent space but the mesh primitive does not provide it. Runtime-generated tangent space may be non-portable across implementations. @ /meshes/0/primitives/0/material",
+    "1 MESH_PRIMITIVE_GENERATED_TANGENT_SPACE: Material requires a tangent space but the mesh primitive does not provide it. Runtime-generated tangent space may be non-portable across implementations. @ /meshes/1/primitives/0/material",
+    "2 UNUSED_OBJECT: This object may be unused. @ /meshes/2/primitives/0/attributes/TEXCOORD_0",
+    "2 UNUSED_OBJECT: This object may be unused. @ /meshes/3/primitives/0/attributes/TEXCOORD_0",
+    "1 MESH_PRIMITIVE_GENERATED_TANGENT_SPACE: Material requires a tangent space but the mesh primitive does not provide it. Runtime-generated tangent space may be non-portable across implementations. @ /meshes/4/primitives/0/material",
+    "2 NODE_EMPTY: Empty node encountered. @ /nodes/0",
+    "2 NODE_EMPTY: Empty node encountered. @ /nodes/1",
+    "2 NODE_EMPTY: Empty node encountered. @ /nodes/2",
+    "2 NODE_EMPTY: Empty node encountered. @ /nodes/3",
+    "2 NODE_EMPTY: Empty node encountered. @ /nodes/4",
+    "2 NODE_EMPTY: Empty node encountered. @ /nodes/5",
+    "2 NODE_EMPTY: Empty node encountered. @ /nodes/6",
+    "2 NODE_EMPTY: Empty node encountered. @ /nodes/7",
+    "2 NODE_EMPTY: Empty node encountered. @ /nodes/8",
+    "2 NODE_EMPTY: Empty node encountered. @ /nodes/9",
+    "2 NODE_EMPTY: Empty node encountered. @ /nodes/10"
+  ]
+}

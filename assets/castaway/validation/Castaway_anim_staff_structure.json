@@ -1,0 +1,27 @@
+{
+ "file": "Castaway_anim_staff.glb",
+ "bytes": 471016,
+ "meshes": 0,
+ "primitives": 0,
+ "vertices": 0,
+ "triangles": 0,
+ "materials": [],
+ "images": [],
+ "skins": [],
+ "animations": [
+  "walk_staff",
+  "walk_staff_start",
+  "idle_staff",
+  "idle_staff_lean",
+  "walk_staff_stop",
+  "staff_pickup"
+ ],
+ "errors": [
+  "no meshes in file",
+  "no vertices read, cannot compute bounds",
+  "no materials in file"
+ ],
+ "warnings": [],
+ "status": "PASS (skeleton-only pack)",
+ "note": "Skeleton-only animation pack: the mesh/material checks are not applicable; 'no meshes in file' is expected."
+}

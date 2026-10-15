@@ -1,0 +1,38 @@
+{
+ "file": "Castaway_anim_wildlife.glb",
+ "bytes": 1338348,
+ "meshes": 0,
+ "primitives": 0,
+ "vertices": 0,
+ "triangles": 0,
+ "materials": [],
+ "images": [],
+ "skins": [],
+ "animations": [
+  "observe_animal",
+  "observe_animal__upper",
+  "birdwatch",
+  "birdwatch__upper",
+  "track_animals",
+  "curious_reaction",
+  "curious_reaction__upper",
+  "startled",
+  "approach_carefully",
+  "stalk_rat",
+  "spear_thrust_ground",
+  "spear_ground_recover",
+  "sprint_away",
+  "run_look_back",
+  "chase_monkey",
+  "catch_breath",
+  "laugh_after_chase"
+ ],
+ "errors": [
+  "no meshes in file",
+  "no vertices read, cannot compute bounds",
+  "no materials in file"
+ ],
+ "warnings": [],
+ "status": "PASS (skeleton-only pack)",
+ "note": "Skeleton-only animation pack: the mesh/material checks are not applicable; 'no meshes in file' is expected."
+}

@@ -1,0 +1,1877 @@
+{
+ "bones": [
+  {
+   "name": "root",
+   "parent": null,
+   "head": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "tail": [
+    0.0,
+    -0.12,
+    0.0
+   ],
+   "deform": true
+  },
+  {
+   "name": "pelvis",
+   "parent": "root",
+   "head": [
+    0.0,
+    0.012,
+    1.0703
+   ],
+   "tail": [
+    0.0,
+    0.005,
+    1.1459
+   ],
+   "deform": true
+  },
+  {
+   "name": "spine1",
+   "parent": "pelvis",
+   "head": [
+    0.0,
+    0.005,
+    1.1459
+   ],
+   "tail": [
+    0.0,
+    -0.002,
+    1.2528
+   ],
+   "deform": true
+  },
+  {
+   "name": "spine2",
+   "parent": "spine1",
+   "head": [
+    0.0,
+    -0.002,
+    1.2528
+   ],
+   "tail": [
+    0.0,
+    -0.0,
+    1.364
+   ],
+   "deform": true
+  },
+  {
+   "name": "spine3",
+   "parent": "spine2",
+   "head": [
+    0.0,
+    -0.0,
+    1.364
+   ],
+   "tail": [
+    0.0,
+    0.006,
+    1.4887
+   ],
+   "deform": true
+  },
+  {
+   "name": "spine4",
+   "parent": "spine3",
+   "head": [
+    0.0,
+    0.006,
+    1.4887
+   ],
+   "tail": [
+    0.0,
+    0.014,
+    1.6133
+   ],
+   "deform": true
+  },
+  {
+   "name": "neck1",
+   "parent": "spine4",
+   "head": [
+    0.0,
+    0.02,
+    1.6266
+   ],
+   "tail": [
+    0.0,
+    0.018,
+    1.7
+   ],
+   "deform": true
+  },
+  {
+   "name": "neck2",
+   "parent": "neck1",
+   "head": [
+    0.0,
+    0.018,
+    1.7
+   ],
+   "tail": [
+    0.0,
+    0.012,
+    1.775
+   ],
+   "deform": true
+  },
+  {
+   "name": "head",
+   "parent": "neck2",
+   "head": [
+    0.0,
+    0.012,
+    1.775
+   ],
+   "tail": [
+    0.0,
+    -0.0,
+    2.0
+   ],
+   "deform": true
+  },
+  {
+   "name": "jaw",
+   "parent": "head",
+   "head": [
+    0.0,
+    0.01,
+    1.838
+   ],
+   "tail": [
+    0.0,
+    -0.085,
+    1.765
+   ],
+   "deform": true
+  },
+  {
+   "name": "lip_low",
+   "parent": "jaw",
+   "head": [
+    0.0,
+    -0.088,
+    1.782
+   ],
+   "tail": [
+    0.0,
+    -0.095,
+    1.782
+   ],
+   "deform": true
+  },
+  {
+   "name": "beard_C_1",
+   "parent": "jaw",
+   "head": [
+    0.0,
+    -0.062,
+    1.752
+   ],
+   "tail": [
+    0.0,
+    -0.075,
+    1.668
+   ],
+   "deform": true
+  },
+  {
+   "name": "beard_C_2",
+   "parent": "beard_C_1",
+   "head": [
+    0.0,
+    -0.075,
+    1.668
+   ],
+   "tail": [
+    0.0,
+    -0.092,
+    1.5732
+   ],
+   "deform": true
+  },
+  {
+   "name": "beard_L_1",
+   "parent": "jaw",
+   "head": [
+    0.042,
+    -0.03,
+    1.768
+   ],
+   "tail": [
+    0.05,
+    -0.042,
+    1.69
+   ],
+   "deform": true
+  },
+  {
+   "name": "beard_R_1",
+   "parent": "jaw",
+   "head": [
+    -0.042,
+    -0.03,
+    1.768
+   ],
+   "tail": [
+    -0.05,
+    -0.042,
+    1.69
+   ],
+   "deform": true
+  },
+  {
+   "name": "eye_L",
+   "parent": "head",
+   "head": [
+    0.032,
+    -0.07,
+    1.877
+   ],
+   "tail": [
+    0.032,
+    -0.084,
+    1.877
+   ],
+   "deform": true
+  },
+  {
+   "name": "lid_up_L",
+   "parent": "head",
+   "head": [
+    0.032,
+    -0.07,
+    1.877
+   ],
+   "tail": [
+    0.032,
+    -0.084,
+    1.889
+   ],
+   "deform": true
+  },
+  {
+   "name": "lid_low_L",
+   "parent": "head",
+   "head": [
+    0.032,
+    -0.07,
+    1.877
+   ],
+   "tail": [
+    0.032,
+    -0.084,
+    1.867
+   ],
+   "deform": true
+  },
+  {
+   "name": "brow_in_L",
+   "parent": "head",
+   "head": [
+    0.012,
+    -0.092,
+    1.908
+   ],
+   "tail": [
+    0.016,
+    -0.098,
+    1.915
+   ],
+   "deform": true
+  },
+  {
+   "name": "brow_mid_L",
+   "parent": "head",
+   "head": [
+    0.033,
+    -0.085,
+    1.911
+   ],
+   "tail": [
+    0.036,
+    -0.09,
+    1.918
+   ],
+   "deform": true
+  },
+  {
+   "name": "brow_out_L",
+   "parent": "head",
+   "head": [
+    0.054,
+    -0.07,
+    1.905
+   ],
+   "tail": [
+    0.057,
+    -0.074,
+    1.911
+   ],
+   "deform": true
+  },
+  {
+   "name": "cheek_L",
+   "parent": "head",
+   "head": [
+    0.046,
+    -0.058,
+    1.832
+   ],
+   "tail": [
+    0.048,
+    -0.064,
+    1.836
+   ],
+   "deform": true
+  },
+  {
+   "name": "lip_corner_L",
+   "parent": "head",
+   "head": [
+    0.024,
+    -0.08,
+    1.7945
+   ],
+   "tail": [
+    0.028,
+    -0.084,
+    1.7945
+   ],
+   "deform": true
+  },
+  {
+   "name": "eye_R",
+   "parent": "head",
+   "head": [
+    -0.032,
+    -0.07,
+    1.877
+   ],
+   "tail": [
+    -0.032,
+    -0.084,
+    1.877
+   ],
+   "deform": true
+  },
+  {
+   "name": "lid_up_R",
+   "parent": "head",
+   "head": [
+    -0.032,
+    -0.07,
+    1.877
+   ],
+   "tail": [
+    -0.032,
+    -0.084,
+    1.889
+   ],
+   "deform": true
+  },
+  {
+   "name": "lid_low_R",
+   "parent": "head",
+   "head": [
+    -0.032,
+    -0.07,
+    1.877
+   ],
+   "tail": [
+    -0.032,
+    -0.084,
+    1.867
+   ],
+   "deform": true
+  },
+  {
+   "name": "brow_in_R",
+   "parent": "head",
+   "head": [
+    -0.012,
+    -0.092,
+    1.908
+   ],
+   "tail": [
+    -0.016,
+    -0.098,
+    1.915
+   ],
+   "deform": true
+  },
+  {
+   "name": "brow_mid_R",
+   "parent": "head",
+   "head": [
+    -0.033,
+    -0.085,
+    1.911
+   ],
+   "tail": [
+    -0.036,
+    -0.09,
+    1.918
+   ],
+   "deform": true
+  },
+  {
+   "name": "brow_out_R",
+   "parent": "head",
+   "head": [
+    -0.054,
+    -0.07,
+    1.905
+   ],
+   "tail": [
+    -0.057,
+    -0.074,
+    1.911
+   ],
+   "deform": true
+  },
+  {
+   "name": "cheek_R",
+   "parent": "head",
+   "head": [
+    -0.046,
+    -0.058,
+    1.832
+   ],
+   "tail": [
+    -0.048,
+    -0.064,
+    1.836
+   ],
+   "deform": true
+  },
+  {
+   "name": "lip_corner_R",
+   "parent": "head",
+   "head": [
+    -0.024,
+    -0.08,
+    1.7945
+   ],
+   "tail": [
+    -0.028,
+    -0.084,
+    1.7945
+   ],
+   "deform": true
+  },
+  {
+   "name": "lip_up",
+   "parent": "head",
+   "head": [
+    0.0,
+    -0.09,
+    1.808
+   ],
+   "tail": [
+    0.0,
+    -0.097,
+    1.808
+   ],
+   "deform": true
+  },
+  {
+   "name": "hair_back_L_1",
+   "parent": "head",
+   "head": [
+    0.04,
+    0.085,
+    1.9
+   ],
+   "tail": [
+    0.04,
+    0.09,
+    1.81
+   ],
+   "deform": true
+  },
+  {
+   "name": "hair_back_L_2",
+   "parent": "hair_back_L_1",
+   "head": [
+    0.04,
+    0.09,
+    1.81
+   ],
+   "tail": [
+    0.04,
+    0.097,
+    1.69
+   ],
+   "deform": true
+  },
+  {
+   "name": "hair_back_M_1",
+   "parent": "head",
+   "head": [
+    0.0,
+    0.1,
+    1.9
+   ],
+   "tail": [
+    0.0,
+    0.105,
+    1.81
+   ],
+   "deform": true
+  },
+  {
+   "name": "hair_back_M_2",
+   "parent": "hair_back_M_1",
+   "head": [
+    0.0,
+    0.105,
+    1.81
+   ],
+   "tail": [
+    0.0,
+    0.112,
+    1.69
+   ],
+   "deform": true
+  },
+  {
+   "name": "hair_back_R_1",
+   "parent": "head",
+   "head": [
+    -0.04,
+    0.085,
+    1.9
+   ],
+   "tail": [
+    -0.04,
+    0.09,
+    1.81
+   ],
+   "deform": true
+  },
+  {
+   "name": "hair_back_R_2",
+   "parent": "hair_back_R_1",
+   "head": [
+    -0.04,
+    0.09,
+    1.81
+   ],
+   "tail": [
+    -0.04,
+    0.097,
+    1.69
+   ],
+   "deform": true
+  },
+  {
+   "name": "hair_side_L",
+   "parent": "head",
+   "head": [
+    0.07,
+    -0.01,
+    1.9
+   ],
+   "tail": [
+    0.078,
+    -0.005,
+    1.79
+   ],
+   "deform": true
+  },
+  {
+   "name": "hair_side_R",
+   "parent": "head",
+   "head": [
+    -0.07,
+    -0.01,
+    1.9
+   ],
+   "tail": [
+    -0.078,
+    -0.005,
+    1.79
+   ],
+   "deform": true
+  },
+  {
+   "name": "clavicle_L",
+   "parent": "spine4",
+   "head": [
+    0.022,
+    -0.05,
+    1.64
+   ],
+   "tail": [
+    0.166,
+    -0.016,
+    1.6338
+   ],
+   "deform": true
+  },
+  {
+   "name": "upper_arm_L",
+   "parent": "clavicle_L",
+   "head": [
+    0.185,
+    -0.003,
+    1.6026
+   ],
+   "tail": [
+    0.371,
+    -0.003,
+    1.2805
+   ],
+   "deform": true
+  },
+  {
+   "name": "forearm_L",
+   "parent": "upper_arm_L",
+   "head": [
+    0.371,
+    -0.003,
+    1.2805
+   ],
+   "tail": [
+    0.4877,
+    -0.0614,
+    1.0237
+   ],
+   "deform": true
+  },
+  {
+   "name": "forearm_tw1_L",
+   "parent": "forearm_L",
+   "head": [
+    0.4095,
+    -0.0223,
+    1.1957
+   ],
+   "tail": [
+    0.4352,
+    -0.0351,
+    1.1392
+   ],
+   "deform": true
+  },
+  {
+   "name": "forearm_tw2_L",
+   "parent": "forearm_L",
+   "head": [
+    0.448,
+    -0.0415,
+    1.111
+   ],
+   "tail": [
+    0.4737,
+    -0.0543,
+    1.0545
+   ],
+   "deform": true
+  },
+  {
+   "name": "hand_L",
+   "parent": "forearm_L",
+   "head": [
+    0.4877,
+    -0.0614,
+    1.0237
+   ],
+   "tail": [
+    0.5282,
+    -0.0816,
+    0.9346
+   ],
+   "deform": true
+  },
+  {
+   "name": "attach_hand_L",
+   "parent": "hand_L",
+   "head": [
+    0.5011,
+    -0.0735,
+    0.9652
+   ],
+   "tail": [
+    0.5072,
+    -0.0765,
+    0.9519
+   ],
+   "deform": false
+  },
+  {
+   "name": "f_index_1_L",
+   "parent": "hand_L",
+   "head": [
+    0.5257,
+    -0.111,
+    0.9401
+   ],
+   "tail": [
+    0.5283,
+    -0.1225,
+    0.8992
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_index_2_L",
+   "parent": "f_index_1_L",
+   "head": [
+    0.5283,
+    -0.1225,
+    0.8992
+   ],
+   "tail": [
+    0.5198,
+    -0.1274,
+    0.8773
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_index_3_L",
+   "parent": "f_index_2_L",
+   "head": [
+    0.5198,
+    -0.1274,
+    0.8773
+   ],
+   "tail": [
+    0.5101,
+    -0.1308,
+    0.8602
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_middle_1_L",
+   "parent": "hand_L",
+   "head": [
+    0.5273,
+    -0.0919,
+    0.9365
+   ],
+   "tail": [
+    0.5273,
+    -0.1005,
+    0.8908
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_middle_2_L",
+   "parent": "f_middle_1_L",
+   "head": [
+    0.5273,
+    -0.1005,
+    0.8908
+   ],
+   "tail": [
+    0.515,
+    -0.1042,
+    0.8654
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_middle_3_L",
+   "parent": "f_middle_2_L",
+   "head": [
+    0.515,
+    -0.1042,
+    0.8654
+   ],
+   "tail": [
+    0.5023,
+    -0.1066,
+    0.847
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_ring_1_L",
+   "parent": "hand_L",
+   "head": [
+    0.5266,
+    -0.0711,
+    0.9382
+   ],
+   "tail": [
+    0.5238,
+    -0.0762,
+    0.8955
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_ring_2_L",
+   "parent": "f_ring_1_L",
+   "head": [
+    0.5238,
+    -0.0762,
+    0.8955
+   ],
+   "tail": [
+    0.5103,
+    -0.0782,
+    0.8728
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_ring_3_L",
+   "parent": "f_ring_2_L",
+   "head": [
+    0.5103,
+    -0.0782,
+    0.8728
+   ],
+   "tail": [
+    0.4972,
+    -0.0795,
+    0.8565
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_pinky_1_L",
+   "parent": "hand_L",
+   "head": [
+    0.5281,
+    -0.0535,
+    0.9348
+   ],
+   "tail": [
+    0.5236,
+    -0.0548,
+    0.9007
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_pinky_2_L",
+   "parent": "f_pinky_1_L",
+   "head": [
+    0.5236,
+    -0.0548,
+    0.9007
+   ],
+   "tail": [
+    0.5127,
+    -0.0553,
+    0.8845
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_pinky_3_L",
+   "parent": "f_pinky_2_L",
+   "head": [
+    0.5127,
+    -0.0553,
+    0.8845
+   ],
+   "tail": [
+    0.5003,
+    -0.0557,
+    0.8707
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_thumb_1_L",
+   "parent": "hand_L",
+   "head": [
+    0.4864,
+    -0.0905,
+    1.0096
+   ],
+   "tail": [
+    0.4839,
+    -0.1235,
+    0.9776
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_thumb_2_L",
+   "parent": "f_thumb_1_L",
+   "head": [
+    0.4839,
+    -0.1235,
+    0.9776
+   ],
+   "tail": [
+    0.477,
+    -0.1466,
+    0.953
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_thumb_3_L",
+   "parent": "f_thumb_2_L",
+   "head": [
+    0.477,
+    -0.1466,
+    0.953
+   ],
+   "tail": [
+    0.4682,
+    -0.1647,
+    0.9321
+   ],
+   "deform": true
+  },
+  {
+   "name": "clavicle_R",
+   "parent": "spine4",
+   "head": [
+    -0.022,
+    -0.05,
+    1.64
+   ],
+   "tail": [
+    -0.166,
+    -0.016,
+    1.6338
+   ],
+   "deform": true
+  },
+  {
+   "name": "upper_arm_R",
+   "parent": "clavicle_R",
+   "head": [
+    -0.185,
+    -0.003,
+    1.6026
+   ],
+   "tail": [
+    -0.371,
+    -0.003,
+    1.2805
+   ],
+   "deform": true
+  },
+  {
+   "name": "forearm_R",
+   "parent": "upper_arm_R",
+   "head": [
+    -0.371,
+    -0.003,
+    1.2805
+   ],
+   "tail": [
+    -0.4877,
+    -0.0614,
+    1.0237
+   ],
+   "deform": true
+  },
+  {
+   "name": "forearm_tw1_R",
+   "parent": "forearm_R",
+   "head": [
+    -0.4095,
+    -0.0223,
+    1.1957
+   ],
+   "tail": [
+    -0.4352,
+    -0.0351,
+    1.1392
+   ],
+   "deform": true
+  },
+  {
+   "name": "forearm_tw2_R",
+   "parent": "forearm_R",
+   "head": [
+    -0.448,
+    -0.0415,
+    1.111
+   ],
+   "tail": [
+    -0.4737,
+    -0.0543,
+    1.0545
+   ],
+   "deform": true
+  },
+  {
+   "name": "hand_R",
+   "parent": "forearm_R",
+   "head": [
+    -0.4877,
+    -0.0614,
+    1.0237
+   ],
+   "tail": [
+    -0.5282,
+    -0.0816,
+    0.9346
+   ],
+   "deform": true
+  },
+  {
+   "name": "attach_hand_R",
+   "parent": "hand_R",
+   "head": [
+    -0.5011,
+    -0.0735,
+    0.9652
+   ],
+   "tail": [
+    -0.5072,
+    -0.0765,
+    0.9519
+   ],
+   "deform": false
+  },
+  {
+   "name": "f_index_1_R",
+   "parent": "hand_R",
+   "head": [
+    -0.5257,
+    -0.111,
+    0.9401
+   ],
+   "tail": [
+    -0.5283,
+    -0.1225,
+    0.8992
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_index_2_R",
+   "parent": "f_index_1_R",
+   "head": [
+    -0.5283,
+    -0.1225,
+    0.8992
+   ],
+   "tail": [
+    -0.5198,
+    -0.1274,
+    0.8773
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_index_3_R",
+   "parent": "f_index_2_R",
+   "head": [
+    -0.5198,
+    -0.1274,
+    0.8773
+   ],
+   "tail": [
+    -0.5101,
+    -0.1308,
+    0.8602
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_middle_1_R",
+   "parent": "hand_R",
+   "head": [
+    -0.5273,
+    -0.0919,
+    0.9365
+   ],
+   "tail": [
+    -0.5273,
+    -0.1005,
+    0.8908
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_middle_2_R",
+   "parent": "f_middle_1_R",
+   "head": [
+    -0.5273,
+    -0.1005,
+    0.8908
+   ],
+   "tail": [
+    -0.515,
+    -0.1042,
+    0.8654
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_middle_3_R",
+   "parent": "f_middle_2_R",
+   "head": [
+    -0.515,
+    -0.1042,
+    0.8654
+   ],
+   "tail": [
+    -0.5023,
+    -0.1066,
+    0.847
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_ring_1_R",
+   "parent": "hand_R",
+   "head": [
+    -0.5266,
+    -0.0711,
+    0.9382
+   ],
+   "tail": [
+    -0.5238,
+    -0.0762,
+    0.8955
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_ring_2_R",
+   "parent": "f_ring_1_R",
+   "head": [
+    -0.5238,
+    -0.0762,
+    0.8955
+   ],
+   "tail": [
+    -0.5103,
+    -0.0782,
+    0.8728
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_ring_3_R",
+   "parent": "f_ring_2_R",
+   "head": [
+    -0.5103,
+    -0.0782,
+    0.8728
+   ],
+   "tail": [
+    -0.4972,
+    -0.0795,
+    0.8565
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_pinky_1_R",
+   "parent": "hand_R",
+   "head": [
+    -0.5281,
+    -0.0535,
+    0.9348
+   ],
+   "tail": [
+    -0.5236,
+    -0.0548,
+    0.9007
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_pinky_2_R",
+   "parent": "f_pinky_1_R",
+   "head": [
+    -0.5236,
+    -0.0548,
+    0.9007
+   ],
+   "tail": [
+    -0.5127,
+    -0.0553,
+    0.8845
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_pinky_3_R",
+   "parent": "f_pinky_2_R",
+   "head": [
+    -0.5127,
+    -0.0553,
+    0.8845
+   ],
+   "tail": [
+    -0.5003,
+    -0.0557,
+    0.8707
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_thumb_1_R",
+   "parent": "hand_R",
+   "head": [
+    -0.4864,
+    -0.0905,
+    1.0096
+   ],
+   "tail": [
+    -0.4839,
+    -0.1235,
+    0.9776
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_thumb_2_R",
+   "parent": "f_thumb_1_R",
+   "head": [
+    -0.4839,
+    -0.1235,
+    0.9776
+   ],
+   "tail": [
+    -0.477,
+    -0.1466,
+    0.953
+   ],
+   "deform": true
+  },
+  {
+   "name": "f_thumb_3_R",
+   "parent": "f_thumb_2_R",
+   "head": [
+    -0.477,
+    -0.1466,
+    0.953
+   ],
+   "tail": [
+    -0.4682,
+    -0.1647,
+    0.9321
+   ],
+   "deform": true
+  },
+  {
+   "name": "thigh_L",
+   "parent": "pelvis",
+   "head": [
+    0.088,
+    -0.0,
+    1.048
+   ],
+   "tail": [
+    0.098,
+    -0.02,
+    0.5609
+   ],
+   "deform": true
+  },
+  {
+   "name": "shin_L",
+   "parent": "thigh_L",
+   "head": [
+    0.098,
+    -0.02,
+    0.5609
+   ],
+   "tail": [
+    0.1,
+    -0.0,
+    0.082
+   ],
+   "deform": true
+  },
+  {
+   "name": "foot_L",
+   "parent": "shin_L",
+   "head": [
+    0.1,
+    -0.0,
+    0.082
+   ],
+   "tail": [
+    0.104,
+    -0.168,
+    0.03
+   ],
+   "deform": true
+  },
+  {
+   "name": "hallux_1_L",
+   "parent": "foot_L",
+   "head": [
+    0.0625,
+    -0.16,
+    0.0155
+   ],
+   "tail": [
+    0.0628,
+    -0.193,
+    0.0155
+   ],
+   "deform": true
+  },
+  {
+   "name": "hallux_2_L",
+   "parent": "hallux_1_L",
+   "head": [
+    0.0628,
+    -0.193,
+    0.0155
+   ],
+   "tail": [
+    0.0631,
+    -0.22,
+    0.0155
+   ],
+   "deform": true
+  },
+  {
+   "name": "toe2_1_L",
+   "parent": "foot_L",
+   "head": [
+    0.088,
+    -0.16,
+    0.0108
+   ],
+   "tail": [
+    0.0883,
+    -0.208,
+    0.0108
+   ],
+   "deform": true
+  },
+  {
+   "name": "toe3_1_L",
+   "parent": "foot_L",
+   "head": [
+    0.1058,
+    -0.16,
+    0.0102
+   ],
+   "tail": [
+    0.1059,
+    -0.204,
+    0.0102
+   ],
+   "deform": true
+  },
+  {
+   "name": "toe4_1_L",
+   "parent": "foot_L",
+   "head": [
+    0.1215,
+    -0.16,
+    0.0095
+   ],
+   "tail": [
+    0.1213,
+    -0.2,
+    0.0095
+   ],
+   "deform": true
+  },
+  {
+   "name": "toe5_1_L",
+   "parent": "foot_L",
+   "head": [
+    0.135,
+    -0.16,
+    0.0088
+   ],
+   "tail": [
+    0.1345,
+    -0.194,
+    0.0088
+   ],
+   "deform": true
+  },
+  {
+   "name": "thigh_R",
+   "parent": "pelvis",
+   "head": [
+    -0.088,
+    -0.0,
+    1.048
+   ],
+   "tail": [
+    -0.098,
+    -0.02,
+    0.5609
+   ],
+   "deform": true
+  },
+  {
+   "name": "shin_R",
+   "parent": "thigh_R",
+   "head": [
+    -0.098,
+    -0.02,
+    0.5609
+   ],
+   "tail": [
+    -0.1,
+    -0.0,
+    0.082
+   ],
+   "deform": true
+  },
+  {
+   "name": "foot_R",
+   "parent": "shin_R",
+   "head": [
+    -0.1,
+    -0.0,
+    0.082
+   ],
+   "tail": [
+    -0.104,
+    -0.168,
+    0.03
+   ],
+   "deform": true
+  },
+  {
+   "name": "hallux_1_R",
+   "parent": "foot_R",
+   "head": [
+    -0.0625,
+    -0.16,
+    0.0155
+   ],
+   "tail": [
+    -0.0628,
+    -0.193,
+    0.0155
+   ],
+   "deform": true
+  },
+  {
+   "name": "hallux_2_R",
+   "parent": "hallux_1_R",
+   "head": [
+    -0.0628,
+    -0.193,
+    0.0155
+   ],
+   "tail": [
+    -0.0631,
+    -0.22,
+    0.0155
+   ],
+   "deform": true
+  },
+  {
+   "name": "toe2_1_R",
+   "parent": "foot_R",
+   "head": [
+    -0.088,
+    -0.16,
+    0.0108
+   ],
+   "tail": [
+    -0.0883,
+    -0.208,
+    0.0108
+   ],
+   "deform": true
+  },
+  {
+   "name": "toe3_1_R",
+   "parent": "foot_R",
+   "head": [
+    -0.1058,
+    -0.16,
+    0.0102
+   ],
+   "tail": [
+    -0.1059,
+    -0.204,
+    0.0102
+   ],
+   "deform": true
+  },
+  {
+   "name": "toe4_1_R",
+   "parent": "foot_R",
+   "head": [
+    -0.1215,
+    -0.16,
+    0.0095
+   ],
+   "tail": [
+    -0.1213,
+    -0.2,
+    0.0095
+   ],
+   "deform": true
+  },
+  {
+   "name": "toe5_1_R",
+   "parent": "foot_R",
+   "head": [
+    -0.135,
+    -0.16,
+    0.0088
+   ],
+   "tail": [
+    -0.1345,
+    -0.194,
+    0.0088
+   ],
+   "deform": true
+  },
+  {
+   "name": "cloth_front_1",
+   "parent": "pelvis",
+   "head": [
+    0.0,
+    -0.095,
+    1.1103
+   ],
+   "tail": [
+    0.0,
+    -0.102,
+    1.0318
+   ],
+   "deform": true
+  },
+  {
+   "name": "cloth_front_2",
+   "parent": "cloth_front_1",
+   "head": [
+    0.0,
+    -0.102,
+    1.0318
+   ],
+   "tail": [
+    0.0,
+    -0.105,
+    0.9343
+   ],
+   "deform": true
+  },
+  {
+   "name": "cloth_back_1",
+   "parent": "pelvis",
+   "head": [
+    0.0,
+    0.105,
+    1.1059
+   ],
+   "tail": [
+    0.0,
+    0.11,
+    1.0209
+   ],
+   "deform": true
+  },
+  {
+   "name": "cloth_back_2",
+   "parent": "cloth_back_1",
+   "head": [
+    0.0,
+    0.11,
+    1.0209
+   ],
+   "tail": [
+    0.0,
+    0.112,
+    0.9235
+   ],
+   "deform": true
+  },
+  {
+   "name": "cloth_knot_1",
+   "parent": "pelvis",
+   "head": [
+    0.15,
+    -0.03,
+    1.1148
+   ],
+   "tail": [
+    0.158,
+    -0.034,
+    1.0318
+   ],
+   "deform": true
+  },
+  {
+   "name": "cloth_knot_2",
+   "parent": "cloth_knot_1",
+   "head": [
+    0.158,
+    -0.034,
+    1.0318
+   ],
+   "tail": [
+    0.162,
+    -0.036,
+    0.9398
+   ],
+   "deform": true
+  },
+  {
+   "name": "prop_staff",
+   "parent": "root",
+   "head": [
+    0.0,
+    -0.3,
+    0.9668
+   ],
+   "tail": [
+    0.0,
+    -0.3,
+    1.0703
+   ],
+   "deform": false
+  },
+  {
+   "name": "prop_aux",
+   "parent": "root",
+   "head": [
+    0.0,
+    -0.4,
+    0.5338
+   ],
+   "tail": [
+    0.0,
+    -0.4,
+    0.6421
+   ],
+   "deform": false
+  }
+ ],
+ "groups": {
+  "spine": [
+   "root",
+   "pelvis",
+   "spine1",
+   "spine2",
+   "spine3",
+   "spine4",
+   "neck1",
+   "neck2",
+   "head"
+  ],
+  "arms": [
+   "clavicle_L",
+   "upper_arm_L",
+   "forearm_L",
+   "forearm_tw1_L",
+   "forearm_tw2_L",
+   "hand_L",
+   "clavicle_R",
+   "upper_arm_R",
+   "forearm_R",
+   "forearm_tw1_R",
+   "forearm_tw2_R",
+   "hand_R"
+  ],
+  "twist": [
+   "forearm_tw1_L",
+   "forearm_tw2_L",
+   "forearm_tw1_R",
+   "forearm_tw2_R"
+  ],
+  "fingers": [
+   "f_index_1_L",
+   "f_index_2_L",
+   "f_index_3_L",
+   "f_middle_1_L",
+   "f_middle_2_L",
+   "f_middle_3_L",
+   "f_ring_1_L",
+   "f_ring_2_L",
+   "f_ring_3_L",
+   "f_pinky_1_L",
+   "f_pinky_2_L",
+   "f_pinky_3_L",
+   "f_thumb_1_L",
+   "f_thumb_2_L",
+   "f_thumb_3_L",
+   "f_index_1_R",
+   "f_index_2_R",
+   "f_index_3_R",
+   "f_middle_1_R",
+   "f_middle_2_R",
+   "f_middle_3_R",
+   "f_ring_1_R",
+   "f_ring_2_R",
+   "f_ring_3_R",
+   "f_pinky_1_R",
+   "f_pinky_2_R",
+   "f_pinky_3_R",
+   "f_thumb_1_R",
+   "f_thumb_2_R",
+   "f_thumb_3_R"
+  ],
+  "legs": [
+   "thigh_L",
+   "shin_L",
+   "foot_L",
+   "thigh_R",
+   "shin_R",
+   "foot_R"
+  ],
+  "toes": [
+   "hallux_1_L",
+   "hallux_2_L",
+   "toe2_1_L",
+   "toe3_1_L",
+   "toe4_1_L",
+   "toe5_1_L",
+   "hallux_1_R",
+   "hallux_2_R",
+   "toe2_1_R",
+   "toe3_1_R",
+   "toe4_1_R",
+   "toe5_1_R"
+  ],
+  "face": [
+   "jaw",
+   "lip_low",
+   "eye_L",
+   "lid_up_L",
+   "lid_low_L",
+   "brow_in_L",
+   "brow_mid_L",
+   "brow_out_L",
+   "cheek_L",
+   "lip_corner_L",
+   "eye_R",
+   "lid_up_R",
+   "lid_low_R",
+   "brow_in_R",
+   "brow_mid_R",
+   "brow_out_R",
+   "cheek_R",
+   "lip_corner_R",
+   "lip_up"
+  ],
+  "hair_beard_secondary": [
+   "beard_C_1",
+   "beard_C_2",
+   "beard_L_1",
+   "beard_R_1",
+   "hair_back_L_1",
+   "hair_back_L_2",
+   "hair_back_M_1",
+   "hair_back_M_2",
+   "hair_back_R_1",
+   "hair_back_R_2",
+   "hair_side_L",
+   "hair_side_R"
+  ],
+  "cloth_secondary": [
+   "cloth_front_1",
+   "cloth_front_2",
+   "cloth_back_1",
+   "cloth_back_2",
+   "cloth_knot_1",
+   "cloth_knot_2"
+  ],
+  "props": [
+   "prop_staff",
+   "prop_aux"
+  ],
+  "attach": [
+   "attach_hand_L",
+   "attach_hand_R"
+  ]
+ },
+ "upper_body_mask": [
+  "attach_hand_L",
+  "attach_hand_R",
+  "beard_C_1",
+  "beard_C_2",
+  "beard_L_1",
+  "beard_R_1",
+  "brow_in_L",
+  "brow_in_R",
+  "brow_mid_L",
+  "brow_mid_R",
+  "brow_out_L",
+  "brow_out_R",
+  "cheek_L",
+  "cheek_R",
+  "clavicle_L",
+  "clavicle_R",
+  "eye_L",
+  "eye_R",
+  "f_index_1_L",
+  "f_index_1_R",
+  "f_index_2_L",
+  "f_index_2_R",
+  "f_index_3_L",
+  "f_index_3_R",
+  "f_middle_1_L",
+  "f_middle_1_R",
+  "f_middle_2_L",
+  "f_middle_2_R",
+  "f_middle_3_L",
+  "f_middle_3_R",
+  "f_pinky_1_L",
+  "f_pinky_1_R",
+  "f_pinky_2_L",
+  "f_pinky_2_R",
+  "f_pinky_3_L",
+  "f_pinky_3_R",
+  "f_ring_1_L",
+  "f_ring_1_R",
+  "f_ring_2_L",
+  "f_ring_2_R",
+  "f_ring_3_L",
+  "f_ring_3_R",
+  "f_thumb_1_L",
+  "f_thumb_1_R",
+  "f_thumb_2_L",
+  "f_thumb_2_R",
+  "f_thumb_3_L",
+  "f_thumb_3_R",
+  "forearm_L",
+  "forearm_R",
+  "forearm_tw1_L",
+  "forearm_tw1_R",
+  "forearm_tw2_L",
+  "forearm_tw2_R",
+  "hair_back_L_1",
+  "hair_back_L_2",
+  "hair_back_M_1",
+  "hair_back_M_2",
+  "hair_back_R_1",
+  "hair_back_R_2",
+  "hair_side_L",
+  "hair_side_R",
+  "hand_L",
+  "hand_R",
+  "head",
+  "jaw",
+  "lid_low_L",
+  "lid_low_R",
+  "lid_up_L",
+  "lid_up_R",
+  "lip_corner_L",
+  "lip_corner_R",
+  "lip_low",
+  "lip_up",
+  "neck1",
+  "neck2",
+  "spine1",
+  "spine2",
+  "spine3",
+  "spine4",
+  "upper_arm_L",
+  "upper_arm_R"
+ ],
+ "note": "positions are Blender rest coordinates (z up, the character faces -Y); GLB nodes use glTF axes (y up, faces +Z) with the same node-local frames."
+}

@@ -1,0 +1,39 @@
+{
+ "file": "Castaway_anim_survival.glb",
+ "bytes": 1600140,
+ "meshes": 0,
+ "primitives": 0,
+ "vertices": 0,
+ "triangles": 0,
+ "materials": [],
+ "images": [],
+ "skins": [],
+ "animations": [
+  "drink_cupped_hands",
+  "wipe_mouth",
+  "wipe_mouth__upper",
+  "coconut_pickup",
+  "coconut_crack",
+  "coconut_drink",
+  "coconut_drink__upper",
+  "eat_food",
+  "eat_food__upper",
+  "rest_on_rock",
+  "sit_on_rock",
+  "rise_from_rock",
+  "tend_fire",
+  "turn_fish_on_fire",
+  "rest_by_fire",
+  "prepare_food",
+  "shelter_from_rain",
+  "sit_watching_rain"
+ ],
+ "errors": [
+  "no meshes in file",
+  "no vertices read, cannot compute bounds",
+  "no materials in file"
+ ],
+ "warnings": [],
+ "status": "PASS (skeleton-only pack)",
+ "note": "Skeleton-only animation pack: the mesh/material checks are not applicable; 'no meshes in file' is expected."
+}

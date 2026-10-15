@@ -1,0 +1,222 @@
+{
+ "generator": "tools/castaway/package_assets.py",
+ "files": {
+  "Castaway.glb": {
+   "bytes": 10346116,
+   "sha256_16": "c8bd64fee23580cd",
+   "triangles": 71643,
+   "skin_triangles": 45973,
+   "nodes": 126,
+   "animations": 6,
+   "images": 10
+  },
+  "Castaway_anim_canoe.glb": {
+   "bytes": 920832,
+   "sha256_16": "fd63b953f68a2631",
+   "triangles": 0,
+   "skin_triangles": 0,
+   "nodes": 126,
+   "animations": 11,
+   "images": 0
+  },
+  "Castaway_anim_climbing.glb": {
+   "bytes": 1025012,
+   "sha256_16": "86e887aa33ff4d22",
+   "triangles": 0,
+   "skin_triangles": 0,
+   "nodes": 126,
+   "animations": 12,
+   "images": 0
+  },
+  "Castaway_anim_fishing.glb": {
+   "bytes": 1331536,
+   "sha256_16": "1d54a60772fbce11",
+   "triangles": 0,
+   "skin_triangles": 0,
+   "nodes": 126,
+   "animations": 16,
+   "images": 0
+  },
+  "Castaway_anim_locomotion.glb": {
+   "bytes": 1175116,
+   "sha256_16": "48ad75c991d3f1be",
+   "triangles": 0,
+   "skin_triangles": 0,
+   "nodes": 126,
+   "animations": 17,
+   "images": 0
+  },
+  "Castaway_anim_personality.glb": {
+   "bytes": 4601528,
+   "sha256_16": "0254d5c77e3024b8",
+   "triangles": 0,
+   "skin_triangles": 0,
+   "nodes": 126,
+   "animations": 60,
+   "images": 0
+  },
+  "Castaway_anim_posture.glb": {
+   "bytes": 875188,
+   "sha256_16": "23cf4820d382e3ca",
+   "triangles": 0,
+   "skin_triangles": 0,
+   "nodes": 126,
+   "animations": 11,
+   "images": 0
+  },
+  "Castaway_anim_staff.glb": {
+   "bytes": 471016,
+   "sha256_16": "3e402941628624cd",
+   "triangles": 0,
+   "skin_triangles": 0,
+   "nodes": 126,
+   "animations": 6,
+   "images": 0
+  },
+  "Castaway_anim_survival.glb": {
+   "bytes": 1600140,
+   "sha256_16": "973f094346768529",
+   "triangles": 0,
+   "skin_triangles": 0,
+   "nodes": 126,
+   "animations": 18,
+   "images": 0
+  },
+  "Castaway_anim_water.glb": {
+   "bytes": 375404,
+   "sha256_16": "bd4fe2d533d552f3",
+   "triangles": 0,
+   "skin_triangles": 0,
+   "nodes": 126,
+   "animations": 5,
+   "images": 0
+  },
+  "Castaway_anim_wildlife.glb": {
+   "bytes": 1338348,
+   "sha256_16": "8640da45b3035c3d",
+   "triangles": 0,
+   "skin_triangles": 0,
+   "nodes": 126,
+   "animations": 17,
+   "images": 0
+  },
+  "Castaway_lite.glb": {
+   "bytes": 5514976,
+   "sha256_16": "fa616a6e96bd3b2c",
+   "triangles": 24230,
+   "skin_triangles": 7814,
+   "nodes": 126,
+   "animations": 6,
+   "images": 10
+  },
+  "Castaway_lod1.glb": {
+   "bytes": 6964696,
+   "sha256_16": "722007467116cd12",
+   "triangles": 41417,
+   "skin_triangles": 19307,
+   "nodes": 126,
+   "animations": 6,
+   "images": 10
+  },
+  "Staff.glb": {
+   "bytes": 1712344,
+   "sha256_16": "6b98f64a97abc29e",
+   "triangles": 22746,
+   "skin_triangles": 0,
+   "nodes": 17,
+   "animations": 0,
+   "images": 6
+  },
+  "castaway_bones.json": {
+   "bytes": 23531,
+   "sha256_16": "a04cf757edcfa5f9"
+  },
+  "castaway_clips.json": {
+   "bytes": 251294,
+   "sha256_16": "a5701e599b967443"
+  },
+  "castaway_face.json": {
+   "bytes": 21971,
+   "sha256_16": "aba7b223c1c324c8"
+  },
+  "castaway_grips.json": {
+   "bytes": 31531,
+   "sha256_16": "f32bc13fb03f3f2e"
+  },
+  "staff_points.json": {
+   "bytes": 1285,
+   "sha256_16": "d119869805f65970"
+  },
+  "source/Castaway_rig.blend": {
+   "bytes": 10122413,
+   "sha256_16": "70dd5423acf2261e"
+  },
+  "props/Boulder.glb": {
+   "bytes": 20292,
+   "sha256_16": "6380432eeb5edba1",
+   "triangles": 1008,
+   "skin_triangles": 0,
+   "nodes": 7,
+   "animations": 0,
+   "images": 0
+  },
+  "props/Campfire.glb": {
+   "bytes": 49868,
+   "sha256_16": "d3c17825c4924845",
+   "triangles": 2328,
+   "skin_triangles": 0,
+   "nodes": 6,
+   "animations": 0,
+   "images": 0
+  },
+  "props/Canoe.glb": {
+   "bytes": 27644,
+   "sha256_16": "511b04888d9e3900",
+   "triangles": 1244,
+   "skin_triangles": 0,
+   "nodes": 12,
+   "animations": 0,
+   "images": 0
+  },
+  "props/Log.glb": {
+   "bytes": 7360,
+   "sha256_16": "6b28ba0ddb8f2930",
+   "triangles": 308,
+   "skin_triangles": 0,
+   "nodes": 3,
+   "animations": 0,
+   "images": 0
+  },
+  "props/Paddle.glb": {
+   "bytes": 7464,
+   "sha256_16": "6df488cf049b6fdd",
+   "triangles": 300,
+   "skin_triangles": 0,
+   "nodes": 5,
+   "animations": 0,
+   "images": 0
+  },
+  "props/PalmTrunk.glb": {
+   "bytes": 38020,
+   "sha256_16": "c86b35a0be0f3901",
+   "triangles": 1722,
+   "skin_triangles": 0,
+   "nodes": 13,
+   "animations": 0,
+   "images": 0
+  },
+  "props/Rock.glb": {
+   "bytes": 19972,
+   "sha256_16": "474e334ab8060007",
+   "triangles": 1008,
+   "skin_triangles": 0,
+   "nodes": 3,
+   "animations": 0,
+   "images": 0
+  },
+  "props/proxies.json": {
+   "bytes": 2194,
+   "sha256_16": "06b3cb065ea8229c"
+  }
+ }
+}

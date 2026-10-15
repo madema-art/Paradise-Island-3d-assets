@@ -1,0 +1,33 @@
+{
+ "file": "Castaway_anim_climbing.glb",
+ "bytes": 1025012,
+ "meshes": 0,
+ "primitives": 0,
+ "vertices": 0,
+ "triangles": 0,
+ "materials": [],
+ "images": [],
+ "skins": [],
+ "animations": [
+  "tree_climb_up",
+  "tree_climb_down",
+  "tree_hold_rest",
+  "reach_for_handhold",
+  "climb_approach_tree",
+  "climb_onto_boulder",
+  "climb_down_boulder",
+  "step_down_rock",
+  "clamber_rocks",
+  "balance_uneven",
+  "high_lookout",
+  "look_down_from_height"
+ ],
+ "errors": [
+  "no meshes in file",
+  "no vertices read, cannot compute bounds",
+  "no materials in file"
+ ],
+ "warnings": [],
+ "status": "PASS (skeleton-only pack)",
+ "note": "Skeleton-only animation pack: the mesh/material checks are not applicable; 'no meshes in file' is expected."
+}

@@ -1,0 +1,30 @@
+{
+  "file": "/home/user/Paradise-Island-3d-assets/assets/castaway/Castaway.glb",
+  "version": "2.0",
+  "generator": "Khronos glTF Blender I/O v5.2.40",
+  "materials": 6,
+  "triangles": 71643,
+  "vertices": 54210,
+  "errors": 0,
+  "warnings": 17,
+  "infos": 0,
+  "messages": [
+    "1 MESH_PRIMITIVE_GENERATED_TANGENT_SPACE: Material requires a tangent space but the mesh primitive does not provide it. Runtime-generated tangent space may be non-portable across implementations. @ /meshes/0/primitives/0/material",
+    "1 MESH_PRIMITIVE_GENERATED_TANGENT_SPACE: Material requires a tangent space but the mesh primitive does not provide it. Runtime-generated tangent space may be non-portable across implementations. @ /meshes/0/primitives/1/material",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/110",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/111",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/112",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/113",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/114",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/115",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/116",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/117",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/118",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/119",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/120",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/121",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/122",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/123",
+    "1 NODE_SKINNED_MESH_NON_ROOT: Node with a skinned mesh is not root. Parent transforms will not affect a skinned mesh. @ /nodes/124"
+  ]
+}

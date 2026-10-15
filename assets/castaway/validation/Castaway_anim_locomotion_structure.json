@@ -1,0 +1,38 @@
+{
+ "file": "Castaway_anim_locomotion.glb",
+ "bytes": 1175116,
+ "meshes": 0,
+ "primitives": 0,
+ "vertices": 0,
+ "triangles": 0,
+ "materials": [],
+ "images": [],
+ "skins": [],
+ "animations": [
+  "idle_relaxed",
+  "idle_breathe",
+  "idle_weight_shift",
+  "idle_look_around",
+  "walk",
+  "walk_brisk",
+  "run",
+  "walk_start",
+  "run_start",
+  "walk_stop",
+  "walk_brisk_stop",
+  "run_stop",
+  "turn_left_90",
+  "turn_right_90",
+  "turn_180",
+  "run_cut_left",
+  "run_cut_right"
+ ],
+ "errors": [
+  "no meshes in file",
+  "no vertices read, cannot compute bounds",
+  "no materials in file"
+ ],
+ "warnings": [],
+ "status": "PASS (skeleton-only pack)",
+ "note": "Skeleton-only animation pack: the mesh/material checks are not applicable; 'no meshes in file' is expected."
+}

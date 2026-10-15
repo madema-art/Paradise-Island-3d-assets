@@ -1,0 +1,32 @@
+{
+ "file": "Castaway_anim_canoe.glb",
+ "bytes": 920832,
+ "meshes": 0,
+ "primitives": 0,
+ "vertices": 0,
+ "triangles": 0,
+ "materials": [],
+ "images": [],
+ "skins": [],
+ "animations": [
+  "canoe_board",
+  "canoe_sit_down",
+  "canoe_sit_idle",
+  "canoe_paddle",
+  "canoe_paddle_left",
+  "canoe_paddle_hard",
+  "canoe_drift",
+  "canoe_fish_seated",
+  "canoe_reel_in",
+  "canoe_exit",
+  "canoe_pull_on_land"
+ ],
+ "errors": [
+  "no meshes in file",
+  "no vertices read, cannot compute bounds",
+  "no materials in file"
+ ],
+ "warnings": [],
+ "status": "PASS (skeleton-only pack)",
+ "note": "Skeleton-only animation pack: the mesh/material checks are not applicable; 'no meshes in file' is expected."
+}

@@ -1,0 +1,130 @@
+{
+  "file": "Castaway_lite.glb",
+  "bytes": 5514976,
+  "meshes": 15,
+  "primitives": 16,
+  "vertices": 21286,
+  "triangles": 24230,
+  "materials": [
+    {
+      "name": "CastawaySkinHead",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 512,
+        "height": 512,
+        "mimeType": "image/jpeg"
+      }
+    },
+    {
+      "name": "CastawaySkinBody",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 512,
+        "height": 512,
+        "mimeType": "image/jpeg"
+      }
+    },
+    {
+      "name": "CastawayEye",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 512,
+        "height": 256,
+        "mimeType": "image/png"
+      }
+    },
+    {
+      "name": "CastawayMouth",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 256,
+        "height": 256,
+        "mimeType": "image/png"
+      }
+    },
+    {
+      "name": "CastawayHair",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 1024,
+        "height": 1024,
+        "mimeType": "image/png"
+      }
+    },
+    {
+      "name": "CastawayMaro",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 1024,
+        "height": 1024,
+        "mimeType": "image/png"
+      }
+    }
+  ],
+  "images": [
+    "image/jpeg",
+    "image/png",
+    "image/jpeg",
+    "image/jpeg",
+    "image/png",
+    "image/jpeg",
+    "image/png",
+    "image/png",
+    "image/png",
+    "image/png"
+  ],
+  "bounds_min": [
+    -0.538,
+    -0.0002,
+    -0.4053
+  ],
+  "bounds_max": [
+    0.538,
+    2.1055,
+    0.2364
+  ],
+  "skins": [
+    110
+  ],
+  "animations": [
+    "idle_relaxed",
+    "idle_breathe",
+    "idle_look_around",
+    "walk",
+    "walk_brisk",
+    "run"
+  ],
+  "errors": [],
+  "warnings": [],
+  "status": "PASS"
+}

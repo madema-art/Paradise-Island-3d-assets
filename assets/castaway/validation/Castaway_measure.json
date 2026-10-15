@@ -1,0 +1,213 @@
+{
+ "file": "Castaway.glb",
+ "meshes": {
+  "CastawaySkinMesh/CastawaySkinHead": {
+   "tris": 15709,
+   "verts": 8976,
+   "y_min": 1.6948,
+   "y_max": 2.003,
+   "x_span": 0.182,
+   "z_span": 0.227,
+   "skinned": true
+  },
+  "CastawaySkinMesh/CastawaySkinBody": {
+   "tris": 30264,
+   "verts": 19587,
+   "y_min": -0.0,
+   "y_max": 1.7053,
+   "x_span": 1.076,
+   "z_span": 0.357,
+   "skinned": true
+  },
+  "Castaway_Eye_LMesh/CastawayEye": {
+   "tris": 1280,
+   "verts": 693,
+   "y_min": 1.8649,
+   "y_max": 1.8891,
+   "x_span": 0.024,
+   "z_span": 0.024,
+   "skinned": true
+  },
+  "Castaway_Eye_RMesh/CastawayEye": {
+   "tris": 1280,
+   "verts": 693,
+   "y_min": 1.8649,
+   "y_max": 1.8891,
+   "x_span": 0.024,
+   "z_span": 0.024,
+   "skinned": true
+  },
+  "Castaway_gum_lowerMesh/CastawayMouth": {
+   "tris": 144,
+   "verts": 80,
+   "y_min": 1.7813,
+   "y_max": 1.7897,
+   "x_span": 0.054,
+   "z_span": 0.035,
+   "skinned": true
+  },
+  "Castaway_gum_upperMesh/CastawayMouth": {
+   "tris": 144,
+   "verts": 80,
+   "y_min": 1.7998,
+   "y_max": 1.8082,
+   "x_span": 0.054,
+   "z_span": 0.035,
+   "skinned": true
+  },
+  "CastawayHairMesh/CastawayHair": {
+   "tris": 18534,
+   "verts": 21382,
+   "y_min": 1.4252,
+   "y_max": 2.1055,
+   "x_span": 0.62,
+   "z_span": 0.642,
+   "skinned": true
+  },
+  "Castaway_maro_backMesh/CastawayMaro": {
+   "tris": 390,
+   "verts": 224,
+   "y_min": 0.8733,
+   "y_max": 1.137,
+   "x_span": 0.178,
+   "z_span": 0.087,
+   "skinned": true
+  },
+  "Castaway_maro_bandMesh/CastawayMaro": {
+   "tris": 1600,
+   "verts": 909,
+   "y_min": 1.0495,
+   "y_max": 1.2004,
+   "x_span": 0.381,
+   "z_span": 0.26,
+   "skinned": true
+  },
+  "Castaway_maro_end0Mesh/CastawayMaro": {
+   "tris": 104,
+   "verts": 70,
+   "y_min": 0.8249,
+   "y_max": 1.1056,
+   "x_span": 0.03,
+   "z_span": 0.022,
+   "skinned": true
+  },
+  "Castaway_maro_end1Mesh/CastawayMaro": {
+   "tris": 104,
+   "verts": 70,
+   "y_min": 0.8852,
+   "y_max": 1.1113,
+   "x_span": 0.016,
+   "z_span": 0.047,
+   "skinned": true
+  },
+  "Castaway_maro_frontMesh/CastawayMaro": {
+   "tris": 390,
+   "verts": 224,
+   "y_min": 0.8341,
+   "y_max": 1.137,
+   "x_span": 0.165,
+   "z_span": 0.079,
+   "skinned": true
+  },
+  "Castaway_maro_strapMesh/CastawayMaro": {
+   "tris": 252,
+   "verts": 154,
+   "y_min": 0.9543,
+   "y_max": 1.0846,
+   "x_span": 0.069,
+   "z_span": 0.237,
+   "skinned": true
+  },
+  "Castaway_teeth_lowerMesh/CastawayMouth": {
+   "tris": 640,
+   "verts": 480,
+   "y_min": 1.7846,
+   "y_max": 1.7935,
+   "x_span": 0.06,
+   "z_span": 0.034,
+   "skinned": true
+  },
+  "Castaway_teeth_upperMesh/CastawayMouth": {
+   "tris": 640,
+   "verts": 480,
+   "y_min": 1.7955,
+   "y_max": 1.8063,
+   "x_span": 0.06,
+   "z_span": 0.034,
+   "skinned": true
+  },
+  "Castaway_tongueMesh/CastawayMouth": {
+   "tris": 168,
+   "verts": 108,
+   "y_min": 1.7755,
+   "y_max": 1.7925,
+   "x_span": 0.037,
+   "z_span": 0.068,
+   "skinned": true
+  }
+ },
+ "draw_calls": 16,
+ "triangles": 71643,
+ "skeleton_joints": 110,
+ "materials": [
+  "CastawaySkinHead",
+  "CastawaySkinBody",
+  "CastawayEye",
+  "CastawayMouth",
+  "CastawayHair",
+  "CastawayMaro"
+ ],
+ "images": [
+  {
+   "name": "skin_head_normal",
+   "mime": "image/jpeg",
+   "bytes": 754777
+  },
+  {
+   "name": "skin_head_orm",
+   "mime": "image/png",
+   "bytes": 448827
+  },
+  {
+   "name": "skin_head_albedo",
+   "mime": "image/jpeg",
+   "bytes": 536494
+  },
+  {
+   "name": "skin_body_normal",
+   "mime": "image/jpeg",
+   "bytes": 582444
+  },
+  {
+   "name": "skin_body_orm",
+   "mime": "image/png",
+   "bytes": 831168
+  },
+  {
+   "name": "skin_body_albedo",
+   "mime": "image/jpeg",
+   "bytes": 1227245
+  },
+  {
+   "name": "eye_albedo",
+   "mime": "image/png",
+   "bytes": 16479
+  },
+  {
+   "name": "mouth_albedo",
+   "mime": "image/png",
+   "bytes": 45192
+  },
+  {
+   "name": "hair_atlas",
+   "mime": "image/png",
+   "bytes": 919410
+  },
+  {
+   "name": "maro_albedo",
+   "mime": "image/png",
+   "bytes": 1308097
+  }
+ ],
+ "animations": 6
+}

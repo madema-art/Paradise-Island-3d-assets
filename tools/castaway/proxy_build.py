@@ -150,8 +150,9 @@ def build_campfire():
 def build_palm():
     H = 5.2
     zs = np.linspace(0, H, 40)
-    pts = np.stack([0.30 * (zs / H) ** 2 * 1.0 + 0.05 * np.sin(zs * 0.8), zs, 0.53 + 0.10 * np.sin(zs * 0.5)], 1)
-    rad = 0.17 - 0.06 * (zs / H) + 0.012 * np.sin(zs * 18.0)
+    # trunk surface stays 0.36 m in front of the climber's axis (the clips' TRUNK_F); only the axis drifts sideways, so hands/feet meet bark at any height
+    rad = 0.17 - 0.06 * (zs / H) + 0.008 * np.sin(zs * 18.0)
+    pts = np.stack([0.30 * (zs / H) ** 2 * 1.0 + 0.05 * np.sin(zs * 0.8), zs, 0.36 + rad], 1)
     t = tube(pts, rad, sides=14, v_scale=1.0)
     fronds = []
     for k in range(9):

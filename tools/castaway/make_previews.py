@@ -161,7 +161,7 @@ def sheet(idx):
     y2 = y1 + 700
     sheet_img.paste(tile(torso, 3), (30, y2))
     sheet_img.paste(tile(hands, 2), (30 + 3 * 570 + 20, y2))
-    sheet_img.paste(feet, (30 + 3 * 570 + 20, y2 + 600))
+    sheet_img.paste(feet, (x + 3 * 570 + 20, y0))      # free area right of the front/side/back row
     y3 = y2 + 760
     sheet_img.paste(tile(maro, 2), (30, y3))
     sheet_img.paste(tile(wires, 4), (30 + 2 * 570 + 20, y3))
@@ -191,7 +191,7 @@ def uv_layouts():
         d = ImageDraw.Draw(base)
         sel = np.nonzero(grp == g)[0]
         for fi in sel:
-            p = uv[fi * 3:(fi + 1) * 3] if len(uv) == len(F) * 3 else uv[F[fi]]
+            p = uv[fi]                      # uv is (faces, 3, 2)
             pts = [(float(a[0]) * S, (1 - float(a[1])) * S) for a in p]
             d.line(pts + [pts[0]], fill=(120, 220, 170), width=1)
         outs.append(caption(base, f"UV layout · {tag} atlas 2048² ({len(sel):,} tris)"))
@@ -203,14 +203,24 @@ def uv_layouts():
 def atlases():
     base = os.path.join(ROOT, "build/castaway/textures")
     items = []
-    for f, t in (("skin_head_albedo.jpg", "head · albedo"), ("skin_head_normal.jpg", "head · normal"), ("skin_head_orm.png", "head · ORM (R AO, G rough, B metal)"),
-                 ("skin_body_albedo.jpg", "body · albedo"), ("skin_body_normal.jpg", "body · normal"), ("skin_body_orm.png", "body · ORM"),
-                 ("hair_atlas.png", "hair/beard/brow strand atlas (RGBA)"), ("maro_albedo.png", "maro cloth albedo"), ("eye_albedo.png", "eye albedo")):
-        i = Image.open(os.path.join(base, f)).convert("RGBA")
+    import io
+    sys.path.insert(0, HERE)
+    import measure_glb as MG
+    j, bin_ = MG.load(os.path.join(ROOT, "assets/castaway/Castaway.glb"))      # the packaged LOD0 GLB is the source of truth (build/castaway/textures is overwritten by LOD builds)
+    emb = {}
+    for im in j["images"]:
+        bv = j["bufferViews"][im["bufferView"]]
+        o = bv.get("byteOffset", 0)
+        emb[im["name"]] = Image.open(io.BytesIO(bin_[o:o + bv["byteLength"]])).copy()
+    for f, t in (("skin_head_albedo", "head · albedo"), ("skin_head_normal", "head · normal"), ("skin_head_orm", "head · ORM (R AO, G rough, B metal)"),
+                 ("skin_body_albedo", "body · albedo"), ("skin_body_normal", "body · normal"), ("skin_body_orm", "body · ORM"),
+                 ("hair_atlas", "hair/beard/brow strand atlas (RGBA)"), ("maro_albedo", "maro cloth albedo"), ("eye_albedo", "eye albedo")):
+        src = emb[f]
+        i = src.convert("RGBA")
         bgc = Image.new("RGBA", i.size, (60, 64, 70, 255))
         i = Image.alpha_composite(bgc, i).convert("RGB")
         i.thumbnail((620, 620))
-        items.append(caption(i, t, f"{Image.open(os.path.join(base, f)).size[0]}×{Image.open(os.path.join(base, f)).size[1]}"))
+        items.append(caption(i, t, f"{src.size[0]}×{src.size[1]}"))
     sd = os.path.join(ROOT, "build/castaway/staff_tex")
     for f, t in (("staff_wood_albedo.jpg", "staff wood albedo"), ("staff_wood_normal.jpg", "staff wood normal"), ("staff_cord_albedo.jpg", "staff cord albedo")):
         i = Image.open(os.path.join(sd, f)).convert("RGB")

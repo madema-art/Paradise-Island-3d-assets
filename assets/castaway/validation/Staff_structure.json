@@ -1,0 +1,88 @@
+{
+  "file": "Staff.glb",
+  "bytes": 1712344,
+  "meshes": 5,
+  "primitives": 5,
+  "vertices": 12883,
+  "triangles": 22746,
+  "materials": [
+    {
+      "name": "StaffWood",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 256,
+        "height": 2048,
+        "mimeType": "image/jpeg"
+      }
+    },
+    {
+      "name": "StaffCord",
+      "base_color_factor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "base_color_texture": {
+        "width": 256,
+        "height": 256,
+        "mimeType": "image/jpeg"
+      }
+    },
+    {
+      "name": "StaffHook",
+      "base_color_factor": [
+        0.550000011920929,
+        0.550000011920929,
+        0.5699999928474426,
+        1
+      ],
+      "base_color_texture": null
+    },
+    {
+      "name": "StaffLine",
+      "base_color_factor": [
+        0.8199999928474426,
+        0.8199999928474426,
+        0.7799999713897705,
+        1
+      ],
+      "base_color_texture": null
+    }
+  ],
+  "images": [
+    "image/jpeg",
+    "image/png",
+    "image/jpeg",
+    "image/jpeg",
+    "image/png",
+    "image/jpeg"
+  ],
+  "bounds_min": [
+    -0.0289,
+    -0.0005,
+    -0.0237
+  ],
+  "bounds_max": [
+    0.0259,
+    2.1,
+    0.1278
+  ],
+  "skins": [],
+  "animations": [],
+  "errors": [],
+  "warnings": [
+    "mesh[1].primitive[0]: 2373 UVs outside [0,1]",
+    "mesh[2].primitive[0]: 42 UVs outside [0,1]",
+    "mesh[3].primitive[0]: 348 UVs outside [0,1]",
+    "mesh[4].primitive[0]: 5024 UVs outside [0,1]",
+    "material StaffHook: no base colour texture",
+    "material StaffLine: no base colour texture"
+  ],
+  "status": "PASS"
+}

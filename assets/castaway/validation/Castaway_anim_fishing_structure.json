@@ -1,0 +1,37 @@
+{
+ "file": "Castaway_anim_fishing.glb",
+ "bytes": 1331536,
+ "meshes": 0,
+ "primitives": 0,
+ "vertices": 0,
+ "triangles": 0,
+ "materials": [],
+ "images": [],
+ "skins": [],
+ "animations": [
+  "fish_wait_stand",
+  "fish_prepare_rod",
+  "fish_cast",
+  "fish_bite_reaction",
+  "fish_reel_in",
+  "fish_lift_catch",
+  "fish_inspect_catch",
+  "fish_inspect_catch__upper",
+  "fish_celebrate",
+  "fish_fail",
+  "fish_reset",
+  "spear_stance_idle",
+  "spear_aim",
+  "spear_thrust",
+  "spear_recover_miss",
+  "spear_catch_lift"
+ ],
+ "errors": [
+  "no meshes in file",
+  "no vertices read, cannot compute bounds",
+  "no materials in file"
+ ],
+ "warnings": [],
+ "status": "PASS (skeleton-only pack)",
+ "note": "Skeleton-only animation pack: the mesh/material checks are not applicable; 'no meshes in file' is expected."
+}
