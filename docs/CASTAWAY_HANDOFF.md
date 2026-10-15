@@ -12,6 +12,9 @@ and were **not** inspected.
 | `viewer/castaway.html/.js/.css` | Castaway viewer (clip browser, compare, camera presets, face tester, staff attachment test, upper-body layering, wireframe/skeleton, lighting presets). `viewer/tests/castaway_capture.mjs` is the headless test, `viewer/tests/shot.mjs` the render tool. |
 | `docs/CASTAWAY_INTEGRATION.md` | How a game would use the assets (state→clip map, root-motion rules, props, layers, face). |
 | `docs/CASTAWAY_ANIMATION_LIBRARY.md` | Every clip with status (generated). |
+| `docs/CASTAWAY_TECHNICAL_SPEC.md` | Measured height, skeleton, materials, draw calls, texture sizes, loading requirements, validator results. |
+
+Private preview (real GLBs, republish to the same URL on revisions): https://claude.ai/artifact/HZPAouJkxq8bbxT8CYE7cK
 
 ## Pipeline (all under `tools/castaway/`)
 
@@ -43,7 +46,10 @@ Run `build_castaway.sh FROM=assemble` after any LOD build: LOD assembles overwri
 * **Anatomy/face quality**: plausible and consistent but stylised: the torso/limb definition is mostly a few millimetres of sculpted relief plus normal-map detail; the face is partly hidden by the (requested) wild hair and beard. It is not a photoscan-level human.
 * **Hair** is cards (alpha-masked strand atlas). Edges look best with MSAA / alpha-to-coverage; the strand atlas is procedural and somewhat uniform.
 * **Skin textures** are procedural (position-based, seamless), including freckles and sunspots, rough elbows/knees/hands/feet, face wrinkles and creases; they are not hand-painted.
-* **In development**: see `docs/CASTAWAY_ANIMATION_LIBRARY.md`, "Clips in development" (water/swim clips are first passes).
+* **In development (4 of 142)**: `swim_crawl`, `swim_breaststroke`, `tread_water` (first passes: stroke/kick timing and body roll are not tuned, and they were not judged against a water surface) and `turn_fish_on_fire` (kneeling leg joints sink 52 mm below the ground plane; reads acceptably in the viewer but fails the 30 mm rule). Nothing was promoted without passing the rules.
+* **Tree climbs**: verified visually against the proxy trunk (hands and feet meet the bark). The ground-sink rule is waived for `tree_climb_*` because the virtual root travels down the trunk; the proxy trunk surface is 0.36 m in front of the climber's axis, which the clips assume.
+* **Height**: skinned body 2.003 m (soles 0.000 to skull crown 2.003); hair cards reach 2.106 m.
+* **Draw calls**: 16 per character at LOD0 (see the technical spec).
 * Props `props/*.glb` are proxies. Canoe and rock/boulder/palm geometry in the game will differ: anchored clips (boarding, boulder, rock) assume the dimensions listed in the clip metadata.
 * The Artifact host serves no `.glb`; `tools/stage_artifact_viewer.py` publishes identical bytes as `*.glb.wasm`.
 * Not tested: in-game performance, the game's own behaviour names, GPU rendering (all checks used SwiftShader).

@@ -33,7 +33,7 @@ for g in glbs:
 for j in ("castaway_clips.json", "castaway_face.json", "castaway_grips.json"):
     shutil.copy(os.path.join(SRC, j), os.path.join(OUT, "assets", "castaway", j))
     mapping[j] = f"assets/castaway/{j}"
-page = (f"<title>Castaway Asset Viewer</title>\n<meta name=\"claude:viewport-fit-sides\" content=\"cover\">\n<style>{css}</style>\n{importmap}\n{body}\n"
+page = (f"<meta charset=\"utf-8\">\n<title>Castaway Asset Viewer</title>\n<meta name=\"claude:viewport-fit-sides\" content=\"cover\">\n<style>{css}</style>\n{importmap}\n{body}\n"
         f"<script>window.CASTAWAY_FILES = {json.dumps(mapping)};</script>\n<script type=\"module\" src=\"castaway.js\"></script>\n")
 open(os.path.join(OUT, "index.html"), "w", encoding="utf8").write(page)
 shutil.copy(os.path.join(ROOT, "viewer", "castaway.js"), os.path.join(OUT, "castaway.js"))
@@ -45,5 +45,13 @@ for d, _, fs in os.walk(OUT):
             files[p] = os.path.join("build", "artifact_castaway", p)
 big = [(p, os.path.getsize(os.path.join(OUT, p))) for p in files if os.path.getsize(os.path.join(OUT, p)) > 15 * 1024 * 1024]
 assert not big, big
-json.dump({p: {"from": s, "contentType": "application/wasm"} if p.endswith(".wasm") else s for p, s in files.items()}, open(os.path.join(OUT, "files.json"), "w"), indent=1)
+def _entry(p, s):
+    if p.endswith(".wasm"):
+        return p, {"from": s, "contentType": "application/wasm"}
+    if os.path.splitext(p)[1] == "":          # e.g. vendor/three/LICENSE: the host serves only known extensions, so publish it as text
+        return p + ".txt", {"from": s, "contentType": "text/plain"}
+    return p, s
+
+
+json.dump(dict(_entry(p, s) for p, s in files.items()), open(os.path.join(OUT, "files.json"), "w"), indent=1)
 print("staged", len(files) + 1, "files,", sum(os.path.getsize(os.path.join(OUT, p)) for p in files) // 1024, "KB")
