@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paradise Island · Canopy Comparison</title>
+<link rel="icon" href="data:,">
+<style>
+:root { color-scheme: light dark; --panel: rgba(255,255,255,.9); --ink: #17301c; --line: rgba(23,48,28,.18); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --panel: rgba(16,26,20,.88); --ink: #e6f2e8; --line: rgba(230,242,232,.2); } }
+:root[data-theme="dark"] { --panel: rgba(16,26,20,.88); --ink: #e6f2e8; --line: rgba(230,242,232,.2); }
+html, body { margin: 0; height: 100%; background: #bcd8e6; font: 13px/1.4 system-ui, sans-serif; color: var(--ink); overflow: hidden; }
+#stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+.panel { position: fixed; top: 12px; left: 12px; width: 330px; max-height: calc(100% - 24px); overflow: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+h1 { font-size: 16px; margin: 0 0 4px; }
+h1 span { font-weight: 400; opacity: .7; }
+p { margin: 6px 0; opacity: .85; }
+label { display: grid; grid-template-columns: 90px 1fr; gap: 6px; align-items: center; margin: 6px 0; }
+select, button { font: inherit; padding: 5px 8px; border-radius: 7px; border: 1px solid var(--line); background: transparent; color: var(--ink); }
+button { cursor: pointer; }
+pre { font: 11px/1.35 ui-monospace, monospace; background: rgba(0,0,0,.06); padding: 8px; border-radius: 6px; overflow: auto; max-height: 260px; white-space: pre-wrap; }
+@media (max-width: 760px) { .panel { left: 8px; right: 8px; width: auto; top: auto; bottom: 8px; max-height: 50%; } }
+</style>
+<script type="importmap">
+{ "imports": { "three": "../vendor/three/three.module.js", "three/addons/": "../vendor/three/addons/" } }
+</script>
+</head>
+<body>
+<canvas id="stage"></canvas>
+<aside class="panel">
+  <h1>Canopy comparison <span>workshop</span></h1>
+  <p>Left: current game style (seven smooth lobes, flat-shaded, shaded by height). Right: new leaf-clump canopy (smooth normals, inner shade, sunlit tops). Same trunk, one canopy mesh per tree.</p>
+  <label>Show <select id="mode">
+    <option value="both">Both trees</option>
+    <option value="current">Current only</option>
+    <option value="new">New only</option>
+  </select></label>
+  <label>Camera <select id="cam">
+    <option value="hero">Hero</option>
+    <option value="close">Close: current</option>
+    <option value="closeNew">Close: new</option>
+    <option value="low">Low, eye level</option>
+    <option value="top">Top</option>
+  </select></label>
+  <p><button id="forest">Forest test (196 trees)</button></p>
+  <p id="status">Loading…</p>
+  <pre id="stats"></pre>
+</aside>
+<script type="module" src="canopy.js"></script>
+</body>
+</html>

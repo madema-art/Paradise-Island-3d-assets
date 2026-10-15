@@ -21,4 +21,6 @@ The castaway has its own viewer and its own private artifact: stage with `python
 `*.glb.wasm`), publish `build/artifact_castaway/index.html` plus the files in `build/artifact_castaway/files.json` (contentType `application/wasm` for `*.wasm`), and update
 the same URL on later revisions: https://claude.ai/artifact/HZPAouJkxq8bbxT8CYE7cK (private).
 
+The broadleaf tree canopy comparison (current game style against the new leaf-clump canopy) has its own private artifact: stage with `python3 tools/stage_canopy_viewer.py` (writes `build/artifact_canopy/`), publish `build/artifact_canopy/index.html` plus the files in `build/artifact_canopy/files.json` (contentType `text/plain` for extension-less files), and update the same URL on later revisions: https://claude.ai/artifact/5Fdk3N3E9WyaPnyX2JJhnu (private).
+
 The giant manta ray has its own viewer and private artifact: stage with `python3 tools/stage_manta_viewer.py` (writes `build/artifact_manta/`, GLB published as `*.glb.wasm`), publish `build/artifact_manta/index.html` plus the files in `build/artifact_manta/files.json` (contentType `application/wasm` for `*.wasm`), and update the same URL on later revisions: https://claude.ai/artifact/SkuLE4corUxLQ1qRcA6Y37 (private).
