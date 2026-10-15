@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paradise Island · Lagoon Coral</title>
+<link rel="icon" href="data:,">
+<style>
+:root { color-scheme: light dark; --panel: rgba(255,255,255,.9); --ink: #123a40; --line: rgba(18,58,64,.18); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --panel: rgba(10,30,34,.88); --ink: #e2f4f6; --line: rgba(226,244,246,.2); } }
+:root[data-theme="dark"] { --panel: rgba(10,30,34,.88); --ink: #e2f4f6; --line: rgba(226,244,246,.2); }
+html, body { margin: 0; height: 100%; background: #3fb8c9; font: 13px/1.4 system-ui, sans-serif; color: var(--ink); overflow: hidden; }
+#stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+.panel { position: fixed; top: 12px; left: 12px; width: 340px; max-height: calc(100% - 24px); overflow: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+h1 { font-size: 16px; margin: 0 0 4px; }
+h1 span { font-weight: 400; opacity: .7; }
+p { margin: 6px 0; opacity: .85; }
+label { display: grid; grid-template-columns: 90px 1fr; gap: 6px; align-items: center; margin: 6px 0; }
+select { font: inherit; padding: 5px 8px; border-radius: 7px; border: 1px solid var(--line); background: transparent; color: var(--ink); }
+pre { font: 11px/1.35 ui-monospace, monospace; background: rgba(0,0,0,.08); padding: 8px; border-radius: 6px; overflow: auto; max-height: 300px; white-space: pre-wrap; }
+@media (max-width: 760px) { .panel { left: 8px; right: 8px; width: auto; top: auto; bottom: 8px; max-height: 50%; } }
+</style>
+<script type="importmap">
+{ "imports": { "three": "../vendor/three/three.module.js", "three/addons/": "../vendor/three/addons/" } }
+</script>
+</head>
+<body>
+<canvas id="stage"></canvas>
+<aside class="panel">
+  <h1>Lagoon coral <span>workshop</span></h1>
+  <p>Left: the game's coral (flat shaded). Right: the redesign. Same south-seas mix, placement and colours. Each head is one instance, so each kind is one draw call.</p>
+  <label>Show <select id="show">
+    <option value="both">Both</option>
+    <option value="legacy">Game coral only</option>
+    <option value="redesign">Redesign only</option>
+  </select></label>
+  <label>Camera <select id="cam">
+    <option value="overview">Overview</option>
+    <option value="legacy">Game coral</option>
+    <option value="redesign">Redesign</option>
+    <option value="low">Low, eye level</option>
+    <option value="legacyClose">Close: game coral</option>
+    <option value="redesignClose">Close: redesign</option>
+  </select></label>
+  <p id="status">Loading…</p>
+  <pre id="stats"></pre>
+</aside>
+<script type="module" src="lagoon.js"></script>
+</body>
+</html>
