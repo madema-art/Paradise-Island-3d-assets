@@ -5,9 +5,9 @@
  }
  
 +// The compass turn of the sun's daily arc, in radians about the vertical axis. 0 rises in the east and sets in the west (the old
-+// orientation); -PI/2 rises in the north and sets in the south, so the island's volcano sits between the lagoon and the rising sun.
++// orientation). -7*PI/12 (-105 degrees) puts the sunrise on the horizon just left of the centre of the opening view, clear of the volcano.
 +// Only the sun and the moon turn: the island, its placement and every object id stay where they are.
-+export const SUN_TURN = -Math.PI / 2;
++export const SUN_TURN = -(7 * Math.PI) / 12;
 +const _tc = Math.cos(SUN_TURN), _ts = Math.sin(SUN_TURN);
 +const turned = (x, y, z) => new THREE.Vector3(x * _tc - z * _ts, y, x * _ts + z * _tc).normalize();
 +
