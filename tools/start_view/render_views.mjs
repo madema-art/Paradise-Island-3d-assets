@@ -1,11 +1,16 @@
+// Renders candidate poses in a running game and counts draw calls and triangles for each frame.
+// PHI is the experiment hook used on the scratch build (window.__SUN_PHI). With the sun_turn.patch applied, the game uses its own
+// SUN_TURN constant, so leave PHI unset.
 import { chromium } from 'playwright-core';
 import fs from 'node:fs';
 const OUT = process.env.OUT || 'build/start_view';
 fs.mkdirSync(OUT, { recursive: true });
 const POSES = JSON.parse(process.env.POSES || '[]');
+const PHI = Number(process.env.PHI ?? 0);
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--no-sandbox'] });
 const page = await browser.newPage({ viewport: { width: 960, height: 540 } });
-await page.goto('' + (process.env.GAME_URL || 'http://127.0.0.1:5190/index.html') + '', { waitUntil: 'load', timeout: 180000 });
+await page.addInitScript((phi) => { window.__SUN_PHI = phi; }, PHI);
+await page.goto((process.env.GAME_URL || 'http://127.0.0.1:5190/index.html'), { waitUntil: 'load', timeout: 180000 });
 await page.waitForFunction(() => window.__dbg && window.__dbg.falls && window.__dbg.falls.camp, null, { timeout: 240000 });
 await new Promise((r) => setTimeout(r, 2500));
 const results = [];

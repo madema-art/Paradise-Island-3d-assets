@@ -1,0 +1,25 @@
+--- a/src/core.js
++++ b/src/core.js
+@@ -140,13 +140,20 @@
+   return `${hh}:${mm} · ${n}`;
+ }
+ 
++// The compass turn of the sun's daily arc, in radians about the vertical axis. 0 rises in the east and sets in the west (the old
++// orientation); -PI/2 rises in the north and sets in the south, so the island's volcano sits between the lagoon and the rising sun.
++// Only the sun and the moon turn: the island, its placement and every object id stay where they are.
++export const SUN_TURN = -Math.PI / 2;
++const _tc = Math.cos(SUN_TURN), _ts = Math.sin(SUN_TURN);
++const turned = (x, y, z) => new THREE.Vector3(x * _tc - z * _ts, y, x * _ts + z * _tc).normalize();
++
+ export function applyTimeOfDay() {
+   const a = ((env.tod - 6) / 24) * Math.PI * 2;
+-  env.sunDir.set(Math.cos(a), Math.sin(a), 0.28).normalize();
++  env.sunDir.copy(turned(Math.cos(a), Math.sin(a), 0.28));
+   // the moon rides the same daily arc, displaced from the sun by its elongation: that elongation is its phase
+   const age = (MOON_AGE0 + env.hours / 24) % MOON_CYCLE;
+   const e = (age / MOON_CYCLE) * Math.PI * 2;
+-  env.moonDir.set(Math.cos(a + e), Math.sin(a + e), 0.28).normalize();
++  env.moonDir.copy(turned(Math.cos(a + e), Math.sin(a + e), 0.28));
+   env.moonK = (1 - Math.cos(e)) / 2;
+   env.moonAge = age;
+   // tide: two highs and two lows a day, following the game clock

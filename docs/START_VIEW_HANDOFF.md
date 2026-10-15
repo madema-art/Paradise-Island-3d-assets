@@ -1,67 +1,81 @@
-# Start view and lagoon sunset: handoff to the game repository
+# Start view: turn the sun, open on the lagoon, sunset from the lagoon
 
-**Status:** measured in the built game (a copy in the scratchpad, not the repository). Nothing is changed in the game. The change is two constants, so it costs no frame time.
+**Status:** measured in a built copy of the game (kept in the scratchpad; the repository's game is untouched). The change is one constant in `src/core.js`, two view numbers in `src/main.js`, and no new geometry, lights or draws.
 
 Preview (private, owner only): https://claude.ai/artifact/Ep49EfqyRZRoAyq743CK88
 
-**Rule:** FPS-neutral or better. Measured below: the proposed opening draws fewer calls and triangles than the current one.
+**Rule:** FPS-neutral or better. Measured below: the new opening draws fewer calls and triangles than today's opening.
 
-## 1. What you asked for, and what the geometry allows
+## 1. What you asked for
 
-- **Start on the lagoon and the castaway, with the sunrise on the horizon behind the island.** The game's sun is fixed by the time of day: it rises on +X (east) and sets on −X (west). So the camera has to be west of the island, looking east, with the island between it and the sun. The castaway's camp is on the east edge of the west coast (about (4.5, 107)), and the Pearl Cove lagoon is east of it. From the west sea, the island's silhouette sits about one degree above the horizon toward the dawn sun, so the sun rises just above the trees.
-- **Sunset viewable from the lagoon.** From the south-east corner of the lagoon, around (60–72, 140–146), the horizon toward the setting sun is open sea (about −2°). The sunset is visible from there, but the sun is then not behind the island.
-- **The castaway and the sunrise together are a trade-off.** The sunrise-behind-island view is about 260 m from the camp, and the castaway is only a few pixels tall at that distance. A closer view (about 100 to 120 m) shows the castaway's beach, but there the sun rises over the lagoon, not behind the island. Pick one, or accept a second move later (see section 4).
+The game should open on the view from your screenshot, the lagoon in the foreground with the island and the volcano behind it, with the sun rising behind the island. The sun currently rises in the east, which puts it beside that view, not behind it. So the island's orientation on the compass changes: the sun rises in the north instead.
 
-## 2. Proposed change
+Turning the island itself would move every placed object, and the placement and the object ids depend on their coordinates (the seeded placement, saved notes and the inspector all rely on them). So the change turns the sun's daily arc instead: the sun and the moon rise and set on a different compass bearing, and the island stays where it is. From the player's side the result is the same: the island is oriented differently against the sun.
 
-`src/main.js`, line 182 (the opening):
+## 2. The change
+
+### 2.1 `src/core.js`: turn the sun's and the moon's daily arc
+
+The patch is `docs/start_view/sun_turn.patch` (line endings kept). In short, in `applyTimeOfDay`:
+
+```js
+// The compass turn of the sun's daily arc, in radians about the vertical axis.
+// 0 rises in the east and sets in the west (the old orientation); -PI/2 rises in the north and sets in the south.
+export const SUN_TURN = -Math.PI / 2;
+const _tc = Math.cos(SUN_TURN), _ts = Math.sin(SUN_TURN);
+const turned = (x, y, z) => new THREE.Vector3(x * _tc - z * _ts, y, x * _ts + z * _tc).normalize();
+
+// in applyTimeOfDay:
+env.sunDir.copy(turned(Math.cos(a), Math.sin(a), 0.28));
+// ...
+env.moonDir.copy(turned(Math.cos(a + e), Math.sin(a + e), 0.28));
+```
+
+Sunrise moves to the north (`(0.28, 0, -1)`) and sunset to the south (`(0.28, 0, 1)`). The sun, the moon, the sky, the shadows and the water lighting all read `env.sunDir` or `env.moonDir`, so they all turn together.
+
+### 2.2 `src/main.js`: the opening view (line 182)
 
 ```js
 // now
 const VIEW = { pos: [-230, 60, -20], tgt: [0, 30, -10] };
-// proposed: the same spot in the west sea, looking at the lagoon; the island sits between the camera and the rising sun
-const VIEW = { pos: [-232, 60, -20], tgt: [30, 0, 112] };
+// proposed: from the south sea, looking north at the lagoon, the island and the volcano (your screenshot)
+const VIEW = { pos: [0, 60, 254], tgt: [5, 20, 40] };
 ```
 
-The camera keeps its height (60 m) and its position almost exactly. Only the aim changes.
-
-`src/main.js`, the `presets` list (about line 124 onward), a new entry for the sunset:
+### 2.3 `src/main.js`: a lagoon sunset preset (in the `presets` list, about line 124)
 
 ```js
-{ name: 'Lagoon sunset', pos: [66, 2.5, 146], tgt: [-134, 1.5, 202], dur: 4 }
+{ name: 'Lagoon sunset', pos: [30, 3, 120], tgt: [12, 1.5, 230], dur: 4 }
 ```
 
-This preset shows the sun setting over the sea from the lagoon. It only shows the sun near the horizon, so it is best used around dusk (time of day about 17.5 to 19). The game does not change the time when the camera goes there; decide whether the preset should set the time too (not included here).
+It shows the sun setting over the open sea to the south. The sun is only near the horizon around the dusk hours (time of day 17.5 to 19), so the preset is most useful then. The game does not change the time when the camera goes there.
 
-## 3. Measured cost (headless Chromium, software GL; counts are exact for each frame)
+## 3. Measured (headless Chromium, software GL; counts are exact for each frame)
 
 | View | Draw calls | Triangles | Against now |
 |---|---|---|---|
-| **Now**: opening at first light | 3,165 | 14.2 M | (baseline) |
-| **Proposed opening** | **2,679** | **11.8 M** | fewer calls, fewer triangles |
-| Aimed at the castaway (same spot) | 3,118 | 14.3 M | about the same |
-| Closer, aimed at the castaway (120 m) | 2,687 | 11.8 M | fewer |
-| Lagoon sunset (preset) | 891 | 8.3 M | much fewer |
+| **Now**: the current opening | 3,165 | 14.2 M | (baseline) |
+| **Proposed opening** (0, 60, 254) | **2,842** | **12.0 M** | fewer calls and triangles |
+| Alternative, closer (12, 60, 242) | 3,177 | 14.0 M | about the same |
+| Alternative, (0, 35, 254) | 3,133 | 11.6 M | fewer triangles, more calls |
+| Lagoon sunset preset (30, 3, 120) | 1,731 | 10.4 M | much fewer |
 
-The proposed opening is cheaper on both counts, so it meets the FPS rule. The frame time itself needs the game's own `?perf=1` run on your machine: software GL cannot measure it.
+The proposed opening is cheaper on both counts. Frame time needs your `?perf=1` run on your machine: software GL cannot measure it.
 
-## 4. Decision for you: castaway in the opening frame
+## 4. Checks in the game
 
-- **Option A (proposed):** the sunrise behind the island, the lagoon in view, the castaway too small to see. He appears as the camera moves on or when you look for him.
-- **Option B:** a closer view that shows the castaway's beach. The sun then sits over the lagoon, not behind the island.
-- **Option C:** the proposed opening, then a short camera move (a few seconds) that flies in toward the castaway as the sun clears the island. Cheap to run, and it gets both, but it is a sequence change, not a single view.
+- Open the game at dawn: the sun should come up behind the volcano and the island, not over the sea beside it.
+- Check the sunset from the lagoon preset around time 18.
+- The shadows now fall along a north-south axis (the sun's new arc). That is intended, and it is a lighting result, not a cost.
+- The prevailing wind is still `north-west`. The wind is not turned; say if you want it turned to match.
+- Nothing in placement changes. The constant draws no random numbers, and object ids are unchanged.
+- Run `?perf=1` at the opening, before and after.
 
-Recommendation: A now, C later if you want him in the first frame.
+## 5. Files in the workshop
 
-## 5. Game-side checks
-
-- Set the opening, then look at the first minute: the sun must come up behind the trees, not over the sea.
-- Check the lagoon sunset preset at about time 18.
-- Run `?perf=1` with the opening view before and after.
-- The constants do not draw random numbers, so placement and object ids do not change (the CLAUDE.md rule is not at risk).
-
-## 6. Files in the workshop
-
-- `docs/start_view/`: the four real renders (now, proposed, the lagoon sunset, the closer alternative).
-- `tools/start_view/search_views.mjs`: finds the viewpoints from the game's terrain (horizon angles toward the sun).
-- `tools/start_view/render_views.mjs`: renders candidate poses and counts draw calls and triangles. Both take `GAME_URL` (a running copy of the game, for example `node serve.mjs 5190` in a built copy) and write to `build/start_view/` by default.
+- `docs/start_view/sun_turn.patch`: the change to `src/core.js`, against the game's current file.
+- `docs/start_view/reference_screenshot.png`: your screenshot, for comparison.
+- `docs/start_view/now_dawn_start.png`: the current opening, for comparison.
+- `docs/start_view/south_dawn_proposed.png`: the proposed opening, rendered from the built game with the sun turned.
+- `docs/start_view/lagoon_sunset_proposed.png`: the proposed lagoon sunset.
+- `tools/start_view/search_south.mjs` and `tools/start_view/render_views.mjs`: search for open horizons and render candidate poses, counting draw calls and triangles. Both take `GAME_URL` for a running build.
